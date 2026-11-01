@@ -1,0 +1,60 @@
+{
+ "v": 1,
+ "name": "Big speed",
+ "author": "NOVA",
+ "desc": "K\u00e6mpe hastighed og en bred bj\u00e6lke. Let at afl\u00e6se under k\u00f8rsel",
+ "items": [
+  {
+   "t": "num",
+   "x": 160,
+   "y": 50,
+   "src": "speed",
+   "font": "8",
+   "align": "center",
+   "dp": 0,
+   "color": "text"
+  },
+  {
+   "t": "text",
+   "x": 160,
+   "y": 130,
+   "text": "km/h",
+   "font": "4",
+   "align": "center",
+   "color": "dim"
+  },
+  {
+   "t": "bar",
+   "x": 20,
+   "y": 160,
+   "w": 280,
+   "h": 14,
+   "src": "speed",
+   "max": 35,
+   "color": "neon"
+  },
+  {
+   "t": "num",
+   "x": 20,
+   "y": 176,
+   "src": "battery",
+   "font": "4",
+   "align": "left",
+   "unit": "%",
+   "color": "ok"
+  },
+  {
+   "t": "num",
+   "x": 300,
+   "y": 176,
+   "src": "power",
+   "font": "4",
+   "align": "right",
+   "unit": " W",
+   "color": "text"
+  },
+  {
+   "t": "modebar"
+  }
+ ]
+}

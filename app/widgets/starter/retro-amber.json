@@ -1,0 +1,150 @@
+{
+ "v": 2,
+ "name": "Retro amber",
+ "author": "NOVA",
+ "desc": "Sort skaerm med rav-farvede 7-segment tal",
+ "pages": 1,
+ "bg": "black",
+ "items": [
+  {
+   "t": "segbar",
+   "x": 10,
+   "y": 10,
+   "w": 300,
+   "h": 16,
+   "n": 30,
+   "src": "speed",
+   "max": 35,
+   "color": "#ffb000",
+   "color2": "#2a1c00",
+   "warn": 28,
+   "bad": 33
+  },
+  {
+   "t": "num",
+   "x": 160,
+   "y": 40,
+   "src": "speed",
+   "font": "7",
+   "align": "center",
+   "color": "#ffb000"
+  },
+  {
+   "t": "text",
+   "x": 160,
+   "y": 92,
+   "text": "KM/H",
+   "font": "2",
+   "align": "center",
+   "color": "#6b4a00"
+  },
+  {
+   "t": "num",
+   "x": 10,
+   "y": 120,
+   "src": "power",
+   "font": "6",
+   "color": "#ffb000"
+  },
+  {
+   "t": "text",
+   "x": 150,
+   "y": 150,
+   "text": "W",
+   "font": "2",
+   "color": "#6b4a00"
+  },
+  {
+   "t": "num",
+   "x": 10,
+   "y": 176,
+   "src": "battery",
+   "font": "4",
+   "unit": "%",
+   "color": "#ffb000",
+   "warn": 20,
+   "bad": 10,
+   "below": true
+  },
+  {
+   "t": "segbar",
+   "x": 10,
+   "y": 206,
+   "w": 190,
+   "h": 18,
+   "n": 20,
+   "src": "battery",
+   "max": 100,
+   "color": "#ffb000",
+   "color2": "#2a1c00",
+   "warn": 20,
+   "bad": 10,
+   "below": true
+  },
+  {
+   "t": "num",
+   "x": 310,
+   "y": 120,
+   "src": "volt",
+   "font": "4",
+   "align": "right",
+   "dp": 1,
+   "color": "#ffb000",
+   "unit": "V"
+  },
+  {
+   "t": "num",
+   "x": 310,
+   "y": 150,
+   "src": "current",
+   "font": "2",
+   "align": "right",
+   "dp": 1,
+   "color": "#6b4a00",
+   "unit": "A"
+  },
+  {
+   "t": "num",
+   "x": 310,
+   "y": 176,
+   "src": "temp",
+   "font": "4",
+   "align": "right",
+   "unit": "C",
+   "color": "#ffb000",
+   "warn": 60,
+   "bad": 75
+  },
+  {
+   "t": "text",
+   "x": 214,
+   "y": 206,
+   "text": "HOT",
+   "font": "4",
+   "color": "bad",
+   "show": {
+    "src": "temp",
+    "op": ">=",
+    "val": 70
+   }
+  },
+  {
+   "t": "dot",
+   "x": 300,
+   "y": 214,
+   "r": 7,
+   "src": "limit",
+   "color": "warn",
+   "color2": "#2a1c00"
+  },
+  {
+   "t": "line",
+   "x": 10,
+   "y": 112,
+   "w": 300,
+   "h": 0,
+   "th": 1,
+   "color": "#6b4a00"
+  }
+ ]
+}

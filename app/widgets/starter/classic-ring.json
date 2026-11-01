@@ -1,0 +1,151 @@
+{
+ "v": 1,
+ "name": "Classic ring",
+ "author": "NOVA",
+ "desc": "Ringmaaler med hastighed, effekt, batteri og temperaturer",
+ "items": [
+  {
+   "t": "ring",
+   "x": 88,
+   "y": 126,
+   "r": 80,
+   "th": 14,
+   "src": "speed",
+   "max": 35,
+   "color": "neon"
+  },
+  {
+   "t": "num",
+   "x": 88,
+   "y": 88,
+   "src": "speed",
+   "font": "8",
+   "align": "center",
+   "dp": 0,
+   "color": "text"
+  },
+  {
+   "t": "text",
+   "x": 88,
+   "y": 158,
+   "text": "km/h",
+   "font": "4",
+   "align": "center",
+   "color": "dim"
+  },
+  {
+   "t": "num",
+   "x": 88,
+   "y": 66,
+   "src": "mode",
+   "font": "2",
+   "align": "center",
+   "color": "ok"
+  },
+  {
+   "t": "num",
+   "x": 292,
+   "y": 30,
+   "src": "power",
+   "font": "6",
+   "align": "right",
+   "color": "text"
+  },
+  {
+   "t": "bar",
+   "x": 184,
+   "y": 80,
+   "w": 122,
+   "h": 8,
+   "src": "power",
+   "max": 1000,
+   "color": "neon"
+  },
+  {
+   "t": "num",
+   "x": 184,
+   "y": 94,
+   "src": "current",
+   "font": "2",
+   "align": "left",
+   "dp": 1,
+   "unit": " A",
+   "color": "text"
+  },
+  {
+   "t": "num",
+   "x": 184,
+   "y": 112,
+   "src": "battery",
+   "font": "4",
+   "align": "left",
+   "unit": "%",
+   "color": "ok"
+  },
+  {
+   "t": "num",
+   "x": 306,
+   "y": 112,
+   "src": "volt",
+   "font": "4",
+   "align": "right",
+   "dp": 1,
+   "unit": "V",
+   "color": "text"
+  },
+  {
+   "t": "bar",
+   "x": 184,
+   "y": 140,
+   "w": 122,
+   "h": 10,
+   "src": "battery",
+   "max": 100,
+   "color": "ok"
+  },
+  {
+   "t": "num",
+   "x": 184,
+   "y": 156,
+   "src": "trip",
+   "font": "2",
+   "align": "left",
+   "dp": 1,
+   "unit": " km",
+   "color": "dim"
+  },
+  {
+   "t": "num",
+   "x": 184,
+   "y": 171,
+   "src": "total",
+   "font": "2",
+   "align": "left",
+   "unit": " km",
+   "color": "dim"
+  },
+  {
+   "t": "num",
+   "x": 56,
+   "y": 186,
+   "src": "temp",
+   "font": "2",
+   "align": "center",
+   "unit": "C",
+   "color": "dim"
+  },
+  {
+   "t": "num",
+   "x": 120,
+   "y": 186,
+   "src": "motortemp",
+   "font": "2",
+   "align": "center",
+   "unit": "C",
+   "color": "dim"
+  },
+  {
+   "t": "modebar"
+  }
+ ]
+}

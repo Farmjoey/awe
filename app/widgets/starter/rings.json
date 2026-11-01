@@ -1,0 +1,120 @@
+{
+ "v": 2,
+ "name": "Rings",
+ "author": "NOVA",
+ "desc": "Tre ringe: fart, effekt og batteri",
+ "pages": 1,
+ "bg": "bg",
+ "items": [
+  {
+   "t": "arc",
+   "x": 100,
+   "y": 120,
+   "r": 100,
+   "th": 14,
+   "a0": 120,
+   "sweep": 300,
+   "src": "speed",
+   "max": 35,
+   "color": "neon",
+   "color2": "panel",
+   "caps": true
+  },
+  {
+   "t": "arc",
+   "x": 100,
+   "y": 120,
+   "r": 80,
+   "th": 12,
+   "a0": 120,
+   "sweep": 300,
+   "src": "power",
+   "max": 3000,
+   "color": "warn",
+   "color2": "panel",
+   "caps": true
+  },
+  {
+   "t": "arc",
+   "x": 100,
+   "y": 120,
+   "r": 62,
+   "th": 10,
+   "a0": 120,
+   "sweep": 300,
+   "src": "battery",
+   "max": 100,
+   "color": "ok",
+   "color2": "panel",
+   "caps": true,
+   "warn": 20,
+   "bad": 10,
+   "below": true
+  },
+  {
+   "t": "num",
+   "x": 100,
+   "y": 88,
+   "src": "speed",
+   "font": "6",
+   "align": "center"
+  },
+  {
+   "t": "text",
+   "x": 100,
+   "y": 138,
+   "text": "km/h",
+   "font": "2",
+   "align": "center",
+   "color": "dim"
+  },
+  {
+   "t": "num",
+   "x": 220,
+   "y": 40,
+   "src": "speed",
+   "font": "4",
+   "unit": " km/h"
+  },
+  {
+   "t": "num",
+   "x": 220,
+   "y": 90,
+   "src": "power",
+   "font": "4",
+   "unit": " W",
+   "color": "warn"
+  },
+  {
+   "t": "num",
+   "x": 220,
+   "y": 140,
+   "src": "battery",
+   "font": "4",
+   "unit": "%",
+   "color": "ok",
+   "warn": 20,
+   "bad": 10,
+   "below": true
+  },
+  {
+   "t": "num",
+   "x": 220,
+   "y": 176,
+   "src": "volt",
+   "font": "2",
+   "dp": 1,
+   "unit": " V",
+   "color": "dim"
+  },
+  {
+   "t": "num",
+   "x": 220,
+   "y": 196,
+   "src": "temp",
+   "font": "2",
+   "unit": " C",
+   "color": "dim"
+  }
+ ]
+}

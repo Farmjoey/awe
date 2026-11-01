@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NOVA RIDE</title>
+<style>
+:root{--bg:#262626;--card:#333;--card2:#444;--fg:#ececec;--mut:#9a9fa2;--acc:#6fa3a8;--line:#4d4d4d;--ok:#8fd9a8;--bad:#ff5a6e;--btn:#d6d6d6;--tr:#4a4a4a;--edge:#8d8d8d;--onacc:#10181a;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
+:root[data-look="dark"]{--bg:#0e0e10;--card:#1b1b1f;--card2:#2a2a30;--line:#2c2c33;--mut:#9a9aa6;--btn:#f0f0f0;--tr:#2a2a30;--edge:#55555e}
+:root[data-look="light"]{--bg:#f3f3f5;--card:#fff;--card2:#e9e9ee;--fg:#141416;--mut:#6b6b76;--line:#dcdce2;--ok:#14a05f;--bad:#d93a4a;--btn:#2a2a2e;--tr:#dcdce2;--edge:#a9a9b3;--onacc:#101010}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+html{color-scheme:dark}:root[data-look="light"]{color-scheme:light}
+header{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--bg);border-bottom:1px solid var(--line)}
+.logo{font-weight:800;letter-spacing:.14em;font-size:17px}.logo b{color:var(--acc)}
+#pill{font-size:12px;padding:5px 10px;border-radius:99px;background:var(--card2);color:var(--mut)}
+#pill.on{background:var(--ok);color:var(--onacc)}
+main{max-width:560px;margin:0 auto;padding:6px 14px calc(96px + env(safe-area-inset-bottom,0px))}
+.card{background:var(--card);border-radius:20px;padding:16px;margin:12px 0}
+h2{margin:0 0 4px;font-size:18px}h3{margin:0 0 8px;font-size:15px;color:var(--mut);font-weight:600}
+p{margin:6px 0;color:var(--mut);font-size:14px}
+.btn{display:block;width:100%;border:2px solid var(--btn);border-radius:14px;padding:13px;font:700 16px system-ui;background:transparent;color:var(--fg);cursor:pointer;margin-top:10px}
+.btn.sec{border-color:var(--line);color:var(--mut)}.btn[disabled]{opacity:.4}
+.row{display:flex;gap:10px}.row>*{flex:1}
+.hero{display:flex;align-items:center;gap:16px}
+.hero svg{flex:none}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.chip{font-size:12px;padding:5px 10px;border-radius:99px;background:var(--card2);color:var(--mut)}
+.chip.ok{background:var(--ok);color:var(--onacc)}
+.kv{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line);font-size:15px}.kv:last-child{border:0}.kv span:first-child{color:var(--mut)}
+.bar{height:12px;border-radius:99px;background:var(--card2);overflow:hidden;margin:12px 0 6px}.bar i{display:block;height:100%;width:0;background:var(--acc);transition:width .15s}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tcard{border:2px solid transparent;border-radius:16px;padding:8px;background:var(--card2);cursor:pointer;text-align:center;font-size:13px}
+.tcard.sel{border-color:var(--acc)}
+.tcard svg{width:100%;height:auto;border-radius:10px;display:block;margin-bottom:6px}
+.step{display:flex;gap:12px;margin:10px 0;align-items:flex-start}.step em{flex:none;width:26px;height:26px;border-radius:50%;background:var(--acc);color:var(--onacc);font-style:normal;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:14px}
+input[type=text]{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--card2);color:var(--fg);font-size:16px}
+input[type=range]{width:100%;accent-color:var(--acc)}
+canvas{width:100%;image-rendering:pixelated;background:#000;border-radius:10px;display:block}
+.seg{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.seg button{padding:10px 4px;border-radius:12px;border:2px solid transparent;background:var(--card2);color:var(--fg);font-size:13px}.seg button.sel{border-color:var(--acc)}
+.play{display:flex;justify-content:center;gap:18px;margin:18px 0}.play button{width:74px;height:74px;border-radius:50%;border:0;background:var(--card2);color:var(--fg);font-size:26px}.play button.big{background:var(--acc);color:var(--onacc);width:88px;height:88px;font-size:32px}
+.warn{background:#ff82001f;border:1px solid var(--acc);color:var(--fg);border-radius:14px;padding:10px 12px;font-size:14px}
+nav{position:fixed;left:0;right:0;bottom:0;z-index:6;display:grid;grid-template-columns:repeat(5,1fr);background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+nav button{border:0;background:none;color:var(--mut);padding:10px 2px 8px;font-size:11px}nav button span{display:block;font-size:20px}
+nav button.sel{color:var(--acc)}
+.small{font-size:12px;color:var(--mut)}
+.wcard{background:var(--card2);border-radius:16px;padding:10px;margin:10px 0}.wcard canvas{margin-bottom:8px}.wcard b{font-size:15px}
+.fld{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}.fld label{font-size:12px;color:var(--mut);display:block}.fld input,.fld select{width:100%;padding:8px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--fg);font-size:15px}
+.err{color:var(--bad);font-size:13px;margin:6px 0}.mini{padding:8px 10px;font-size:13px;margin-top:6px;border-radius:10px}.row3{display:flex;gap:8px}.row3>*{flex:1}
+.addrow{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}.addrow button{border:0;border-radius:10px;padding:8px 10px;background:var(--card2);color:var(--fg);font-size:13px}
+nav{grid-template-columns:repeat(4,1fr)}nav button{font-size:11px}nav button span{font-size:21px}
+.live{padding:10px 8px 6px;background:radial-gradient(120% 100% at 30% 10%,color-mix(in srgb,var(--card) 85%,#fff),var(--card))}
+.live svg{width:100%;height:auto;display:block;font-family:"Roboto Condensed","Arial Narrow",system-ui,sans-serif}
+.live text{fill:var(--fg)}.live .m{fill:var(--mut)}
+.subnav{display:flex;gap:6px;overflow-x:auto;margin:10px 0 2px;padding-bottom:2px;scrollbar-width:none}.subnav::-webkit-scrollbar{display:none}
+.subnav button{flex:none;border:2px solid var(--line);background:transparent;color:var(--mut);border-radius:99px;padding:8px 14px;font-size:14px}
+.subnav button.sel{border-color:var(--acc);color:var(--fg)}
+.sw{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0}.sw button{width:38px;height:38px;border-radius:50%;border:3px solid transparent;cursor:pointer}.sw button.sel{border-color:var(--fg)}
+.tg{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}.tg button{border:2px solid var(--line);background:transparent;color:var(--mut);border-radius:12px;padding:9px 12px;font-size:14px}.tg button.sel{border-color:var(--acc);color:var(--fg)}
+.seg.c5{grid-template-columns:repeat(5,1fr)}.seg.c3{grid-template-columns:repeat(3,1fr)}.seg button{border-color:var(--line);background:transparent;color:var(--mut)}.seg button.sel{color:var(--fg)}
+input[type=color]{width:100%;height:48px;border:2px solid var(--line);border-radius:12px;background:var(--card2);padding:4px}
+.mrow{display:flex;gap:10px}.mrow button{flex:1;border:2px solid var(--line);background:transparent;color:var(--fg);border-radius:14px;padding:12px;font-size:20px}
+
+.sbar{position:sticky;top:0;z-index:7;display:flex;align-items:center;gap:8px;padding:8px 4px;background:var(--bg)}
+.sbar .sname{flex:1;text-align:center;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mini{border:2px solid var(--line);background:transparent;color:var(--fg);border-radius:10px;padding:7px 10px;font-size:13px;margin:0}
+.mini.pri,.stb .pri{border-color:var(--acc);color:var(--fg)}.mini.bad{color:var(--bad)}.mini[disabled]{opacity:.4}
+.scv{position:sticky;top:50px;z-index:6;background:var(--bg);padding-bottom:6px}
+.scv canvas{border-radius:12px;image-rendering:auto;touch-action:none;background:#000;width:100%;max-width:560px;margin:0 auto;border:1px solid var(--line)}
+.stb{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}.stb button,.stb select{border:2px solid var(--line);background:transparent;color:var(--fg);border-radius:10px;padding:8px 10px;font-size:14px}.stb button.sel{border-color:var(--acc)}.stb button[disabled]{opacity:.35}
+.sp{background:var(--card);border-radius:18px;padding:12px;margin:10px 0}.sph{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:8px;flex-wrap:wrap}.sph span{display:flex;gap:6px;flex-wrap:wrap}
+.nfg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px}.nf label{display:block;font-size:12px;color:var(--mut);margin-bottom:3px}.nf.wide{grid-column:1/-1}
+.nf input[type=text],.nf input[type=number],.nf select{width:100%;padding:9px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--fg);font-size:15px}
+.nfr{display:flex;gap:4px}.nfr input{text-align:center;min-width:0}.nfr button{flex:none;width:38px;border:0;border-radius:10px;background:var(--card2);color:var(--fg);font-size:18px}
+.swr{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.sc{width:30px;height:30px;border-radius:50%;border:2px solid var(--line);cursor:pointer;padding:0}.sc.sel{border-color:var(--fg);box-shadow:0 0 0 2px var(--acc)}
+.cp{width:38px;height:32px;padding:0;border:2px solid var(--line);border-radius:10px;background:none}.cp.sel{border-color:var(--fg)}
+.nudge{display:flex;gap:6px;margin:4px 0 10px}.nudge button{flex:1;border:0;border-radius:10px;background:var(--card2);color:var(--fg);padding:9px 0;font-size:16px}
+.adv{margin:6px 0;border-top:1px solid var(--line);padding-top:8px}.adv summary{cursor:pointer;color:var(--mut);font-size:14px;padding:4px 0}
+.layers{display:flex;flex-direction:column;gap:6px}.layers button{text-align:left;border:2px solid var(--line);background:transparent;color:var(--fg);border-radius:10px;padding:9px 10px;font-size:14px}.layers button.sel{border-color:var(--acc)}.layers button.off{opacity:.45}
+.addgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}.addgrid button{text-align:left;border:2px solid var(--line);background:var(--card);color:var(--fg);border-radius:14px;padding:10px}.addgrid b{display:block;font-size:15px}.addgrid span{font-size:12px;color:var(--mut)}
+.scv canvas{width:min(100%,calc(34vh * 1.3334));height:auto;aspect-ratio:4/3;display:block}
+.sp{scroll-margin-top:calc(60px + 34vh + 14px)}
+.hintbox{background:color-mix(in srgb,var(--acc) 18%,transparent);border:1px solid var(--acc);border-radius:12px;padding:10px 12px;font-size:14px;line-height:1.45;margin-top:8px}
+.pk{width:100%;text-align:left;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--fg);font-size:15px;min-height:42px}.pk i{color:var(--mut);font-style:normal}
+.nv{flex:1;min-width:0;border:1px solid var(--line);border-radius:10px;background:var(--card2);color:var(--fg);font-size:15px}
+.sheet{position:fixed;inset:0;z-index:30;background:rgba(0,0,0,.55);display:flex;align-items:flex-end}
+.sheetbox{width:100%;max-height:75vh;overflow-y:auto;background:var(--card);border-radius:20px 20px 0 0;padding:12px 12px calc(16px + env(safe-area-inset-bottom,0px))}
+.sheeth{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.sheetbox>button{display:block;width:100%;text-align:left;border:2px solid var(--line);background:transparent;color:var(--fg);border-radius:12px;padding:13px 14px;font-size:16px;margin:6px 0}.sheetbox>button.sel{border-color:var(--acc)}
+.sheetin{width:100%;padding:14px;border-radius:12px;border:2px solid var(--acc);background:var(--card2);color:var(--fg);font-size:20px}
+</style>
+</head>
+<body>
+<header><div class="logo">NOVA <b>RIDE</b></div><div id="pill">Ikke forbundet</div></header>
+<main id="view"></main>
+<nav id="tabs"></nav>
+<script>
+/*INLINE*/
+(function(){
+'use strict';
+var $=function(s){return document.querySelector(s)};
+var UU={svc:'4e4f5641-5249-4445-0000-000000000001',ctrl:'4e4f5641-5249-4445-0000-000000000002',data:'4e4f5641-5249-4445-0000-000000000003',stat:'4e4f5641-5249-4445-0000-000000000004'};
+var OP={INFO:1,BEGIN:0x10,END:0x11,ABORT:0x12,THEME:0x20,STYLE:0x21,TEXT:0x22,IMG_BEGIN:0x23,IMG_CHUNK:0x24,IMG_END:0x25,PREVIEW:0x26,MUSIC:0x30,LB:0x40,LC:0x41,LE:0x42,LU:0x43,START:0x50,BL:0x51,AM:0x52,AC:0x53};
+var ERR=['','Opdateringsvinduet er lukket på boardet','Løbehjulet kører','Filstørrelsen accepteres ikke','Ikke en ESP32-firmware (.bin)','CRC-fejl','Skrivefejl i flash','Kunne ikke starte opdatering','Dataoverløb – prøv igen','Boardet er optaget','Timeout'];
+var THEMES=[
+ {n:'NOVA BLUE',bg:'#040814',panel:'#0a1630',neon:'#00aaff',warn:'#ffb000',ok:'#00dc8c',text:'#e1f0ff'},
+ {n:'EMBER',bg:'#120604',panel:'#2c120a',neon:'#ff6e14',warn:'#ffc800',ok:'#78dc50',text:'#fff0e1'},
+ {n:'MATRIX',bg:'#020c06',panel:'#082412',neon:'#00ff6e',warn:'#ffc800',ok:'#78ffa0',text:'#dcffe6'},
+ {n:'VIOLET',bg:'#0a0414',panel:'#1c0e34',neon:'#aa5aff',warn:'#ffbe3c',ok:'#00dca0',text:'#f0e6ff'},
+ {n:'ROSE',bg:'#14040a',panel:'#300c1c',neon:'#ff3c8c',warn:'#ffbe28',ok:'#00dc96',text:'#ffe6f0'},
+ {n:'MONO',bg:'#000000',panel:'#1a1a1a',neon:'#ebebeb',warn:'#ffbe00',ok:'#00dc78',text:'#ffffff'},
+ {n:'STEEL',bg:'#303030',panel:'#3b3b3b',neon:'#6fa3a8',warn:'#ffb000',ok:'#8fd9a8',text:'#ececec'},
+ {n:'EGEN',bg:'#303030',panel:'#3b3b3b',neon:'#6fa3a8',warn:'#ffb000',ok:'#8fd9a8',text:'#ececec'}];
+var STYLES=['Klassisk','Navn','Billede','Minimal'];
+var MAXAPP=0x140000,MINAPP=65536;
+var NW=window.NovaWidget;
+
+var S={tab:'home',sub:{tune:'themes',system:'device'},live:null,pref:null,t:null,demo:false,conn:false,info:null,ota:{state:0,err:0,recv:0,total:0},file:null,fileInfo:null,
+  wid:{v:2,name:'Mit dashboard',author:'',desc:'',pages:1,bg:'bg',items:[]},gal:[],comm:[],commMsg:'',repo:'',
+  img:null,thr:128,inv:false,imgName:'',busy:false,msg:'',text:'',acks:{},otaWait:null};
+
+// ---------- CRC-32 (same as zlib) ----------
+var CRC=(function(){var t=new Uint32Array(256);for(var n=0;n<256;n++){var c=n;for(var k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();
+function crc32(u8){var c=0xFFFFFFFF;for(var i=0;i<u8.length;i++)c=CRC[(c^u8[i])&255]^(c>>>8);return (c^0xFFFFFFFF)>>>0}
+function le32(v){return [v&255,(v>>>8)&255,(v>>>16)&255,(v>>>24)&255]}
+function sleep(ms){return new Promise(function(r){setTimeout(r,ms)})}
+function hex(v){return ('00000000'+v.toString(16)).slice(-8).toUpperCase()}
+
+// ---------- transports ----------
+function BleT(){this.onStat=null;this.onClose=null}
+BleT.prototype.connect=async function(){
+  var self=this,stage='scan';
+  function fail(msg,e){var d=e&&e.name?(' ('+e.name+')'):'';throw new Error(msg+d)}
+  try{
+    stage='scan';
+    this.dev=await navigator.bluetooth.requestDevice({filters:[{namePrefix:'NOVA RIDE'}],optionalServices:[UU.svc]});
+    this.dev.addEventListener('gattserverdisconnected',function(){if(self.onClose)self.onClose()});
+    stage='gatt';
+    var srv=await this.dev.gatt.connect();
+    stage='service';
+    var svc=await srv.getPrimaryService(UU.svc);
+    stage='chars';
+    this.c=await svc.getCharacteristic(UU.ctrl);
+    this.d=await svc.getCharacteristic(UU.data);
+    this.s=await svc.getCharacteristic(UU.stat);
+    stage='notify';
+    await this.s.startNotifications();
+    this.s.addEventListener('characteristicvaluechanged',function(e){if(self.onStat)self.onStat(new Uint8Array(e.target.value.buffer,e.target.value.byteOffset,e.target.value.byteLength))});
+  }catch(e){
+    var m={
+      scan:'Fandt ingen enhed. Sæt PHONE ON på boardet, og hold telefonen tæt på.',
+      gatt:'Kunne ikke oprette forbindelse. Prøv igen, og sluk/tænd boardet hvis det bliver ved.',
+      service:'Boardet har ikke app-tjenesten. Enten er firmwaren ældre end 0.8 (flash den nyeste .factory.bin med USB), eller også husker iPhonen en gammel tjenesteliste: Indstillinger > Bluetooth > NOVA RIDE (i) > Glem denne enhed, og par igen.',
+      chars:'Appens kanaler mangler på boardet. Opdater firmwaren, og glem enheden i iPhone-indstillingerne.',
+      notify:'Kunne ikke abonnere på svar fra boardet. Glem enheden i iPhone-indstillingerne og par igen.'}[stage];
+    if(e&&e.name==='NotFoundError'&&stage==='scan')m='Ingen enhed valgt. Prøv igen.';
+    fail(m,e);
+  }
+};
+BleT.prototype.disconnect=function(){try{this.dev.gatt.disconnect()}catch(e){}};
+BleT.prototype.ctrl=function(b){var u=new Uint8Array(b);return this.c.writeValueWithResponse?this.c.writeValueWithResponse(u):this.c.writeValue(u)};
+BleT.prototype.data=function(b){var u=new Uint8Array(b);return this.d.writeValueWithoutResponse?this.d.writeValueWithoutResponse(u):this.d.writeValue(u)};
+
+// A simulated board, so the app can be tried without hardware.
+function DemoT(){this.onStat=null;this.onClose=null;this.st={bl:80,arc:0,acc:[111,163,168],theme:0,style:0,text:'',img:false,recv:0,total:0,exp:0,state:0}}
+DemoT.prototype.connect=async function(){await sleep(300);var self=this,t0=Date.now();
+  this.tm=setInterval(function(){var s=self.st,t=(Date.now()-t0)/1000,sp=14+12*Math.sin(t*.5);if(s.startcap&&sp>20)sp=20;
+   var pct=Math.max(5,Math.round(86-t*.05)),pw=Math.round(sp*58+120*Math.sin(t)),V=67.5+pct*.19,amp=pw/V,u16=function(x){x=Math.round(x)&0xFFFF;return [x&255,x>>8]};
+   self.emit([0x40,0xFF].concat(u16(sp*10),[pct],u16(V*10),u16(pw),u16(amp*10),[Math.round(34+sp*.5)&255,Math.round(45+sp*.5)&255,2,s.startcap?1:0],le32(Math.round(20660*10))))},500);
+  if(this.tm&&this.tm.unref)this.tm.unref()};
+DemoT.prototype.disconnect=function(){clearInterval(this.tm);if(this.onClose)this.onClose()};
+DemoT.prototype.emit=function(a){if(this.onStat)this.onStat(new Uint8Array(a))};
+DemoT.prototype.info=function(){var s=this.st,e=new TextEncoder(),a=[1,1,s.theme,s.style,1|(s.img?2:0)|4|8|(s.lay?48:0)|(s.startcap?64:0),0].slice(0,5);
+  var tail=Array.from(e.encode('0.8.0 (demo)')).concat([0],Array.from(e.encode('cyd_st7789')),[0],Array.from(e.encode(s.text)),[0],Array.from(e.encode([s.bl,s.arc].concat(s.acc).join(','))),[0]);this.emit(a.concat(tail))};
+DemoT.prototype.ota=function(){var s=this.st;this.emit([0x10,s.state,0].concat(le32(s.recv),le32(s.total)))};
+DemoT.prototype.ack=function(op,r){this.emit([0x30,op,r||0])};
+DemoT.prototype.ctrl=async function(b){var s=this.st,self=this;await sleep(30);
+  switch(b[0]){
+   case OP.INFO:this.info();break;
+   case OP.THEME:s.theme=b[1];this.ack(b[0]);break;
+   case OP.STYLE:s.style=b[1];this.ack(b[0]);break;
+   case OP.TEXT:s.text=new TextDecoder().decode(b.slice?b.slice(1):new Uint8Array(b).slice(1));this.ack(b[0]);break;
+   case OP.IMG_BEGIN:case OP.IMG_CHUNK:this.ack(b[0]);break;
+   case OP.IMG_END:s.img=true;this.ack(b[0]);break;
+   case OP.LB:case OP.LC:this.ack(b[0]);break;
+   case OP.LE:s.lay=true;this.ack(b[0]);break;
+   case OP.LU:s.lay=b[1]===1;this.ack(b[0]);break;
+   case OP.START:s.startcap=b[1]===1;this.ack(b[0]);break;
+   case OP.BL:s.bl=b[1];this.ack(b[0]);break;
+   case OP.AM:s.arc=b[1];this.ack(b[0]);break;
+   case OP.AC:s.acc=[b[1],b[2],b[3]];this.ack(b[0]);break;
+   case OP.PREVIEW:case OP.MUSIC:case OP.END:case OP.ABORT:this.ack(b[0]);if(b[0]===OP.ABORT){s.state=0;this.ota()}break;
+   case OP.BEGIN:s.total=b[1]|(b[2]<<8)|(b[3]<<16)|(b[4]<<24);s.total>>>=0;s.recv=0;s.state=2;this.ota();break;
+  }};
+DemoT.prototype.data=async function(b){var s=this.st;if(s.state!==2)return;await sleep(2);var prev=s.recv;s.recv=Math.min(s.total,s.recv+b.length);
+  if(s.recv===s.total){s.state=3;this.ota();var me=this;setTimeout(function(){s.state=4;me.ota();setTimeout(function(){me.disconnect()},1500)},700)}
+  else if(Math.floor(s.recv/4096)>Math.floor(prev/4096))this.ota()};
+
+// ---------- protocol ----------
+function onStat(u){
+  if(!u.length)return;
+  if(u[0]===1&&u.length>5){
+    var parts=new TextDecoder().decode(u.slice(5)).split('\0');
+    S.info={theme:u[2],style:u[3],flags:u[4],ver:parts[0],profile:parts[1],text:parts[2]||'',bl:80,arc:0,acc:[111,163,168]};
+    if(parts[3]){var ex=parts[3].split(',').map(Number);if(ex.length>=5&&!ex.some(isNaN)){S.info.bl=ex[0];S.info.arc=ex[1];S.info.acc=[ex[2],ex[3],ex[4]]}}
+    THEMES[7].neon='#'+S.info.acc.map(function(x){return ('0'+x.toString(16)).slice(-2)}).join('');
+    if(!S.textTouched)S.text=S.info.text;
+  }else if(u[0]===0x40&&u.length>=19){
+    var i16=function(a,b){var v=u[a]|(u[b]<<8);return v>32767?v-65536:v},i8=function(a){return u[a]>127?u[a]-256:u[a]};
+    S.live={v:u[1],speed:(u[2]|(u[3]<<8))/10,pct:u[4],volt:(u[5]|(u[6]<<8))/10,pw:i16(7,8),amp:i16(9,10)/10,t:i8(11),mt:i8(12),mode:u[13],cap:u[14],odo:((u[15]|(u[16]<<8)|(u[17]<<16)|(u[18]<<24))>>>0)/10};
+    paintLive();return;
+  }else if(u[0]===0x10&&u.length>=11){
+    S.ota={state:u[1],err:u[2],recv:(u[3]|(u[4]<<8)|(u[5]<<16)|(u[6]<<24))>>>0,total:(u[7]|(u[8]<<8)|(u[9]<<16)|(u[10]<<24))>>>0};
+    if(S.otaWait){var w=S.otaWait;S.otaWait=null;w()}
+    paintOta();
+  }else if(u[0]===0x30&&u.length>=3){
+    var f=S.acks[u[1]];if(f){delete S.acks[u[1]];f(u[2])}
+  }
+  if(u[0]===1)render();
+}
+function sendAck(bytes){return new Promise(function(res,rej){
+  var op=bytes[0],to=setTimeout(function(){delete S.acks[op];rej(new Error('Intet svar fra boardet'))},4000);
+  S.acks[op]=function(r){clearTimeout(to);r===0?res():rej(new Error('Boardet afviste kommandoen'))};
+  S.t.ctrl(bytes).catch(function(e){clearTimeout(to);delete S.acks[op];rej(e)});
+})}
+function waitOta(ms){return new Promise(function(res){var to=setTimeout(function(){S.otaWait=null;res()},ms);S.otaWait=function(){clearTimeout(to);res()}})}
+
+async function connect(demo){
+  S.msg='';
+  try{
+    S.demo=!!demo;S.t=demo?new DemoT():new BleT();
+    S.t.onStat=onStat;
+    var me=S.t;
+    S.t.onClose=function(){if(S.t!==me)return;S.conn=false;S.info=null;S.live=null;S.busy=false;if(S.ota.state===4)S.msg='Opdatering færdig – boardet genstarter.';render()};
+    await S.t.connect();
+    S.conn=true;render();
+    try{await S.t.ctrl([OP.INFO])}catch(e){throw new Error('Boardet afviste første kommando. Parring mangler: par NOVA RIDE i iPhone-indstillinger > Bluetooth, og prøv igen. ('+((e&&e.name)||'fejl')+')')}
+  }catch(e){S.conn=false;S.msg=(e&&e.message)||String(e);render()}
+}
+function disconnect(){if(S.t)S.t.disconnect()}
+
+async function act(fn){
+  if(!S.conn){S.msg='Forbind først.';render();return}
+  try{await fn();S.msg=''}catch(e){S.msg=(e&&e.message)||String(e)}
+  render();
+}
+function setTheme(i){return act(async function(){await sendAck([OP.THEME,i]);await S.t.ctrl([OP.INFO])})}
+function setStyle(i){return act(async function(){await sendAck([OP.STYLE,i]);await S.t.ctrl([OP.INFO])})}
+function sendText(){return act(async function(){var u=Array.from(new TextEncoder().encode(S.text.replace(/[^\x20-\x7E]/g,'').slice(0,15)));await sendAck([OP.TEXT].concat(u));S.textTouched=false;await S.t.ctrl([OP.INFO])})}
+function preview(){return act(function(){return sendAck([OP.PREVIEW])})}
+function music(k){return act(function(){return sendAck([OP.MUSIC,k])})}
+function sendImage(){return act(async function(){
+  if(!S.img)throw new Error('Vælg et billede først.');
+  S.busy=true;render();
+  await sendAck([OP.IMG_BEGIN]);
+  for(var off=0;off<1024;off+=128)await sendAck([OP.IMG_CHUNK,off&255,off>>8].concat(Array.from(S.img.slice(off,off+128))));
+  await sendAck([OP.IMG_END]);
+  await sendAck([OP.STYLE,2]);
+  S.busy=false;await S.t.ctrl([OP.INFO]);
+})}
+
+// ---------- firmware update ----------
+function checkFile(u8,name){
+  if(!/\.bin$/i.test(name))return 'Filen skal være en .bin';
+  if(u8.length<MINAPP||u8.length>MAXAPP)return 'Størrelsen skal være mellem 64 KB og '+(MAXAPP/1024)+' KB (er '+Math.round(u8.length/1024)+' KB)';
+  if(u8[0]!==0xE9||u8[12]!==0||u8[13]!==0)return 'Det ligner ikke en ESP32-app (.bin). Brug NOVA_RIDE_<profil>.bin – ikke .factory.bin';
+  return '';
+}
+async function pickFile(f){
+  S.file=null;S.fileInfo=null;S.msg='';
+  if(!f){render();return}
+  var u8=new Uint8Array(await f.arrayBuffer());
+  var bad=checkFile(u8,f.name);
+  S.fileInfo={name:f.name,size:u8.length,crc:crc32(u8),bad:bad};
+  S.file=bad?null:u8;
+  render();
+}
+async function startUpdate(){
+  if(!S.file||!S.conn)return;
+  S.busy=true;S.msg='';S.ota={state:0,err:0,recv:0,total:S.file.length};S.t0=Date.now();render();
+  try{
+    await S.t.ctrl([OP.BEGIN].concat(le32(S.file.length),le32(S.fileInfo.crc)));
+    await waitOta(5000);
+    if(S.ota.state!==2)throw new Error(ERR[S.ota.err]||'Boardet startede ikke opdateringen');
+    var CH=160,sent=0,u=S.file;
+    while(sent<u.length){
+      if(S.ota.state===5)throw new Error(ERR[S.ota.err]||'Fejl på boardet');
+      if(sent-S.ota.recv>=6144){await waitOta(3000);if(sent-S.ota.recv>=6144&&S.ota.state===2){await sleep(50);continue}}
+      var end=Math.min(u.length,sent+CH);
+      await S.t.data(u.slice(sent,end));
+      sent=end;
+    }
+    var t0=Date.now();
+    while(S.ota.state!==4&&S.ota.state!==5&&Date.now()-t0<20000)await waitOta(1000);
+    if(S.ota.state===5)throw new Error(ERR[S.ota.err]||'Fejl på boardet');
+    S.msg='Opdatering sendt. Boardet genstarter nu.';
+  }catch(e){
+    S.msg=(e&&e.message)||String(e);
+    try{if(S.conn)await S.t.ctrl([OP.ABORT])}catch(x){}
+  }
+  S.busy=false;render();
+}
+function paintOta(){
+  var b=$('#obar'),t=$('#otxt');if(!b)return;
+  var o=S.ota,pct=o.total?Math.floor(o.recv*100/o.total):0;
+  b.style.width=pct+'%';
+  var el=(Date.now()-(S.t0||Date.now()))/1000,sp=el>0?o.recv/el/1024:0;
+  var names=['Klar','Klar','Sender…','Kontrollerer…','Færdig – genstarter','Fejl'];
+  t.textContent=names[o.state]+'  '+pct+'%  ('+Math.round(o.recv/1024)+' / '+Math.round(o.total/1024)+' KB'+(sp>0?', '+sp.toFixed(1)+' KB/s':'')+')';
+}
+
+// ---------- images ----------
+async function loadImage(f){
+  if(!f)return;S.imgName=f.name;S.imgFile=f;await rebuildImg();render();
+}
+async function rebuildImg(){
+  if(!S.imgFile)return;
+  var bmp=await createImageBitmap(S.imgFile),c=document.createElement('canvas');c.width=128;c.height=64;
+  var g=c.getContext('2d');g.fillStyle='#000';g.fillRect(0,0,128,64);
+  var sc=Math.min(128/bmp.width,64/bmp.height),w=bmp.width*sc,h=bmp.height*sc;g.drawImage(bmp,(128-w)/2,(64-h)/2,w,h);
+  var d=g.getImageData(0,0,128,64).data,bits=new Uint8Array(1024);
+  for(var y=0;y<64;y++)for(var x=0;x<128;x++){var i=(y*128+x)*4,lum=0.299*d[i]+0.587*d[i+1]+0.114*d[i+2],on=lum>S.thr;if(S.inv)on=!on;if(on){var b=y*128+x;bits[b>>3]|=0x80>>(b&7)}}
+  S.img=bits;paintImg();
+}
+function paintImg(){
+  var cv=$('#imgprev');if(!cv||!S.img)return;var g=cv.getContext('2d'),th=THEMES[S.info?S.info.theme:0];
+  g.fillStyle='#000';g.fillRect(0,0,128,64);g.fillStyle=th.neon;
+  for(var y=0;y<64;y++)for(var x=0;x<128;x++){var b=y*128+x;if(S.img[b>>3]&(0x80>>(b&7)))g.fillRect(x,y,1,1)}
+}
+
+// ---------- drawing helpers ----------
+function miniDash(t){
+  return '<svg viewBox="0 0 160 100"><rect width="160" height="100" fill="'+t.bg+'"/>'+
+  '<circle cx="48" cy="52" r="34" fill="none" stroke="'+t.panel+'" stroke-width="9"/>'+
+  '<circle cx="48" cy="52" r="34" fill="none" stroke="'+t.neon+'" stroke-width="9" stroke-dasharray="120 214" transform="rotate(135 48 52)"/>'+
+  '<text x="48" y="60" text-anchor="middle" font-size="26" font-weight="700" fill="'+t.text+'" font-family="monospace">23</text>'+
+  '<text x="110" y="30" font-size="18" font-weight="700" fill="'+t.text+'" font-family="monospace">340</text>'+
+  '<rect x="92" y="38" width="56" height="5" rx="2" fill="'+t.panel+'"/><rect x="92" y="38" width="30" height="5" rx="2" fill="'+t.neon+'"/>'+
+  '<rect x="92" y="58" width="56" height="5" rx="2" fill="'+t.panel+'"/><rect x="92" y="58" width="38" height="5" rx="2" fill="'+t.ok+'"/>'+
+  '<rect x="8" y="86" width="30" height="9" rx="3" fill="'+t.panel+'"/><rect x="42" y="86" width="30" height="9" rx="3" fill="'+t.panel+'" stroke="'+t.ok+'"/>'+
+  '<rect x="76" y="86" width="30" height="9" rx="3" fill="'+t.panel+'"/><rect x="110" y="86" width="30" height="9" rx="3" fill="'+t.panel+'"/></svg>';
+}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function kv(a,b){return '<div class="kv"><span>'+a+'</span><span>'+b+'</span></div>'}
+function chip(t,ok){return '<span class="chip'+(ok?' ok':'')+'">'+t+'</span>'}
+// ---------- app preferences (this phone only) ----------
+var LOOKS=[['steel','Stål'],['dark','Mørk'],['light','Lys']];
+var ACCS=['#6fa3a8','#ff8200','#3aa0ff','#33d17a','#b36bff','#ff4f8b','#ffd23f','#e8e8e8'];
+var TILES=[['power','Effekt'],['batt','Batteri'],['volt','Spænding'],['amp','Strøm'],['temp','Temperaturer'],['odo','Km-tæller']];
+S.pref={look:'steel',acc:'#6fa3a8',unit:'kmh',tiles:{power:1,batt:1,volt:1,amp:1,temp:1,odo:1}};
+(function(){try{if(typeof localStorage==='undefined')return;var j=localStorage.getItem('novaPrefs');if(!j)return;var q=JSON.parse(j);
+ ['look','acc','unit'].forEach(function(k){if(q[k])S.pref[k]=q[k]});if(q.tiles)for(var t in q.tiles)S.pref.tiles[t]=q.tiles[t]}catch(e){}})();
+function savePrefs(){try{localStorage.setItem('novaPrefs',JSON.stringify(S.pref))}catch(e){}}
+function applyLook(){try{if(document.documentElement)document.documentElement.onclick=null}catch(e){}
+var r=typeof document!=='undefined'&&document.documentElement;if(!r||!r.setAttribute)return;r.setAttribute('data-look',S.pref.look);r.style.setProperty('--acc',S.pref.acc)}
+function curTheme(){return THEMES[S.info?S.info.theme:6]}
+
+// ---------- views ----------
+var TABS=[['home','🏠','Hjem'],['tune','🎨','Tilpas'],['safe','🛡️','Sikkerhed'],['system','⚙️','System']];
+function subnav(list,cur){return '<div class="subnav">'+list.map(function(x){return '<button data-sub="'+x[0]+'" class="'+(x[0]===cur?'sel':'')+'">'+x[1]+'</button>'}).join('')+'</div>'}
+function render(){
+  applyLook();
+  var pill=$('#pill');pill.textContent=S.conn?(S.demo?'Demo':'Forbundet'):'Ikke forbundet';pill.className=S.conn?'on':'';
+  $('#tabs').innerHTML=TABS.map(function(t){return '<button data-t="'+t[0]+'" class="'+(S.tab===t[0]?'sel':'')+'"><span>'+t[1]+'</span>'+t[2]+'</button>'}).join('');
+  var v=$('#view'),h='',t=S.tab;
+  if(S.msg)h+='<div class="card warn">'+esc(S.msg)+'</div>';
+  if(S.studio)h+=vStudio();else if(t==='home')h+=vHome();else if(t==='tune')h+=vTune();else if(t==='safe')h+=vSafe();else h+=vSystem();
+  v.innerHTML=h;wire();if(S.studio){saveWid();wireStudio();studioLoop()}else wire2();
+  var nv=$('#tabs');if(nv)nv.style.display=S.studio?'none':'';
+  if(t==='system'&&S.sub.system==='update')paintOta();
+  if(t==='tune'&&S.sub.tune==='boot')paintImg();
+  if(!S.studio&&t==='tune'&&S.sub.tune==='widgets')paintWidgets();
+  if(t==='home')paintLive();
+}
+// ----- Hjem: live view of the board's dashboard
+var LA={cx:90,cy:96,r:72};
+function lvPt(f,r){var a=(135+270*f)*Math.PI/180;return [LA.cx+r*Math.cos(a),LA.cy+r*Math.sin(a)]}
+function lvArc(f){var p0=lvPt(0,LA.r),p1=lvPt(f,LA.r);return 'M'+p0[0].toFixed(1)+' '+p0[1].toFixed(1)+'A'+LA.r+' '+LA.r+' 0 '+(270*f>180?1:0)+' 1 '+p1[0].toFixed(1)+' '+p1[1].toFixed(1)}
+function lvBar(id,x,y,w,h){return '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="'+h/2+'" fill="var(--tr)" stroke="var(--edge)"/><rect id="'+id+'" x="'+(x+2)+'" y="'+(y+2)+'" width="0" height="'+(h-4)+'" rx="'+(h-4)/2+'" fill="var(--btn)"/>'}
+function vLive(){
+  return '<div class="card live"><svg viewBox="0 0 320 196">'+
+  '<path d="'+lvArc(1)+'" fill="none" stroke="var(--acc)" stroke-width="9" stroke-linecap="round" opacity=".55"/>'+
+  '<path id="lv-fill" d="" fill="none" stroke="var(--acc)" stroke-width="9" stroke-linecap="round"/>'+
+  '<line id="lv-cap" x1="0" y1="0" x2="0" y2="0" stroke="#ffb000" stroke-width="3" stroke-linecap="round" opacity="0"/>'+
+  '<circle id="lv-knob" r="7" cx="0" cy="0" fill="#f4f4f4"/>'+
+  '<text id="lv-name" x="90" y="44" text-anchor="middle" font-size="10.5" font-weight="700" letter-spacing="1.6"></text>'+
+  '<text id="lv-sp" x="90" y="112" text-anchor="middle" font-size="72" font-weight="700">--</text>'+
+  '<text id="lv-unit" x="90" y="136" text-anchor="middle" font-size="13" font-weight="700" class="m">km/h</text>'+
+  '<g id="g-temp"><text id="lv-t1" x="46" y="178" font-size="10" font-weight="700"></text><text id="lv-t2" x="46" y="191" font-size="10" font-weight="700" class="m"></text></g>'+
+  '<g id="g-odo"><text id="lv-odo" x="290" y="20" text-anchor="end" font-size="16"></text></g>'+
+  '<g id="g-power"><text id="lv-pw" x="290" y="56" text-anchor="end" font-size="42" font-weight="700">--</text><text x="296" y="56" font-size="13" font-weight="700" class="m">W</text>'+lvBar('lv-pb',176,64,138,7)+'</g>'+
+  '<g id="g-batt"><text id="lv-pct" x="178" y="102" font-size="30" font-weight="700">--</text>'+lvBar('lv-bb',176,110,138,15)+'</g>'+
+  '<g id="g-volt"><text id="lv-v" x="314" y="98" text-anchor="end" font-size="15" font-weight="700">--</text></g>'+
+  '<g id="g-amp"><rect x="254" y="136" width="60" height="14" rx="4" fill="var(--acc)" opacity=".3"/><text id="lv-a" x="284" y="147" text-anchor="middle" font-size="10" font-weight="700">BATT -- A</text></g>'+
+  '</svg></div>';
+}
+function paintLive(){
+  try{
+  var L=S.live,e=function(id){return $('#'+id)};if(!L||!e('lv-sp'))return;
+  var mph=S.pref.unit==='mph',k=mph?0.621371:1,P=S.pref.tiles,ok=function(b){return (L.v&b)!==0};
+  var fixed=S.info&&S.info.arc?S.info.arc*5:0,mx=fixed||Math.max(35,Math.ceil((ok(1)?L.speed:0)/5)*5);
+  if(ok(1)&&L.speed>mx)mx=Math.ceil(L.speed/5)*5;
+  e('lv-sp').textContent=ok(1)?Math.round(L.speed*k):'--';e('lv-unit').textContent=mph?'mph':'km/h';
+  var own=S.info&&S.info.text,md=['WALK','ECO','DRIVE','SPORT'][L.mode];e('lv-name').textContent='_'+(own?own.toUpperCase():(md||'--'))+'_';
+  e('lv-pw').textContent=ok(8)?L.pw:'--';e('lv-pct').textContent=ok(2)?L.pct+'%':'--';e('lv-v').textContent=ok(4)?L.volt.toFixed(1)+' V':'-- V';
+  e('lv-a').textContent='BATT '+(ok(16)?Math.round(L.amp):'--')+' A';e('lv-odo').textContent=ok(128)?Math.round(L.odo*k):'--';
+  e('lv-t1').textContent='R FET '+(ok(32)?L.t+'\u00b0':'--')+'  MOT '+(ok(64)?L.mt+'\u00b0':'--');e('lv-t2').textContent='F FET --  MOT --';
+  ['power','batt','volt','amp','temp','odo'].forEach(function(n){var g=e('g-'+n);if(g)g.style.display=P[n]?'':'none'});
+  var f=ok(1)?Math.min(L.speed/mx,1):0,kp=lvPt(f,LA.r);
+  e('lv-fill').setAttribute('d',f>.004?lvArc(f):'');e('lv-knob').setAttribute('cx',kp[0]);e('lv-knob').setAttribute('cy',kp[1]);
+  var c=e('lv-cap'),a=lvPt(20/mx,LA.r-8),b=lvPt(20/mx,LA.r+8);
+  c.setAttribute('x1',a[0]);c.setAttribute('y1',a[1]);c.setAttribute('x2',b[0]);c.setAttribute('y2',b[1]);c.setAttribute('opacity',L.cap===1?1:0);
+  var zx=134*.2,w=ok(8)&&L.pw>0?Math.min(L.pw/6000,1)*134*.8:0,n=ok(8)&&L.pw<0?Math.min(-L.pw/800,1)*zx:0;
+  e('lv-pb').setAttribute('x',178+zx-n);e('lv-pb').setAttribute('width',Math.max(0,w+n));
+  e('lv-bb').setAttribute('width',ok(2)?Math.round(L.pct*1.34):0);
+  e('lv-bb').setAttribute('fill',!ok(2)||L.pct>20?'var(--btn)':L.pct>10?'#ffb000':'var(--bad)');
+  }catch(x){}
+}
+function vHome(){
+  if(!S.conn)return vDevice();
+  var f=S.info?S.info.flags:0;
+  return vLive()+(S.info?'<div class="chips" style="margin:0 4px 6px">'+chip('Telefon '+(f&4?'forbundet':'ikke forbundet'),f&4)+chip('Løbehjul '+(f&8?'forbundet':'ikke forbundet'),f&8)+chip('Start 20 km/t '+(f&64?'til':'fra'),f&64)+'</div>':'')+
+  '<div class="card"><h3>Musik</h3><div class="mrow"><button data-m="0">⏮</button><button data-m="1">⏯</button><button data-m="2">⏭</button></div></div>';
+}
+// ----- Tilpas
+function hexOf(a){return '#'+a.map(function(x){return ('0'+x.toString(16)).slice(-2)}).join('')}
+function vTune(){
+  var sub=S.sub.tune,h=subnav([['themes','Temaer'],['screen','Skærm'],['boot','Boot'],['widgets','Widgets'],['app','App']],sub);
+  if(sub==='themes')h+=vThemes()+vAccent();else if(sub==='screen')h+=vScreen();else if(sub==='boot')h+=vBoot();else if(sub==='widgets')h+=vWidgets();else h+=vAppLook();
+  return h;
+}
+function vAccent(){
+  var a=S.info?S.info.acc:[111,163,168];
+  return '<div class="card"><h2>Egen farve</h2><p>Vælg en farve til temaet <b>EGEN</b>. Knappen sender farven og skifter boardet til temaet.</p>'+
+  '<input type="color" id="accpick" value="'+hexOf(a)+'"><button class="btn" data-a="accsend"'+(S.conn?'':' disabled')+'>Brug farven på boardet</button></div>';
+}
+function vScreen(){
+  var bl=S.info?S.info.bl:80,am=S.info?S.info.arc:0,ST=[0,6,7,8,10,12,16],bs=[20,40,60,80,100];
+  return '<div class="card"><h2>Lysstyrke</h2><div class="seg c5">'+bs.map(function(n){return '<button data-bl="'+n+'" class="'+(Math.abs(bl-n)<10?'sel':'')+'">'+n+'%</button>'}).join('')+'</div>'+
+  '<input type="range" id="blr" min="10" max="100" value="'+bl+'" style="margin-top:12px"></div>'+
+  '<div class="card"><h2>Hastighedsbue</h2><p>Hvor mange km/t hele buen dækker. Auto vokser med grænser og fart, så buen også virker over 35 km/t.</p><div class="seg c4" style="grid-template-columns:repeat(4,1fr)">'+
+  ST.map(function(n){return '<button data-am="'+n+'" class="'+(am===n?'sel':'')+'">'+(n?n*5:'Auto')+'</button>'}).join('')+'</div></div>'+
+  (S.conn?'':'<p class="small">Forbind til boardet for at ændre skærmen.</p>');
+}
+function vAppLook(){
+  var P=S.pref;
+  return '<div class="card"><h2>Udseende</h2><div class="seg c3">'+LOOKS.map(function(l){return '<button data-lk="'+l[0]+'" class="'+(P.look===l[0]?'sel':'')+'">'+l[1]+'</button>'}).join('')+'</div>'+
+  '<h3 style="margin-top:14px">Accentfarve</h3><div class="sw">'+ACCS.map(function(c){return '<button data-acc="'+c.slice(1)+'" style="background:'+c+'" class="'+(P.acc===c?'sel':'')+'"></button>'}).join('')+'</div>'+
+  '<input type="color" id="appacc" value="'+P.acc+'"></div>'+
+  '<div class="card"><h2>Enheder</h2><div class="seg c3" style="grid-template-columns:1fr 1fr">'+[['kmh','km/h'],['mph','mph']].map(function(u){return '<button data-unit="'+u[0]+'" class="'+(P.unit===u[0]?'sel':'')+'">'+u[1]+'</button>'}).join('')+'</div>'+
+  '<p>Gælder kun live-visningen i appen.</p></div>'+
+  '<div class="card"><h2>Live-visning</h2><p>Vælg hvad der vises på Hjem.</p><div class="tg">'+TILES.map(function(t){return '<button data-tile="'+t[0]+'" class="'+(P.tiles[t[0]]?'sel':'')+'">'+t[1]+'</button>'}).join('')+'</div></div>'+
+  '<button class="btn sec" data-a="resetprefs">Nulstil appens udseende</button>';
+}
+// ----- System
+function vSystem(){
+  var sub=S.sub.system;
+  return subnav([['device','Enhed'],['update','Opdater']],sub)+(sub==='update'?vUpdate():vDevice());
+}
+function vDevice(){
+  var i=S.info,th=curTheme(),h='<div class="card"><div class="hero">'+
+  '<svg width="92" height="92" viewBox="0 0 92 92"><circle cx="46" cy="46" r="36" fill="none" stroke="var(--card2)" stroke-width="10"/><circle cx="46" cy="46" r="36" fill="none" stroke="var(--acc)" stroke-width="10" stroke-dasharray="130 226" transform="rotate(135 46 46)"/><text x="46" y="53" text-anchor="middle" font-size="20" font-weight="800" fill="var(--fg)">N</text></svg>'+
+  '<div><h2>NOVA RIDE OS</h2><p>'+(S.conn&&i?'Firmware '+esc(i.ver):'CYD-dashboard til dit løbehjul')+'</p></div></div>';
+  if(S.conn&&i){var f=i.flags;h+='<div class="chips">'+chip('Telefon '+(f&4?'forbundet':'ikke forbundet'),f&4)+chip('Løbehjul '+(f&8?'forbundet':'ikke forbundet'),f&8)+chip('Opdateringsvindue '+(f&1?'åbent':'lukket'),f&1)+chip('Dashboard: '+(f&16?'eget':'standard'),f&16)+chip('Start 20 km/t '+(f&64?'til':'fra'),f&64)+'</div>'}
+  h+='</div>';
+  if(S.conn){
+    h+='<div class="card"><h3>Enhed</h3>'+(i?kv('Firmware',esc(i.ver))+kv('Profil',esc(i.profile))+kv('Tema',THEMES[i.theme]?THEMES[i.theme].n:'?')+kv('Bootskærm',STYLES[i.style]||'?')+kv('Tekst',esc(i.text||'–')):'<p>Henter oplysninger…</p>')+'</div>'+
+    '<button class="btn sec" data-a="disc">Afbryd</button>';
+  }else{
+    h+='<div class="card"><h2>Forbind</h2><p>Sæt <b>PHONE ON</b> i boardets Settings, og vælg derefter <b>NOVA RIDE</b>. Første gang beder iPhonen om at parre.</p>'+
+    (navigator.bluetooth?'':'<p class="warn">Denne browser har ikke Web Bluetooth. På iPhone: åbn siden i appen <b>Bluefy</b>. På Android/Windows: brug Chrome eller Edge.</p>')+
+    '<button class="btn" data-a="conn"'+(navigator.bluetooth?'':' disabled')+'>Find NOVA RIDE</button><button class="btn sec" data-a="demo">Prøv demo uden board</button></div>';
+  }
+  return h;
+}
+function vSafe(){
+  var on=!!(S.info&&(S.info.flags&64));
+  return '<div class="card"><h2>Start-begrænsning</h2>'+
+  '<p>Når den er slået til, kan løbehjulet <b>kun køre 20 km/t</b>, hver gang det tændes. Indstillingen findes kun her i appen – den kan ikke ændres fra boardets egne menuer.</p>'+
+  '<div class="chips">'+chip(S.conn&&S.info?(on?'Slået til':'Slået fra'):'Ikke forbundet',on)+'</div>'+
+  '<button class="btn'+(on?' sec':'')+'" data-a="startcap"'+(S.conn&&S.info?'':' disabled')+'>'+(on?'Slå start-begrænsning fra':'Slå start-begrænsning til')+'</button></div>'+
+  '<p class="small">Begrænsningen sættes på igen, hver gang boardet får forbindelse til løbehjulet. Den virker kun, når boardet har en bekræftet forbindelse til hjulet, og den kan ikke bekræftes i demo-tilstand. Husk, at den lovlige grænse for el-løbehjul på offentlig vej er 20 km/t i Danmark.</p>';
+}
+function vUpdate(){
+  var fi=S.fileInfo,h='<div class="card"><h2>Opdater firmware</h2>'+
+  '<div class="step"><em>1</em><div>På boardet: <b>Settings → UPDATE</b>, og hold knappen nede, så <b>WINDOW OPEN</b> vises (2 minutter).</div></div>'+
+  '<div class="step"><em>2</em><div>Vælg din egen fil <b>NOVA_RIDE_&lt;profil&gt;.bin</b> (fra GitHub Actions, ikke <i>.factory.bin</i>).</div></div>'+
+  '<div class="step"><em>3</em><div>Tryk <b>Start opdatering</b>. Lad telefonen ligge tæt på, og stå stille med hjulet.</div></div></div>'+
+  '<div class="card"><input type="file" id="bin" accept=".bin,application/octet-stream" style="width:100%">';
+  if(fi)h+=kv('Fil',esc(fi.name))+kv('Størrelse',Math.round(fi.size/1024)+' KB')+kv('CRC-32',hex(fi.crc))+(fi.bad?'<p style="color:var(--bad)">'+esc(fi.bad)+'</p>':'<p style="color:var(--ok)">Filen ser ud som en gyldig ESP32-app.</p>');
+  h+='<div class="bar"><i id="obar"></i></div><div class="small" id="otxt">Klar</div>'+
+  '<button class="btn" data-a="go"'+((S.file&&S.conn&&!S.busy)?'':' disabled')+'>Start opdatering</button></div>'+
+  '<p class="small">Boardet kontrollerer filens størrelse, ESP32-header og CRC, og opdateringen kræver, at du selv har åbnet vinduet på boardet. Der er ingen signatur: installér kun filer, du selv har bygget. Går noget galt, kan du altid flashe igen med USB.</p>';
+  return h;
+}
+function vThemes(){
+  var cur=S.info?S.info.theme:-1;
+  return '<div class="card"><h2>Temaer</h2><p>Vælg farverne. Det gælder hele skærmen med det samme.</p><div class="grid">'+
+  THEMES.map(function(t,i){return '<div class="tcard'+(i===cur?' sel':'')+'" data-th="'+i+'">'+miniDash(t)+t.n+'</div>'}).join('')+'</div></div>';
+}
+function vBoot(){
+  var st=S.info?S.info.style:-1,th=curTheme();
+  var h='<div class="card"><h2>Bootskærm</h2><p>Vælg stil. Boardet viser den med det samme.</p><div class="seg">'+
+  STYLES.map(function(n,i){return '<button data-st="'+i+'" class="'+(i===st?'sel':'')+'">'+n+'</button>'}).join('')+'</div></div>'+
+  '<div class="card"><h3>Tekst (maks 15 tegn)</h3><input type="text" id="btext" maxlength="15" value="'+esc(S.text)+'" placeholder="Dit navn"><button class="btn sec" data-a="text">Send tekst</button></div>'+
+  '<div class="card"><h3>Billede (128 × 64, sort/hvid)</h3><input type="file" id="img" accept="image/*" style="width:100%">'+
+  '<canvas id="imgprev" width="128" height="64" style="margin-top:10px"></canvas>'+
+  '<p>Lysstyrke-grænse: <span id="thrv">'+S.thr+'</span></p><input type="range" id="thr" min="20" max="235" value="'+S.thr+'">'+
+  '<label class="small"><input type="checkbox" id="inv"'+(S.inv?' checked':'')+'> Byt lyst/mørkt</label>'+
+  '<button class="btn" data-a="img"'+((S.img&&S.conn&&!S.busy)?'':' disabled')+'>'+(S.busy?'Sender…':'Send billede til boardet')+'</button></div>'+
+  '<button class="btn sec" data-a="prev">Vis bootskærm på boardet</button>';
+  return h;
+}
+function vMusic(){
+  return '<div class="card"><h2>Musik</h2><p>Knapperne sender medietaster via boardet til din iPhone, så de styrer den app, der spiller. Boardet skal være parret som Bluetooth-enhed (PHONE ON). Titel og kunstner er ikke med endnu.</p>'+
+  '<div class="play"><button data-m="0">⏮</button><button class="big" data-m="1">⏯</button><button data-m="2">⏭</button></div></div>';
+}
+function wire(){
+  var v=$('#view');
+  [].forEach.call(document.querySelectorAll('[data-a]'),function(b){b.onclick=function(){
+    var a=b.dataset.a;
+    if(a==='conn')connect(false);else if(a==='demo')connect(true);else if(a==='disc')disconnect();
+    else if(a==='startcap')act(function(){return sendAck([OP.START,(S.info&&(S.info.flags&64))?0:1]).then(function(){return S.t.ctrl([OP.INFO])})});else if(a==='accsend')act(function(){var h=$('#accpick').value||'#6fa3a8',r=parseInt(h.slice(1,3),16),g=parseInt(h.slice(3,5),16),bl=parseInt(h.slice(5,7),16);
+      return sendAck([OP.AC,r,g,bl]).then(function(){return sendAck([OP.THEME,7])}).then(function(){return S.t.ctrl([OP.INFO])})});
+    else if(a==='resetprefs'){S.pref.look='steel';S.pref.acc='#6fa3a8';S.pref.unit='kmh';for(var tk in S.pref.tiles)S.pref.tiles[tk]=1;savePrefs();render()}
+    else if(a==='go')startUpdate();else if(a==='winstall')act(function(){return installWidget(S.wid)});else if(a==='wexport')exportWidget();else if(a==='wshare')shareWidget();else if(a==='wstd')act(function(){return sendAck([OP.LU,0]).then(function(){return S.t.ctrl([OP.INFO])})});else if(a==='text')sendText();else if(a==='img')sendImage();else if(a==='prev')preview();
+  }});
+  [].forEach.call(document.querySelectorAll('[data-th]'),function(b){b.onclick=function(){setTheme(+b.dataset.th)}});
+  [].forEach.call(document.querySelectorAll('[data-st]'),function(b){b.onclick=function(){setStyle(+b.dataset.st)}});
+  [].forEach.call(document.querySelectorAll('[data-m]'),function(b){b.onclick=function(){music(+b.dataset.m)}});
+  var bin=$('#bin');if(bin)bin.onchange=function(){pickFile(bin.files[0])};
+  var img=$('#img');if(img)img.onchange=function(){loadImage(img.files[0])};
+  var thr=$('#thr');if(thr)thr.oninput=function(){S.thr=+thr.value;$('#thrv').textContent=S.thr;rebuildImg()};
+  var inv=$('#inv');if(inv)inv.onchange=function(){S.inv=inv.checked;rebuildImg()};
+  var bt=$('#btext');if(bt)bt.oninput=function(){S.text=bt.value;S.textTouched=true};
+  if(S.tab==='tune'&&S.sub.tune==='widgets')wireWidgets();
+  [].forEach.call(document.querySelectorAll('#tabs button'),function(b){b.onclick=function(){S.tab=b.dataset.t;render()}});
+}
+
+// ---------- widgets (custom dashboard) ----------
+function wire2(){
+  var q=function(sel,fn){[].forEach.call(document.querySelectorAll(sel),function(b){if(b===document.documentElement||b===document.body)return;b.onclick=function(){fn(b)}})};
+  q('[data-sub]',function(b){S.sub[S.tab]=b.dataset.sub;render()});
+  q('[data-lk]',function(b){S.pref.look=b.dataset.lk;savePrefs();render()});
+  q('[data-acc]',function(b){S.pref.acc='#'+b.dataset.acc;savePrefs();render()});
+  q('[data-unit]',function(b){S.pref.unit=b.dataset.unit;savePrefs();render()});
+  q('[data-tile]',function(b){S.pref.tiles[b.dataset.tile]=S.pref.tiles[b.dataset.tile]?0:1;savePrefs();render()});
+  var send=function(bytes){if(!S.conn){S.msg='Forbind først til boardet.';render();return}act(function(){return sendAck(bytes).then(function(){return S.t.ctrl([OP.INFO])})})};
+  q('[data-bl]',function(b){send([OP.BL,+b.dataset.bl])});
+  q('[data-am]',function(b){send([OP.AM,+b.dataset.am])});
+  var r=$('#blr');if(r)r.onchange=function(){send([OP.BL,+r.value])};
+  var c=$('#appacc');if(c)c.onchange=function(){S.pref.acc=c.value;savePrefs();render()};
+}
+// ---------- widgets: previews, gallery and the studio (visual editor) ----------
+var SRC_LABEL={speed:'Hastighed',power:'Effekt (W)',battery:'Batteri %',volt:'Spænding (V)',current:'Strøm (A)',temp:'Temperatur styring',motortemp:'Temperatur motor',trip:'Tur (km)',total:'Total (km)',mode:'Køretilstand',fault:'Fejlkode',
+ maxspeed:'Tophastighed',maxpower:'Spidseffekt',minvolt:'Laveste spænding',energy:'Energi brugt (Wh)',ridetime:'Køretid (min)',ble:'Forbundet til løbehjul',phone:'Forbundet til telefon',limit:'20-grænse aktiv',demo:'Demo-tilstand',alert:'Fejl aktiv',regen:'Regenererer',moving:'Kører'};
+var NUMSRC=['speed','power','battery','volt','current','temp','motortemp','trip','total','maxspeed','maxpower','minvolt','energy','ridetime'],STATSRC=['ble','phone','limit','demo','alert','regen','moving'];
+var TYPE_LABEL={text:'Tekst',num:'Tal',bar:'Bjælke',arc:'Bue / måler',segbar:'Segmenter',spark:'Graf',rect:'Firkant',circle:'Cirkel',line:'Linje',button:'Knap',dot:'Lampe',icon:'Ikon',modebar:'Tilstandsknapper'};
+var TYPE_HINT={text:'En fast tekst',num:'Et tal fra løbehjulet',bar:'Fyldes efter en værdi',arc:'Rund måler, vælg start og åbning',segbar:'Lysdiode-række',spark:'Graf over de sidste 2 min.',rect:'Panel eller ramme',circle:'Rund flade eller ring',line:'Streg',button:'Knap med handling',dot:'Lampe der lyser',icon:'Lille symbol',modebar:'4 knapper til køretilstand'};
+var PAL_NAMES=[['text','Tekst'],['neon','Accent'],['ok','Grøn'],['warn','Gul'],['bad','Rød'],['dim','Dæmpet'],['panel','Panel'],['bg','Baggrund'],['white','Hvid'],['black','Sort']];
+var FONT_LABEL=[['1','Meget lille'],['2','Lille'],['4','Mellem'],['6','Stort tal'],['7','Segment-tal'],['8','Kæmpe tal']];
+var ACTION_LABEL=[['none','Ingen'],['nextpage','Næste side'],['prevpage','Forrige side'],['walk','Tilstand: Walk'],['eco','Tilstand: Eco'],['drive','Tilstand: Drive'],['sport','Tilstand: Sport'],['prevtrack','Forrige sang'],['playpause','Afspil / pause'],['nexttrack','Næste sang'],['settings','Åbn indstillinger'],['messages','Åbn beskeder'],['music','Åbn musik'],['safety','Åbn 20-skærm']];
+var ACTION_HELP={none:'Knappen gør ikke noget (bruges fx som lampe eller mærkat).',nextpage:'Skifter til næste side i designet.',prevpage:'Skifter til forrige side.',walk:'Skifter køretilstand til Walk. Hold knappen nede i 0,8 sekund.',eco:'Skifter køretilstand til Eco. Hold nede i 0,8 sekund.',drive:'Skifter køretilstand til Drive. Hold nede i 0,8 sekund.',sport:'Skifter til Sport. Hold nede i 0,8 sekund.',prevtrack:'Forrige sang på telefonen.',playpause:'Afspil eller pause musik på telefonen.',nexttrack:'Næste sang på telefonen.',settings:'Åbner indstillinger på boardet.',messages:'Åbner beskeder.',music:'Åbner musikskærmen.',safety:'Åbner 20-skærmen.'};
+var ICON_LABEL=[['bolt','Lyn'],['battery','Batteri'],['thermo','Termometer'],['gauge','Måler'],['warning','Advarsel'],['lock','Lås'],['phone','Telefon'],['light','Lys']];
+var DEF2={text:{t:'text',x:20,y:100,text:'Tekst',font:'4',align:'left',color:'text'},num:{t:'num',x:20,y:100,src:'speed',font:'4',align:'left',dp:0,color:'text'},
+ bar:{t:'bar',x:20,y:110,w:160,h:12,src:'battery',max:100,color:'neon',color2:'panel',border:true,round:true,rad:6},arc:{t:'arc',x:100,y:120,r:70,th:12,a0:135,sweep:270,src:'speed',max:35,color:'neon',color2:'panel',caps:true},
+ segbar:{t:'segbar',x:20,y:110,w:200,h:16,n:12,src:'speed',max:35,color:'neon',color2:'panel',round:true},spark:{t:'spark',x:20,y:90,w:200,h:60,src:'speed',max:35,color:'neon',color2:'panel',fill:true,th:2},
+ rect:{t:'rect',x:20,y:80,w:120,h:70,color:'dim',color2:'panel',border:true,rad:8},circle:{t:'circle',x:100,y:120,r:30,color:'neon',fill:true},line:{t:'line',x:20,y:120,w:200,h:0,th:2,color:'dim'},
+ button:{t:'button',x:20,y:180,w:90,h:34,action:'nextpage',text:'KNAP',font:'2',rad:10,color:'text',color2:'neon'},dot:{t:'dot',x:30,y:30,r:6,src:'ble',color:'ok',color2:'dim'},
+ icon:{t:'icon',x:20,y:20,size:28,icon:'bolt',color:'warn'},modebar:{t:'modebar'}};
+var STUDIO_TYPES=['num','text','arc','bar','segbar','spark','button','icon','dot','rect','circle','line','modebar'];
+
+function cloneW(w){return JSON.parse(JSON.stringify(w))}
+function expandModes(w){var o=[];(w.items||[]).forEach(function(it){if(it&&it.t==='modebar')['walk','eco','drive','sport'].forEach(function(m,k){o.push({t:'button',x:4+k*79,y:206,w:75,h:30,action:m,text:m.toUpperCase(),font:'2',rad:9,color:'text',color2:'neon'})});else o.push(it)});w.items=o;return w}
+function toV2(w){var o=NW.upgrade(cloneW(w));o.v=2;o.pages=o.pages||1;o.bg=o.bg||'bg';o.items=o.items||[];return expandModes(o)}
+function wtheme(th){th=th||curTheme();var m=NW.mixc;return {text:th.text,neon:th.neon,ok:th.ok,warn:th.warn,bad:'#ff5a6e',dim:m(th.bg,th.text,.5),panel:th.panel,bg:th.bg,glow:m(th.bg,th.neon,.5),white:'#ffffff',black:'#000000'}}
+function paintLayout(cv,w,th){
+  cv.width=320;cv.height=240;var g=cv.getContext('2d');if(!g)return;
+  try{NW.render(g,w,NW.sample(0,{still:true}),{theme:wtheme(th),page:0,hist:NW.history({_t0:0},60),mode:2})}catch(e){}
+}
+function loadGallery(){
+  var base=location.protocol==='file:'?null:'widgets/';
+  S.gal=(window.STARTERS||[]).map(function(w){return w});
+  if(!base){S.commMsg='Fællesskabets widgets kræver, at siden ligger på nettet (GitHub Pages).';return}
+  fetch(base+'community/index.json',{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(ix){
+    return Promise.all((ix.widgets||[]).slice(0,60).map(function(n){return fetch(base+'community/'+encodeURIComponent(n)+'.json').then(function(r){return r.json()}).catch(function(){return null})}));
+  }).then(function(list){S.comm=list.filter(function(w){return w&&NW.validateFile(w).length===0});S.commMsg=S.comm.length?'':'Der er ingen delte widgets endnu.';if(S.tab==='tune'&&S.sub.tune==='widgets')render()}).catch(function(){S.commMsg='Kunne ikke hente fællesskabets widgets.';if(S.tab==='tune'&&S.sub.tune==='widgets')render()});
+}
+function repoGuess(){var h=location.hostname,p=location.pathname.split('/').filter(Boolean);if(/\.github\.io$/.test(h)&&p[0])return h.split('.')[0]+'/'+p[0];return ''}
+function cardW(w,idx,src){
+  var c=NW.compile(w),pg=c.ok?c.pages:1;
+  return '<div class="wcard"><canvas class="wprev" data-src="'+src+'" data-i="'+idx+'" width="320" height="240"></canvas><b>'+esc(w.name)+'</b> <span class="small">af '+esc(w.author||'?')+(pg>1?' · '+pg+' sider':'')+'</span><p>'+esc(w.desc||'')+'</p>'+
+  '<div class="row3"><button class="btn mini" data-wi="'+src+':'+idx+'">Installér</button><button class="btn sec mini" data-we="'+src+':'+idx+'">Rediger</button></div></div>';
+}
+function vWidgets(){
+  var h='<div class="card"><h2>Rediger din skærm</h2><p>Hele skærmen på boardet er et design, du selv kan ændre: tekster, knapper og hvad de gør, farver, målere og flere sider. Editoren starter med det design, boardet viser fra fabrikken.</p>'+
+  '<button class="btn" data-s="open">Åbn editoren</button><button class="btn sec" data-s="reset"'+(S.conn?'':' disabled')+'>Gendan standard-design på boardet</button><button class="btn sec" data-a="wstd">Brug den faste skærm (uden design)</button></div>';
+  h+='<div class="card"><h3>Start-designs</h3>'+S.gal.map(function(x,i){return cardW(x,i,'s')}).join('')+'</div>';
+  h+='<div class="card"><h3>Fra fællesskabet</h3>'+(S.comm.length?S.comm.map(function(x,i){return cardW(x,i,'c')}).join(''):'<p>'+esc(S.commMsg||'Henter…')+'</p>')+'</div>';
+  return h;
+}
+function paintWidgets(){
+  var th=curTheme();
+  [].forEach.call(document.querySelectorAll('.wprev'),function(cv){var w=(cv.dataset.src==='s'?S.gal:S.comm)[+cv.dataset.i];paintLayout(cv,w,th)});
+}
+async function installWidget(w){
+  var c=NW.compile(w);if(!c.ok)throw new Error(c.errors[0]);
+  var b=Array.from(c.bytes);
+  await sendAck([OP.LB]);
+  for(var off=0;off<b.length;off+=120)await sendAck([OP.LC,off&255,off>>8].concat(b.slice(off,off+120)));
+  await sendAck([OP.LE]);
+  await S.t.ctrl([OP.INFO]);
+}
+function toFile(w){var o={v:2,name:w.name,author:w.author,desc:w.desc||'',pages:w.pages||1,bg:w.bg||'bg',items:w.items};return JSON.stringify(o,null,1)}
+function exportWidget(){var t=toFile(S.wid),bl=new Blob([t],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(bl);a.download=(S.wid.name||'widget').toLowerCase().replace(/[^a-z0-9]+/g,'-')+'.json';a.click()}
+function shareWidget(){
+  var errs=NW.validateFile(S.wid);if(errs.length){S.msg='Ret først: '+errs[0];render();return}
+  var repo=S.repo||repoGuess();if(!repo){repo=prompt('GitHub-repository (ejer/navn), som siden hører til:','')||''}
+  if(!/^[\w.-]+\/[\w.-]+$/.test(repo)){S.msg='Ugyldigt repository';render();return}
+  S.repo=repo;
+  var body='Widget til NOVA RIDE. Ejeren tjekker den og tilføjer mærket "approved", så vises den for alle.\n\n```json\n'+toFile(S.wid)+'\n```\n';
+  window.open('https://github.com/'+repo+'/issues/new?title='+encodeURIComponent('[widget] '+S.wid.name)+'&body='+encodeURIComponent(body),'_blank');
+}
+
+// ----- studio state and history
+S.ed={sel:-1,page:0,anim:true,still:false,snap:2,undo:[],redo:[],add:false,th:-1,limit:false,drag:null,raf:0,t0:Date.now()};
+function pushUndo(){var E=S.ed;E.undo.push(JSON.stringify(S.wid));if(E.undo.length>60)E.undo.shift();E.redo=[]}
+function undo(){var E=S.ed;if(!E.undo.length)return;E.redo.push(JSON.stringify(S.wid));S.wid=JSON.parse(E.undo.pop());if(E.sel>=S.wid.items.length)E.sel=-1;if(E.page>=(S.wid.pages||1))E.page=0;render()}
+function redo(){var E=S.ed;if(!E.redo.length)return;E.undo.push(JSON.stringify(S.wid));S.wid=JSON.parse(E.redo.pop());if(E.sel>=S.wid.items.length)E.sel=-1;render()}
+function saveWid(){try{localStorage.setItem('novaWid',JSON.stringify(S.wid))}catch(e){}}
+function openStudio(w){if(w)S.wid=toV2(w);else S.wid=toV2(S.wid);S.studio=true;S.ed.sel=-1;S.ed.page=0;S.ed.undo=[];S.ed.redo=[];S.ed.add=false;render();try{window.scrollTo(0,0)}catch(e){}}
+function closeStudio(){S.studio=false;stopStudioLoop();render();try{window.scrollTo(0,0)}catch(e){}}
+function selItem(){var E=S.ed;return E.sel>=0?S.wid.items[E.sel]:null}
+function snapv(v){var g=S.ed.snap;return g>1?Math.round(v/g)*g:Math.round(v)}
+
+// ----- studio views
+var PKO={};          // option lists of the pick buttons on screen (rebuilt with every render)
+var MORE_COLORS=['#ff8200','#ffd23f','#33d17a','#00d4d4','#3aa0ff','#7c5cff','#b36bff','#ff4f8b','#ff3b30','#e8e8e8','#8d8d8d','#4a4a4a'];
+function lbl(opts,v){for(var i=0;i<opts.length;i++){var o=opts[i];if(Array.isArray(o)){if(String(o[0])===String(v))return o[1]}else if(String(o)===String(v))return o}return String(v)}
+// number: tap − or + for small steps, tap the number to type it
+function nf(label,key,it,min,max,step){
+  var v=it[key];if(v==null)v=(key==='dp'||key==='rad'||(key==='th'&&it.t==='circle'))?0:'';step=step||1;
+  return '<div class="nf"><label>'+label+'</label><div class="nfr"><button data-nm="'+key+':'+(-step)+'">−</button><button class="nv" data-nv="'+key+':'+min+':'+max+':'+esc(label)+'">'+esc(v===''?'–':v)+'</button><button data-nm="'+key+':'+step+'">+</button></div></div>';
+}
+// choice: a button that opens a list with big buttons
+function sel(label,key,it,opts,def){
+  var v=it[key];if(v==null)v=def==null?'':def;PKO[key]=opts;
+  return '<div class="nf"><label>'+label+'</label><button class="pk" data-pk="'+key+'|'+esc(label)+'">'+esc(lbl(opts,v))+' <i>▾</i></button></div>';
+}
+// text: tap to type
+function tf(label,key,it,max){
+  return '<div class="nf"><label>'+label+'</label><button class="pk tx" data-tx="'+key+'|'+max+'|'+esc(label)+'">'+(it[key]?esc(it[key]):'<i>tryk for at skrive</i>')+'</button></div>';
+}
+function colf(label,key,it,def){
+  var cur=it[key]==null?def:it[key],th=wtheme(S.ed.th>=0?THEMES[S.ed.th]:null),custom=typeof cur==='string'&&cur.charAt(0)==='#';
+  return '<div class="nf wide"><label>'+label+'</label><div class="swr">'+PAL_NAMES.map(function(p){return '<button class="sc'+(cur===p[0]?' sel':'')+'" title="'+p[1]+'" data-c="'+key+':'+p[0]+'" style="background:'+th[p[0]]+'"></button>'}).join('')+
+  MORE_COLORS.map(function(c){return '<button class="sc'+(cur===c?' sel':'')+'" data-c="'+key+':'+c+'" style="background:'+c+'"></button>'}).join('')+
+  '<button class="mini" data-cc="'+key+'">Egen…</button></div>'+(custom?'<div class="small">Egen farve: '+esc(cur)+'</div>':'')+'</div>';
+}
+function chips(it,list){
+  return '<div class="nf wide"><label>Udseende</label><div class="tg">'+list.map(function(f){return '<button data-f="'+f[0]+'" class="'+(it[f[0]]?'sel':'')+'">'+f[1]+'</button>'}).join('')+'</div></div>';
+}
+function itemPanel(it){
+  var t=it.t,h='<div class="sp"><div class="sph"><b>'+TYPE_LABEL[t]+'</b><span><button class="mini" data-s="dup">Kopiér</button><button class="mini" data-s="front">Frem</button><button class="mini" data-s="back">Tilbage</button><button class="mini bad" data-s="del">Slet</button></span></div>';
+  var srcOpts=function(stat,mode){var a=NUMSRC.concat(mode?['mode']:[]).concat(stat?STATSRC:[]);return a.map(function(k){return [k,SRC_LABEL[k]]})};
+  var ALIGNS=[['left','Venstre'],['center','Midt'],['right','Højre']];
+  h+='<div class="nfg">';
+  if(t==='text'){h+=tf('Tekst','text',it,15)+sel('Størrelse','font',it,FONT_LABEL.slice(0,3),'2')+sel('Placering','align',it,ALIGNS,'left')+colf('Farve','color',it,'text')}
+  if(t==='num'){h+=sel('Viser','src',it,srcOpts(true,true),'speed')+sel('Størrelse','font',it,FONT_LABEL,'2')+sel('Placering','align',it,ALIGNS,'left')+nf('Decimaler','dp',it,0,2)+tf('Foran tallet','pre',it,15)+tf('Efter tallet (enhed)','unit',it,15)+colf('Farve','color',it,'text')}
+  if(t==='bar'){h+=sel('Viser','src',it,srcOpts(false),'speed')+nf('Bredde','w',it,4,320)+nf('Højde','h',it,2,200)+nf('Afrunding','rad',it,0,100)+nf('Tom ved','min',it,-32768,32767)+nf('Fuld ved','max',it,-32767,65535)+colf('Fyld','color',it,'neon')+colf('Bund','color2',it,'panel')+chips(it,[['border','Kant'],['bidir','Fra nul'],['rev','Omvendt']])}
+  if(t==='arc'){h+=sel('Viser','src',it,srcOpts(false),'speed')+nf('Radius','r',it,8,160)+nf('Tykkelse','th',it,1,80)+nf('Start (grader)','a0',it,0,359,5)+nf('Åbning (grader)','sweep',it,10,360,10)+nf('Tom ved','min',it,-32768,32767)+nf('Fuld ved','max',it,-32767,65535)+colf('Fyld','color',it,'neon')+colf('Bund','color2',it,'panel')+chips(it,[['caps','Runde ender'],['knob','Knop'],['ticks','Streger'],['rev','Omvendt']])}
+  if(t==='rect'){h+=nf('Bredde','w',it,2,640)+nf('Højde','h',it,2,640)+nf('Afrunding','rad',it,0,100)+colf('Farve','color',it,'dim')+colf('Fyld','color2',it,'panel')+chips(it,[['fill','Fyldt'],['border','Kant']])}
+  if(t==='circle'){h+=nf('Radius','r',it,2,160)+nf('Kant-tykkelse','th',it,0,40)+colf('Farve','color',it,'neon')+colf('Inde i','color2',it,'panel')+chips(it,[['fill','Fyldt'],['border','Kant']])}
+  if(t==='line'){h+=nf('Længde vandret','w',it,0,640)+nf('Længde lodret','h',it,0,640)+nf('Tykkelse','th',it,1,12)+colf('Farve','color',it,'dim')+chips(it,[['rev','Skråt opad']])}
+  if(t==='button'){h+=tf('Tekst','text',it,15)+sel('Når du trykker','action',it,ACTION_LABEL,'none')+'<div class="nf wide small">'+esc(ACTION_HELP[it.action||'none'])+'</div>'+nf('Bredde','w',it,16,320)+nf('Højde','h',it,12,200)+nf('Afrunding','rad',it,0,100)+sel('Størrelse','font',it,FONT_LABEL.slice(0,3),'2')+colf('Kant og tekst','color',it,'text')+colf('Valgt farve','color2',it,'neon')+chips(it,[['fill','Fyldt']])}
+  if(t==='segbar'){h+=sel('Viser','src',it,srcOpts(false),'speed')+nf('Antal segmenter','n',it,2,40)+nf('Bredde','w',it,4,320)+nf('Højde','h',it,2,100)+nf('Tom ved','min',it,-32768,32767)+nf('Fuld ved','max',it,-32767,65535)+colf('Tændt','color',it,'neon')+colf('Slukket','color2',it,'panel')+chips(it,[['round','Runde']])}
+  if(t==='spark'){h+=sel('Viser','src',it,srcOpts(false),'speed')+nf('Bredde','w',it,16,320)+nf('Højde','h',it,8,200)+nf('Streg','th',it,1,6)+nf('Bund ved','min',it,-32768,32767)+nf('Top ved','max',it,-32767,65535)+colf('Linje','color',it,'neon')+colf('Ramme','color2',it,'panel')+chips(it,[['fill','Fyld under']])}
+  if(t==='dot'){h+=sel('Lyser når','src',it,srcOpts(true),'ble')+nf('Radius','r',it,2,40)+colf('Tændt','color',it,'ok')+colf('Slukket','color2',it,'dim')}
+  if(t==='icon'){h+=sel('Ikon','icon',it,ICON_LABEL,'bolt')+nf('Størrelse','size',it,8,96,2)+sel('Niveau fra (valgfri)','src',it,[['none','Ingen']].concat(srcOpts(false)),'none')+nf('Tom ved','min',it,-32768,32767)+nf('Fuld ved','max',it,-32767,65535)+colf('Farve','color',it,'text')}
+  h+='</div>';
+  h+='<div class="nfg">'+nf((t==='arc'||t==='circle'||t==='dot')?'Midte x':'x','x',it,-200,520)+nf((t==='arc'||t==='circle'||t==='dot')?'Midte y':'y','y',it,-200,520)+'</div>'+
+     '<div class="nudge"><button data-ng="-1:0">←</button><button data-ng="0:-1">↑</button><button data-ng="0:1">↓</button><button data-ng="1:0">→</button><button data-ng="-10:0">⇇</button><button data-ng="10:0">⇉</button></div>';
+  if(['num','bar','arc','segbar','icon','spark'].indexOf(t)>=0&&(t==='num'?NUMSRC.indexOf(it.src)>=0:true)&&it.src!=='none'){
+    h+='<details class="adv"'+((it.warn!=null||it.bad!=null)?' open':'')+'><summary>Skift farve ved grænser</summary><div class="nfg">'+nf('Gul ved','warn',it,-32768,32767)+nf('Rød ved','bad',it,-32768,32767)+
+      '</div><div class="tg"><button data-f="below" class="'+(it.below?'sel':'')+'">Gælder under (fx batteri)</button><button data-s="clrwarn">Fjern grænser</button></div></details>';
+  }
+  var sh=it.show||{},OPL=[['>','større end'],['<','mindre end'],['==','lig med'],['!=','forskellig fra'],['>=','mindst'],['<=','højst']];
+  var SHS=[['','Altid vist']].concat(NUMSRC.concat(STATSRC).map(function(k){return [k,SRC_LABEL[k]]}));
+  var PG=[['all','Alle sider']].concat([0,1,2,3].slice(0,S.wid.pages||1).map(function(p){return [String(p),'Side '+(p+1)]}));
+  PKO['show.src']=SHS;PKO['show.op']=OPL;PKO.page=PG;
+  h+='<details class="adv"'+(it.show||it.page!=null?' open':'')+'><summary>Vis kun når / side</summary><div class="nfg">'+
+    '<div class="nf"><label>Kilde</label><button class="pk" data-pk="show.src|Vis kun når">'+esc(lbl(SHS,sh.src||''))+' <i>▾</i></button></div>'+
+    '<div class="nf"><label>Er</label><button class="pk" data-pk="show.op|Er">'+esc(lbl(OPL,sh.op||'>'))+' <i>▾</i></button></div>'+
+    '<div class="nf"><label>Værdi</label><button class="pk" data-nv="show.val:-32768:32767:Værdi">'+esc(sh.val==null?0:sh.val)+'</button></div>'+
+    '<div class="nf"><label>Side</label><button class="pk" data-pk="page|Side">'+esc(lbl(PG,it.page==null||it.page==='all'?'all':String(it.page)))+' <i>▾</i></button></div></div></details>';
+  return h+'</div>';
+}
+function docPanel(){
+  var w=S.wid,PGN=[['1','1 side'],['2','2 sider'],['3','3 sider'],['4','4 sider']];PKO['doc.pages']=PGN;
+  var bgc=w.bg||'bg',th=wtheme();
+  return '<div class="sp"><div class="sph"><b>Hele skærmen</b></div><div class="nfg">'+
+   '<div class="nf"><label>Navn</label><button class="pk tx" data-tx="doc.name|24|Navn">'+esc(w.name||'')+'</button></div><div class="nf"><label>Dit navn</label><button class="pk tx" data-tx="doc.author|24|Dit navn">'+(w.author?esc(w.author):'<i>tryk for at skrive</i>')+'</button></div>'+
+   '<div class="nf wide"><label>Beskrivelse</label><button class="pk tx" data-tx="doc.desc|120|Beskrivelse">'+(w.desc?esc(w.desc):'<i>tryk for at skrive</i>')+'</button></div>'+
+   '<div class="nf"><label>Antal sider</label><button class="pk" data-pk="doc.pages|Antal sider">'+esc(lbl(PGN,String(w.pages||1)))+' <i>▾</i></button></div>'+
+   '<div class="nf wide"><label>Baggrund</label><div class="swr">'+['bg','panel','black','white','neon'].map(function(n){return '<button class="sc'+(bgc===n?' sel':'')+'" data-bgc="'+n+'" style="background:'+th[n]+'"></button>'}).join('')+
+   MORE_COLORS.map(function(c){return '<button class="sc'+(bgc===c?' sel':'')+'" data-bgc="'+c+'" style="background:'+c+'"></button>'}).join('')+'<button class="mini" data-cc="doc.bg">Egen…</button></div></div></div>'+
+   '<div class="hintbox"><b>Sådan ændrer du ting</b><br>Tryk på en knap, tekst eller måler i billedet (eller på et lag i listen nedenfor). Så kan du ændre <b>teksten</b>, <b>hvad en knap gør</b>, hvad et tal viser, farver og størrelse. Træk for at flytte, træk i det runde håndtag for at ændre størrelse. Tryk <b>Installér</b> når du er klar. Et tryk i øverste højre hjørne på boardet åbner altid indstillinger.</div></div>';
+}
+function vStudio(){
+  PKO={};
+  var w=S.wid,E=S.ed,it=selItem(),c=NW.compile(w),pages=w.pages||1;
+  var h='<div class="sbar"><button class="mini" data-s="close">✕ Luk</button><b class="sname">'+esc(w.name)+'</b><button class="mini pri" data-s="install"'+(S.conn&&c.ok?'':' disabled')+'>Installér</button></div>';
+  h+='<div class="scv"><canvas id="stcv" width="320" height="240"></canvas></div>';
+  h+='<div class="stb"><button data-s="undo"'+(E.undo.length?'':' disabled')+'>↶</button><button data-s="redo"'+(E.redo.length?'':' disabled')+'>↷</button><button class="pri" data-s="add">+ Tilføj</button>'+
+     '<button data-s="anim" class="'+(E.anim?'sel':'')+'">'+(E.anim?'Live':'Stille')+'</button><button data-s="lim" class="'+(E.limit?'sel':'')+'">20-grænse</button>'+
+     (function(){var SN=[[1,'Frit'],[2,'Net 2'],[4,'Net 4'],[8,'Net 8']];PKO['ed.snap']=SN;return '<button data-pk="ed.snap|Net">'+lbl(SN,E.snap)+' ▾</button>'})()+'</div>';
+  if(pages>1)h+='<div class="subnav">'+[0,1,2,3].slice(0,pages).map(function(p){return '<button data-pg="'+p+'" class="'+(E.page===p?'sel':'')+'">Side '+(p+1)+'</button>'}).join('')+'</div>';
+  if(!c.ok)h+='<div class="err">'+c.errors.slice(0,3).map(esc).join('<br>')+'</div>';
+  else h+='<div class="small" style="margin:2px 4px">'+c.bytes.length+' / '+NW.LIM.itemLen*NW.LIM.items+' bytes · '+w.items.length+' / '+NW.LIM.items+' elementer</div>';
+  if(E.add)h+='<div class="addgrid">'+STUDIO_TYPES.map(function(t){return '<button data-ad="'+t+'"><b>'+TYPE_LABEL[t]+'</b><span>'+TYPE_HINT[t]+'</span></button>'}).join('')+'</div>';
+  h+=it?itemPanel(it):docPanel();
+  if(E.sheet&&E.sheet.kind){var K=E.sheet,typ=K.kind==='num'?'number':'text',hint=K.kind==='num'?('Fra '+K.min+' til '+K.max):K.kind==='color'?'Skriv fx #33ccff':('Højst '+K.max+' tegn');
+    h+='<div class="sheet"><div class="sheetbox"><div class="sheeth"><b>'+esc(K.title)+'</b><button class="mini" data-pc="1">Annullér</button></div>'+
+      '<input id="sheetin" class="sheetin" type="'+typ+'"'+(K.kind==='num'?' inputmode="decimal"':' autocapitalize="characters" autocomplete="off" spellcheck="false"')+(K.max&&K.kind==='text'?' maxlength="'+K.max+'"':'')+' value="'+esc(K.cur==null?'':K.cur)+'">'+
+      '<div class="small" style="margin:6px 2px 10px">'+esc(hint)+'</div><button class="btn" data-sv="1">Gem</button></div></div>'}
+  else if(E.sheet){var so=PKO[E.sheet.key]||[];h+='<div class="sheet" data-sx="1"><div class="sheetbox"><div class="sheeth"><b>'+esc(E.sheet.title)+'</b><button class="mini" data-pc="1">Annullér</button></div>'+so.map(function(o,i){var ov=Array.isArray(o)?o[0]:o,ol=Array.isArray(o)?o[1]:o;return '<button data-pv="'+i+'" class="'+(String(ov)===String(E.sheet.cur)?'sel':'')+'">'+esc(ol)+'</button>'}).join('')+'</div></div>'}
+  h+='<div class="sp"><div class="sph"><b>Lag</b><span class="small">øverst tegnes sidst</span></div><div class="layers">'+
+     w.items.map(function(x,i){return {x:x,i:i}}).reverse().map(function(o){var pg=o.x.page==null||o.x.page==='all'?15:o.x.page;return '<button data-sel="'+o.i+'" class="'+(o.i===E.sel?'sel':'')+(pg!==15&&pg!==E.page?' off':'')+'">'+(o.i+1)+'. '+TYPE_LABEL[o.x.t]+(o.x.text?' · '+esc(o.x.text):o.x.src&&o.x.src!=='none'?' · '+esc(SRC_LABEL[o.x.src]||o.x.src):'')+'</button>'}).join('')+'</div></div>';
+  h+='<div class="sp"><div class="row3"><button class="btn sec mini" data-s="export">Gem som fil</button><button class="btn sec mini" data-s="share">Del</button><button class="btn sec mini" data-s="new">Ny tom</button><button class="btn sec mini" data-s="std">Standard</button></div>'+
+     '<input type="file" id="wimport" accept=".json,application/json" style="width:100%;margin-top:8px"></div>';
+  return h;
+}
+
+// ----- studio painting and pointer handling
+function studioTheme(){return wtheme(S.ed.th>=0?THEMES[S.ed.th]:null)}
+function studioPaint(){
+  var cv=$('#stcv');if(!cv||!cv.getContext)return;var g=cv.getContext('2d');if(!g)return;
+  var E=S.ed,t=(Date.now()-E.t0)/1000,live=NW.sample(t,{still:!E.anim,limit:E.limit}),th=studioTheme();
+  try{NW.render(g,S.wid,live,{theme:th,page:E.page,hist:NW.history({_t0:0},60),mode:2,ignoreShow:true})}catch(x){}
+  var list=S.wid.items;
+  if(E.drag&&E.snap>1){g.fillStyle='rgba(255,255,255,.18)';for(var gx=0;gx<=320;gx+=E.snap*4)for(var gy=0;gy<=240;gy+=E.snap*4)g.fillRect(gx,gy,1,1)}
+  g.fillStyle='rgba(255,255,255,.28)';[0,1,2].forEach(function(i){g.fillRect(298+i*6,8,2,2)});
+  var it=selItem();
+  if(it&&it.t!=='modebar'){var b=NW.bounds(it,g);g.save();g.strokeStyle='#00c8ff';g.lineWidth=1;g.setLineDash([4,3]);g.strokeRect(b.x-1.5,b.y-1.5,b.w+3,b.h+3);g.setLineDash([]);g.fillStyle='#00c8ff';g.beginPath();g.arc(b.x+b.w+1.5,b.y+b.h+1.5,6,0,7);g.fill();g.restore()}
+}
+function stopStudioLoop(){if(S.ed.raf){clearTimeout(S.ed.raf);S.ed.raf=0}}
+function studioLoop(){stopStudioLoop();if(!S.studio||typeof document==='undefined')return;(function f(){if(!S.studio)return;studioPaint();S.ed.raf=setTimeout(f,S.ed.anim?66:400)})()}
+function hitTest(px,py,g){
+  var E=S.ed,items=S.wid.items,page=E.page;
+  for(var i=items.length-1;i>=0;i--){var it=items[i],pg=it.page==null||it.page==='all'?15:it.page;if(pg!==15&&pg!==page)continue;if(it.t==='modebar')continue;var b=NW.bounds(it,g);if(px>=b.x-4&&px<=b.x+b.w+4&&py>=b.y-4&&py<=b.y+b.h+4)return i}
+  return -1;
+}
+function wireStudioCanvas(){
+  var cv=$('#stcv');if(!cv||!cv.addEventListener)return;
+  var g=cv.getContext('2d');
+  function pt(e){var r=cv.getBoundingClientRect(),k=320/r.width;return {x:(e.clientX-r.left)*k,y:(e.clientY-r.top)*k,k:k}}
+  cv.addEventListener('pointerdown',function(e){
+    e.preventDefault();var p=pt(e),E=S.ed,it=selItem();
+    if(it&&it.t!=='modebar'){var b=NW.bounds(it,g);if(Math.hypot(p.x-(b.x+b.w+1.5),p.y-(b.y+b.h+1.5))<14){pushUndo();E.drag={mode:'size',sx:p.x,sy:p.y,o:cloneW(it)};try{cv.setPointerCapture(e.pointerId)}catch(x){}return}}
+    var i=hitTest(p.x,p.y,g);
+    if(i!==E.sel){E.sel=i;render();studioLoop();scrollPanel()}
+    if(i>=0){pushUndo();E.drag={mode:'move',sx:p.x,sy:p.y,o:cloneW(S.wid.items[i]),moved:false};try{cv.setPointerCapture(e.pointerId)}catch(x){}}
+  });
+  cv.addEventListener('pointermove',function(e){
+    var E=S.ed,d=E.drag;if(!d)return;var p=pt(e),it=selItem();if(!it)return;var dx=p.x-d.sx,dy=p.y-d.sy;
+    if(d.mode==='move'){it.x=Math.max(-200,Math.min(520,snapv(d.o.x+dx)));it.y=Math.max(-200,Math.min(520,snapv(d.o.y+dy)));d.moved=true}
+    else{
+      var t=it.t,m=Math.max(dx,dy);
+      if(t==='arc'){it.r=Math.max(8,Math.min(160,snapv(d.o.r+m)));if(it.th>=it.r)it.th=it.r-1}
+      else if(t==='circle'||t==='dot'){it.r=Math.max(2,Math.min(t==='dot'?40:160,snapv((d.o.r||4)+m)))}
+      else if(t==='icon')it.size=Math.max(8,Math.min(96,snapv((d.o.size||24)+m)));
+      else if(t==='text'||t==='num'){}
+      else{it.w=Math.max(4,Math.min(640,snapv((d.o.w||0)+dx)));if(t!=='line'||d.o.h)it.h=Math.max(t==='line'?0:2,Math.min(640,snapv((d.o.h||0)+dy)))}
+    }
+    studioPaint();
+  });
+  function end(){var E=S.ed;if(E.drag){var moved=E.drag.moved||E.drag.mode==='size';E.drag=null;if(moved){render();studioLoop()}else E.undo.pop()}}
+  cv.addEventListener('pointerup',end);cv.addEventListener('pointercancel',end);
+}
+function addItem(t){
+  var w=S.wid;if(w.items.length+(t==='modebar'?3:0)>=NW.LIM.items){S.msg='Højst '+NW.LIM.items+' elementer';render();return}
+  pushUndo();var n=cloneW(DEF2[t]);if(n.t!=='modebar'&&(S.ed.page>0||w.pages>1))n.page=w.pages>1?S.ed.page:undefined;if(n.page===undefined)delete n.page;
+  if(t==='modebar'){var e=expandModes({items:[n]});e.items.forEach(function(x){if(w.pages>1)x.page=S.ed.page;w.items.push(x)});S.ed.sel=w.items.length-1}
+  else{w.items.push(n);S.ed.sel=w.items.length-1}
+  S.ed.add=false;render();studioLoop();
+}
+function scrollPanel(){try{var el=document.querySelector('.sp');if(el&&el.scrollIntoView)el.scrollIntoView({block:'start',behavior:'smooth'})}catch(e){}}
+function numChanged(it,k,v){it[k]=v;if(k==='r'&&it.t==='arc'&&it.th>=it.r)it.th=it.r-1}
+function focusSheet(){try{var el=document.getElementById('sheetin');if(el&&el.focus){el.focus();if(el.select)el.select()}}catch(e){}}
+function askText(msg,cur){try{if(typeof prompt==='function')return prompt(msg,cur)}catch(e){}return null}
+function getProp(key){
+  var w=S.wid,it=selItem();
+  if(key==='doc.name')return w.name;if(key==='doc.author')return w.author;if(key==='doc.desc')return w.desc;if(key==='doc.pages')return String(w.pages||1);if(key==='doc.bg')return w.bg||'bg';
+  if(key==='ed.snap')return S.ed.snap;if(!it)return null;
+  if(key.indexOf('show.')===0){var sh=it.show||{};var k=key.slice(5);return k==='src'?(sh.src||''):k==='op'?(sh.op||'>'):(sh.val==null?0:sh.val)}
+  if(key==='page')return it.page==null||it.page==='all'?'all':String(it.page);
+  return it[key];
+}
+function setProp(key,val){
+  var w=S.wid,it=selItem();
+  if(key==='doc.name'){w.name=val;return}if(key==='doc.author'){w.author=val;return}if(key==='doc.desc'){w.desc=val;return}
+  if(key==='doc.bg'){w.bg=val;return}
+  if(key==='doc.pages'){var n=+val;w.pages=n;w.items.forEach(function(x){if(x.page!=null&&x.page!=='all'&&x.page>=n)delete x.page});if(S.ed.page>=n)S.ed.page=0;return}
+  if(key==='ed.snap'){S.ed.snap=+val;return}
+  if(!it)return;
+  if(key.indexOf('show.')===0){var k=key.slice(5),sh=it.show||{src:'',op:'>',val:0};sh[k]=k==='val'?+val:val;if(!sh.src)delete it.show;else it.show=sh;return}
+  if(key==='page'){if(val==='all')delete it.page;else it.page=+val;return}
+  if(key==='src'&&val==='none'){delete it.src;return}
+  if(key==='font'||key==='align'||key==='action'||key==='icon'||key==='src'){it[key]=val;return}
+  numChanged(it,key,val);
+}
+function wireStudio(){
+  var q=function(sel,fn){[].forEach.call(document.querySelectorAll(sel),function(b){b.onclick=function(){fn(b)}})};
+  q('[data-s]',function(b){
+    var a=b.dataset.s,w=S.wid,E=S.ed,it=selItem();
+    if(a==='close')closeStudio();else if(a==='open')openStudio();else if(a==='undo')undo();else if(a==='redo')redo();
+    else if(a==='add'){E.add=!E.add;render();studioLoop()}
+    else if(a==='anim'){E.anim=!E.anim;render();studioLoop()}else if(a==='lim'){E.limit=!E.limit;render();studioLoop()}
+    else if(a==='dup'&&it){if(w.items.length>=NW.LIM.items)return;pushUndo();var n=cloneW(it);n.x=(n.x||0)+8;n.y=(n.y||0)+8;w.items.push(n);E.sel=w.items.length-1;render();studioLoop()}
+    else if(a==='del'&&it){pushUndo();w.items.splice(E.sel,1);E.sel=-1;render();studioLoop()}
+    else if(a==='front'&&it&&E.sel<w.items.length-1){pushUndo();var t=w.items[E.sel];w.items[E.sel]=w.items[E.sel+1];w.items[E.sel+1]=t;E.sel++;render();studioLoop()}
+    else if(a==='back'&&it&&E.sel>0){pushUndo();var t2=w.items[E.sel];w.items[E.sel]=w.items[E.sel-1];w.items[E.sel-1]=t2;E.sel--;render();studioLoop()}
+    else if(a==='clrwarn'&&it){pushUndo();delete it.warn;delete it.bad;delete it.below;render();studioLoop()}
+    else if(a==='install'){var c=NW.compile(w);if(!c.ok){S.msg=c.errors[0];render();return}act(function(){return installWidget(w).then(function(){S.msg='Installeret på boardet.'})})}
+    else if(a==='export')exportWidget();else if(a==='share')shareWidget();
+    else if(a==='std'){pushUndo();S.wid=toV2(window.STARTERS[0]);E.sel=-1;E.page=0;render();studioLoop()}
+    else if(a==='new'){pushUndo();S.wid={v:2,name:'Mit dashboard',author:w.author||'',desc:'',pages:1,bg:'bg',items:[cloneW(DEF2.arc),{t:'num',x:100,y:96,src:'speed',font:'8',align:'center',color:'text'}]};S.wid.items[1].y=82;E.sel=-1;E.page=0;render();studioLoop()}
+  });
+  q('[data-ad]',function(b){addItem(b.dataset.ad)});
+  q('[data-sel]',function(b){S.ed.sel=+b.dataset.sel;var it=selItem();if(it){var pg=it.page==null||it.page==='all'?15:it.page;if(pg!==15)S.ed.page=pg}render();studioLoop();scrollPanel()});
+  q('[data-pg]',function(b){S.ed.page=+b.dataset.pg;S.ed.sel=-1;render();studioLoop()});
+  q('[data-c]',function(b){var it=selItem();if(!it)return;var i=b.dataset.c.indexOf(':');pushUndo();it[b.dataset.c.slice(0,i)]=b.dataset.c.slice(i+1);render();studioLoop()});
+  q('[data-f]',function(b){var it=selItem();if(!it)return;pushUndo();var k=b.dataset.f;it[k]=!it[k];if(!it[k])delete it[k];render();studioLoop()});
+  q('[data-nm]',function(b){var it=selItem();if(!it)return;var p=b.dataset.nm.split(':');pushUndo();numChanged(it,p[0],(+it[p[0]]||0)+(+p[1]));render();studioLoop()});
+  q('[data-ng]',function(b){var it=selItem();if(!it)return;var p=b.dataset.ng.split(':');pushUndo();it.x=(+it.x||0)+(+p[0]);it.y=(+it.y||0)+(+p[1]);render();studioLoop()});
+  q('[data-bgc]',function(b){pushUndo();S.wid.bg=b.dataset.bgc;render();studioLoop()});
+  q('[data-pk]',function(b){var p=b.dataset.pk.split('|'),it=selItem();S.ed.sheet={key:p[0],title:p[1]||'',cur:getProp(p[0])};render();studioLoop()});
+  q('[data-pv]',function(b){var sh=S.ed.sheet;if(!sh)return;var o=(PKO[sh.key]||[])[+b.dataset.pv];if(o===undefined)return;var v=Array.isArray(o)?o[0]:o;S.ed.sheet=null;pushUndo();setProp(sh.key,v);render();studioLoop()});
+  q('[data-pc]',function(b){S.ed.sheet=null;render();studioLoop()});
+  q('[data-sx]',function(b){});
+  q('[data-nv]',function(b){var p=b.dataset.nv.split(':');var cur=getProp(p[0]);S.ed.sheet={kind:'num',key:p[0],min:+p[1],max:+p[2],title:p[3]||'Værdi',cur:cur==null?'':cur};render();studioLoop();setTimeout(focusSheet,60)});
+  q('[data-tx]',function(b){var p=b.dataset.tx.split('|');var cur=getProp(p[0]);S.ed.sheet={kind:'text',key:p[0],max:+p[1],title:p[2]||'Tekst',cur:cur==null?'':cur};render();studioLoop();setTimeout(focusSheet,60)});
+  q('[data-cc]',function(b){var key=b.dataset.cc,cur=getProp(key);S.ed.sheet={kind:'color',key:key,title:'Egen farve',cur:typeof cur==='string'&&cur.charAt(0)==='#'?cur:'#'};render();studioLoop();setTimeout(focusSheet,60)});
+  q('[data-sv]',function(b){
+    var K=S.ed.sheet,el=$('#sheetin');if(!K||!el)return;var r=String(el.value==null?'':el.value);
+    if(K.kind==='num'){var n=parseFloat(r.replace(',','.'));if(isNaN(n)){S.msg='Skriv et tal';render();studioLoop();return}n=Math.max(K.min,Math.min(K.max,Math.round(n)));S.ed.sheet=null;pushUndo();setProp(K.key,n)}
+    else if(K.kind==='color'){r=r.trim();if(r.charAt(0)!=='#')r='#'+r;if(!/^#[0-9a-fA-F]{6}$/.test(r)){S.msg='Farven skal skrives som #rrggbb, fx #33ccff';render();studioLoop();return}S.ed.sheet=null;pushUndo();setProp(K.key,r.toLowerCase())}
+    else{r=r.replace(/[^\x20-\x7E]/g,'').slice(0,K.max||15);S.ed.sheet=null;pushUndo();setProp(K.key,r)}
+    S.msg='';render();studioLoop()});
+  var im=$('#wimport');if(im)im.onchange=async function(){try{var t=await im.files[0].text(),o=JSON.parse(t);var w2=toV2(o);var e=NW.compile(w2);S.wid=w2;S.wid.author=S.wid.author||'';S.ed.sel=-1;S.ed.page=0;S.ed.undo=[];S.msg=e.ok?'':'Filen har fejl: '+e.errors[0]}catch(x){S.msg='Kunne ikke læse filen'}render();studioLoop()};
+  wireStudioCanvas();
+}
+function wireWidgets(){
+  var q=function(sel,fn){[].forEach.call(document.querySelectorAll(sel),function(b){b.onclick=function(){fn(b)}})};
+  q('[data-wi]',function(b){var p=b.dataset.wi.split(':'),w=(p[0]==='s'?S.gal:S.comm)[+p[1]];act(function(){return installWidget(w)})});
+  q('[data-we]',function(b){var p=b.dataset.we.split(':'),w=(p[0]==='s'?S.gal:S.comm)[+p[1]];var n=toV2(w);n.author=n.author||'';openStudio(n)});
+  q('[data-s]',function(b){if(b.dataset.s==='open')openStudio();else if(b.dataset.s==='reset')act(function(){return installWidget(window.STARTERS[0]).then(function(){S.msg='Standard-designet er sat på boardet igen.'})})});
+}
+
+(function(){var ok=false;try{var sv=typeof localStorage!=='undefined'&&localStorage.getItem('novaWid');if(sv){var w0=JSON.parse(sv);if(w0&&Array.isArray(w0.items)&&w0.items.length){S.wid=toV2(w0);ok=true}}}catch(e){}
+  if(!ok&&window.STARTERS&&window.STARTERS.length)S.wid=toV2(window.STARTERS[0])})();
+loadGallery();
+render();
+})();
+</script>
+</body>
+</html>

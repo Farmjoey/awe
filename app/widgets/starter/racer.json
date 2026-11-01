@@ -1,0 +1,150 @@
+{
+ "v": 2,
+ "name": "Racer",
+ "author": "NOVA",
+ "desc": "Kaempe hastighed, farveskift naar du naermer dig graenser",
+ "pages": 1,
+ "bg": "bg",
+ "items": [
+  {
+   "t": "num",
+   "x": 160,
+   "y": 6,
+   "src": "speed",
+   "font": "8",
+   "align": "center",
+   "warn": 25,
+   "bad": 32
+  },
+  {
+   "t": "text",
+   "x": 160,
+   "y": 84,
+   "text": "KM/H",
+   "font": "2",
+   "align": "center",
+   "color": "dim"
+  },
+  {
+   "t": "segbar",
+   "x": 8,
+   "y": 108,
+   "w": 304,
+   "h": 22,
+   "n": 36,
+   "src": "speed",
+   "max": 36,
+   "color": "neon",
+   "color2": "panel",
+   "round": true,
+   "warn": 25,
+   "bad": 32
+  },
+  {
+   "t": "num",
+   "x": 8,
+   "y": 146,
+   "src": "power",
+   "font": "4",
+   "pre": "",
+   "unit": " W"
+  },
+  {
+   "t": "num",
+   "x": 312,
+   "y": 146,
+   "src": "battery",
+   "font": "4",
+   "align": "right",
+   "unit": "%",
+   "warn": 20,
+   "bad": 10,
+   "below": true
+  },
+  {
+   "t": "bar",
+   "x": 8,
+   "y": 182,
+   "w": 304,
+   "h": 8,
+   "src": "battery",
+   "max": 100,
+   "color": "ok",
+   "color2": "panel",
+   "round": true,
+   "rad": 4,
+   "warn": 20,
+   "bad": 10,
+   "below": true
+  },
+  {
+   "t": "num",
+   "x": 8,
+   "y": 200,
+   "src": "volt",
+   "font": "2",
+   "dp": 1,
+   "unit": " V",
+   "color": "dim"
+  },
+  {
+   "t": "num",
+   "x": 160,
+   "y": 200,
+   "src": "maxspeed",
+   "font": "2",
+   "align": "center",
+   "pre": "TOP ",
+   "color": "dim"
+  },
+  {
+   "t": "num",
+   "x": 312,
+   "y": 200,
+   "src": "ridetime",
+   "font": "2",
+   "align": "right",
+   "unit": " min",
+   "color": "dim"
+  },
+  {
+   "t": "icon",
+   "x": 10,
+   "y": 224,
+   "size": 14,
+   "icon": "bolt",
+   "color": "warn",
+   "show": {
+    "src": "power",
+    "op": ">",
+    "val": 2500
+   }
+  },
+  {
+   "t": "icon",
+   "x": 30,
+   "y": 224,
+   "size": 14,
+   "icon": "thermo",
+   "color": "bad",
+   "show": {
+    "src": "temp",
+    "op": ">",
+    "val": 65
+   }
+  },
+  {
+   "t": "icon",
+   "x": 50,
+   "y": 224,
+   "size": 14,
+   "icon": "lock",
+   "color": "warn",
+   "show": {
+    "src": "limit",
+    "op": "==",
+    "val": 1
+   }
+  }
+ ]
+}

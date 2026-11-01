@@ -1,0 +1,197 @@
+{
+ "v": 2,
+ "name": "Trip stats",
+ "author": "NOVA",
+ "desc": "Ture, tophastighed, energi og en graf",
+ "pages": 2,
+ "bg": "bg",
+ "items": [
+  {
+   "t": "text",
+   "x": 8,
+   "y": 6,
+   "text": "THIS RIDE",
+   "font": "4",
+   "color": "neon"
+  },
+  {
+   "t": "line",
+   "x": 8,
+   "y": 34,
+   "w": 304,
+   "h": 0,
+   "th": 1,
+   "color": "dim"
+  },
+  {
+   "t": "text",
+   "x": 8,
+   "y": 44,
+   "text": "Top speed",
+   "font": "2",
+   "color": "dim"
+  },
+  {
+   "t": "num",
+   "x": 312,
+   "y": 44,
+   "src": "maxspeed",
+   "font": "2",
+   "align": "right",
+   "dp": 1,
+   "unit": " km/h"
+  },
+  {
+   "t": "text",
+   "x": 8,
+   "y": 68,
+   "text": "Peak power",
+   "font": "2",
+   "color": "dim"
+  },
+  {
+   "t": "num",
+   "x": 312,
+   "y": 68,
+   "src": "maxpower",
+   "font": "2",
+   "align": "right",
+   "unit": " W"
+  },
+  {
+   "t": "text",
+   "x": 8,
+   "y": 92,
+   "text": "Lowest volt",
+   "font": "2",
+   "color": "dim"
+  },
+  {
+   "t": "num",
+   "x": 312,
+   "y": 92,
+   "src": "minvolt",
+   "font": "2",
+   "align": "right",
+   "dp": 1,
+   "unit": " V"
+  },
+  {
+   "t": "text",
+   "x": 8,
+   "y": 116,
+   "text": "Energy used",
+   "font": "2",
+   "color": "dim"
+  },
+  {
+   "t": "num",
+   "x": 312,
+   "y": 116,
+   "src": "energy",
+   "font": "2",
+   "align": "right",
+   "dp": 1,
+   "unit": " Wh"
+  },
+  {
+   "t": "text",
+   "x": 8,
+   "y": 140,
+   "text": "Ride time",
+   "font": "2",
+   "color": "dim"
+  },
+  {
+   "t": "num",
+   "x": 312,
+   "y": 140,
+   "src": "ridetime",
+   "font": "2",
+   "align": "right",
+   "unit": " min"
+  },
+  {
+   "t": "text",
+   "x": 8,
+   "y": 164,
+   "text": "Trip",
+   "font": "2",
+   "color": "dim"
+  },
+  {
+   "t": "num",
+   "x": 312,
+   "y": 164,
+   "src": "trip",
+   "font": "2",
+   "align": "right",
+   "dp": 1,
+   "unit": " km"
+  },
+  {
+   "t": "text",
+   "x": 8,
+   "y": 188,
+   "text": "Total",
+   "font": "2",
+   "color": "dim"
+  },
+  {
+   "t": "num",
+   "x": 312,
+   "y": 188,
+   "src": "total",
+   "font": "2",
+   "align": "right",
+   "unit": " km"
+  },
+  {
+   "t": "button",
+   "x": 8,
+   "y": 210,
+   "w": 100,
+   "h": 26,
+   "action": "nextpage",
+   "text": "GRAPH",
+   "font": "2",
+   "rad": 8,
+   "page": 0
+  },
+  {
+   "t": "spark",
+   "x": 8,
+   "y": 40,
+   "w": 304,
+   "h": 130,
+   "src": "speed",
+   "max": 35,
+   "color": "neon",
+   "color2": "panel",
+   "fill": true,
+   "th": 2,
+   "page": 1
+  },
+  {
+   "t": "num",
+   "x": 8,
+   "y": 178,
+   "src": "speed",
+   "font": "4",
+   "unit": " km/h",
+   "page": 1
+  },
+  {
+   "t": "button",
+   "x": 8,
+   "y": 210,
+   "w": 100,
+   "h": 26,
+   "action": "nextpage",
+   "text": "STATS",
+   "font": "2",
+   "rad": 8,
+   "page": 1
+  }
+ ]
+}

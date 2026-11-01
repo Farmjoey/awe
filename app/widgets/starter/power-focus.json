@@ -1,0 +1,81 @@
+{
+ "v": 1,
+ "name": "Power focus",
+ "author": "NOVA",
+ "desc": "Effekt og str\u00f8m i centrum",
+ "items": [
+  {
+   "t": "num",
+   "x": 160,
+   "y": 40,
+   "src": "power",
+   "font": "6",
+   "align": "center",
+   "color": "text"
+  },
+  {
+   "t": "text",
+   "x": 160,
+   "y": 92,
+   "text": "WATT",
+   "font": "2",
+   "align": "center",
+   "color": "dim"
+  },
+  {
+   "t": "bar",
+   "x": 20,
+   "y": 112,
+   "w": 280,
+   "h": 12,
+   "src": "power",
+   "max": 1000,
+   "color": "neon"
+  },
+  {
+   "t": "num",
+   "x": 20,
+   "y": 136,
+   "src": "current",
+   "font": "4",
+   "align": "left",
+   "dp": 1,
+   "unit": " A",
+   "color": "text"
+  },
+  {
+   "t": "num",
+   "x": 300,
+   "y": 136,
+   "src": "volt",
+   "font": "4",
+   "align": "right",
+   "dp": 1,
+   "unit": " V",
+   "color": "text"
+  },
+  {
+   "t": "num",
+   "x": 20,
+   "y": 172,
+   "src": "speed",
+   "font": "4",
+   "align": "left",
+   "unit": " km/h",
+   "color": "ok"
+  },
+  {
+   "t": "num",
+   "x": 300,
+   "y": 172,
+   "src": "battery",
+   "font": "4",
+   "align": "right",
+   "unit": "%",
+   "color": "ok"
+  },
+  {
+   "t": "modebar"
+  }
+ ]
+}

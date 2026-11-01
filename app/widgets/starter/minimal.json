@@ -1,0 +1,39 @@
+{
+ "v": 1,
+ "name": "Minimal",
+ "author": "NOVA",
+ "desc": "Kun hastighed og batteri",
+ "items": [
+  {
+   "t": "num",
+   "x": 160,
+   "y": 62,
+   "src": "speed",
+   "font": "8",
+   "align": "center",
+   "dp": 0,
+   "color": "text"
+  },
+  {
+   "t": "num",
+   "x": 20,
+   "y": 180,
+   "src": "battery",
+   "font": "4",
+   "align": "left",
+   "unit": "%",
+   "color": "ok"
+  },
+  {
+   "t": "num",
+   "x": 300,
+   "y": 180,
+   "src": "volt",
+   "font": "4",
+   "align": "right",
+   "dp": 1,
+   "unit": "V",
+   "color": "dim"
+  }
+ ]
+}

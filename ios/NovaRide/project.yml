@@ -1,0 +1,27 @@
+name: NovaRide
+options:
+  bundleIdPrefix: dk.novaride
+  deploymentTarget:
+    iOS: "15.0"
+targets:
+  NovaRide:
+    type: application
+    platform: iOS
+    sources:
+      - path: Sources
+      - path: Resources/widgets
+        type: folder
+    info:
+      path: Sources/Info.plist
+      properties:
+        CFBundleDisplayName: NOVA RIDE
+        NSBluetoothAlwaysUsageDescription: NOVA RIDE bruger Bluetooth til at tale med dit dashboard (opdatering, temaer, bootskærm, musik).
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: dk.novaride.app
+        SWIFT_VERSION: "5.0"
+        TARGETED_DEVICE_FAMILY: "1"
+        MARKETING_VERSION: "1.0.0"
+        CURRENT_PROJECT_VERSION: "1"

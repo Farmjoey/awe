@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NOVA RIDE</title>
+<style>
+:root{--bg:#262626;--card:#333;--card2:#444;--fg:#ececec;--mut:#9a9fa2;--acc:#6fa3a8;--line:#4d4d4d;--ok:#8fd9a8;--bad:#ff5a6e;--btn:#d6d6d6;--tr:#4a4a4a;--edge:#8d8d8d;--onacc:#10181a;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
+:root[data-look="dark"]{--bg:#0e0e10;--card:#1b1b1f;--card2:#2a2a30;--line:#2c2c33;--mut:#9a9aa6;--btn:#f0f0f0;--tr:#2a2a30;--edge:#55555e}
+:root[data-look="light"]{--bg:#f3f3f5;--card:#fff;--card2:#e9e9ee;--fg:#141416;--mut:#6b6b76;--line:#dcdce2;--ok:#14a05f;--bad:#d93a4a;--btn:#2a2a2e;--tr:#dcdce2;--edge:#a9a9b3;--onacc:#101010}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+html{color-scheme:dark}:root[data-look="light"]{color-scheme:light}
+header{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--bg);border-bottom:1px solid var(--line)}
+.logo{font-weight:800;letter-spacing:.14em;font-size:17px}.logo b{color:var(--acc)}
+#pill{font-size:12px;padding:5px 10px;border-radius:99px;background:var(--card2);color:var(--mut)}
+#pill.on{background:var(--ok);color:var(--onacc)}
+main{max-width:560px;margin:0 auto;padding:6px 14px calc(96px + env(safe-area-inset-bottom,0px))}
+.card{background:var(--card);border-radius:20px;padding:16px;margin:12px 0}
+h2{margin:0 0 4px;font-size:18px}h3{margin:0 0 8px;font-size:15px;color:var(--mut);font-weight:600}
+p{margin:6px 0;color:var(--mut);font-size:14px}
+.btn{display:block;width:100%;border:2px solid var(--btn);border-radius:14px;padding:13px;font:700 16px system-ui;background:transparent;color:var(--fg);cursor:pointer;margin-top:10px}
+.btn.sec{border-color:var(--line);color:var(--mut)}.btn[disabled]{opacity:.4}
+.row{display:flex;gap:10px}.row>*{flex:1}
+.hero{display:flex;align-items:center;gap:16px}
+.hero svg{flex:none}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.chip{font-size:12px;padding:5px 10px;border-radius:99px;background:var(--card2);color:var(--mut)}
+.chip.ok{background:var(--ok);color:var(--onacc)}
+.kv{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line);font-size:15px}.kv:last-child{border:0}.kv span:first-child{color:var(--mut)}
+.bar{height:12px;border-radius:99px;background:var(--card2);overflow:hidden;margin:12px 0 6px}.bar i{display:block;height:100%;width:0;background:var(--acc);transition:width .15s}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tcard{border:2px solid transparent;border-radius:16px;padding:8px;background:var(--card2);cursor:pointer;text-align:center;font-size:13px}
+.tcard.sel{border-color:var(--acc)}
+.tcard svg{width:100%;height:auto;border-radius:10px;display:block;margin-bottom:6px}
+.step{display:flex;gap:12px;margin:10px 0;align-items:flex-start}.step em{flex:none;width:26px;height:26px;border-radius:50%;background:var(--acc);color:var(--onacc);font-style:normal;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:14px}
+input[type=text]{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--card2);color:var(--fg);font-size:16px}
+input[type=range]{width:100%;accent-color:var(--acc)}
+canvas{width:100%;image-rendering:pixelated;background:#000;border-radius:10px;display:block}
+.seg{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.seg button{padding:10px 4px;border-radius:12px;border:2px solid transparent;background:var(--card2);color:var(--fg);font-size:13px}.seg button.sel{border-color:var(--acc)}
+.play{display:flex;justify-content:center;gap:18px;margin:18px 0}.play button{width:74px;height:74px;border-radius:50%;border:0;background:var(--card2);color:var(--fg);font-size:26px}.play button.big{background:var(--acc);color:var(--onacc);width:88px;height:88px;font-size:32px}
+.warn{background:#ff82001f;border:1px solid var(--acc);color:var(--fg);border-radius:14px;padding:10px 12px;font-size:14px}
+nav{position:fixed;left:0;right:0;bottom:0;z-index:6;display:grid;grid-template-columns:repeat(5,1fr);background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+nav button{border:0;background:none;color:var(--mut);padding:10px 2px 8px;font-size:11px}nav button span{display:block;font-size:20px}
+nav button.sel{color:var(--acc)}
+.small{font-size:12px;color:var(--mut)}
+.wcard{background:var(--card2);border-radius:16px;padding:10px;margin:10px 0}.wcard canvas{margin-bottom:8px}.wcard b{font-size:15px}
+.fld{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}.fld label{font-size:12px;color:var(--mut);display:block}.fld input,.fld select{width:100%;padding:8px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--fg);font-size:15px}
+.err{color:var(--bad);font-size:13px;margin:6px 0}.mini{padding:8px 10px;font-size:13px;margin-top:6px;border-radius:10px}.row3{display:flex;gap:8px}.row3>*{flex:1}
+.addrow{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}.addrow button{border:0;border-radius:10px;padding:8px 10px;background:var(--card2);color:var(--fg);font-size:13px}
+nav{grid-template-columns:repeat(4,1fr)}nav button{font-size:11px}nav button span{font-size:21px}
+.live{padding:10px 8px 6px;background:radial-gradient(120% 100% at 30% 10%,color-mix(in srgb,var(--card) 85%,#fff),var(--card))}
+.live svg{width:100%;height:auto;display:block;font-family:"Roboto Condensed","Arial Narrow",system-ui,sans-serif}
+.live text{fill:var(--fg)}.live .m{fill:var(--mut)}
+.subnav{display:flex;gap:6px;overflow-x:auto;margin:10px 0 2px;padding-bottom:2px;scrollbar-width:none}.subnav::-webkit-scrollbar{display:none}
+.subnav button{flex:none;border:2px solid var(--line);background:transparent;color:var(--mut);border-radius:99px;padding:8px 14px;font-size:14px}
+.subnav button.sel{border-color:var(--acc);color:var(--fg)}
+.sw{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0}.sw button{width:38px;height:38px;border-radius:50%;border:3px solid transparent;cursor:pointer}.sw button.sel{border-color:var(--fg)}
+.tg{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}.tg button{border:2px solid var(--line);background:transparent;color:var(--mut);border-radius:12px;padding:9px 12px;font-size:14px}.tg button.sel{border-color:var(--acc);color:var(--fg)}
+.seg.c5{grid-template-columns:repeat(5,1fr)}.seg.c3{grid-template-columns:repeat(3,1fr)}.seg button{border-color:var(--line);background:transparent;color:var(--mut)}.seg button.sel{color:var(--fg)}
+input[type=color]{width:100%;height:48px;border:2px solid var(--line);border-radius:12px;background:var(--card2);padding:4px}
+.mrow{display:flex;gap:10px}.mrow button{flex:1;border:2px solid var(--line);background:transparent;color:var(--fg);border-radius:14px;padding:12px;font-size:20px}
+
+.sbar{position:sticky;top:0;z-index:7;display:flex;align-items:center;gap:8px;padding:8px 4px;background:var(--bg)}
+.sbar .sname{flex:1;text-align:center;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mini{border:2px solid var(--line);background:transparent;color:var(--fg);border-radius:10px;padding:7px 10px;font-size:13px;margin:0}
+.mini.pri,.stb .pri{border-color:var(--acc);color:var(--fg)}.mini.bad{color:var(--bad)}.mini[disabled]{opacity:.4}
+.scv{position:sticky;top:50px;z-index:6;background:var(--bg);padding-bottom:6px}
+.scv canvas{border-radius:12px;image-rendering:auto;touch-action:none;background:#000;width:100%;max-width:560px;margin:0 auto;border:1px solid var(--line)}
+.stb{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}.stb button,.stb select{border:2px solid var(--line);background:transparent;color:var(--fg);border-radius:10px;padding:8px 10px;font-size:14px}.stb button.sel{border-color:var(--acc)}.stb button[disabled]{opacity:.35}
+.sp{background:var(--card);border-radius:18px;padding:12px;margin:10px 0}.sph{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:8px;flex-wrap:wrap}.sph span{display:flex;gap:6px;flex-wrap:wrap}
+.nfg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px}.nf label{display:block;font-size:12px;color:var(--mut);margin-bottom:3px}.nf.wide{grid-column:1/-1}
+.nf input[type=text],.nf input[type=number],.nf select{width:100%;padding:9px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--fg);font-size:15px}
+.nfr{display:flex;gap:4px}.nfr input{text-align:center;min-width:0}.nfr button{flex:none;width:38px;border:0;border-radius:10px;background:var(--card2);color:var(--fg);font-size:18px}
+.swr{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.sc{width:30px;height:30px;border-radius:50%;border:2px solid var(--line);cursor:pointer;padding:0}.sc.sel{border-color:var(--fg);box-shadow:0 0 0 2px var(--acc)}
+.cp{width:38px;height:32px;padding:0;border:2px solid var(--line);border-radius:10px;background:none}.cp.sel{border-color:var(--fg)}
+.nudge{display:flex;gap:6px;margin:4px 0 10px}.nudge button{flex:1;border:0;border-radius:10px;background:var(--card2);color:var(--fg);padding:9px 0;font-size:16px}
+.adv{margin:6px 0;border-top:1px solid var(--line);padding-top:8px}.adv summary{cursor:pointer;color:var(--mut);font-size:14px;padding:4px 0}
+.layers{display:flex;flex-direction:column;gap:6px}.layers button{text-align:left;border:2px solid var(--line);background:transparent;color:var(--fg);border-radius:10px;padding:9px 10px;font-size:14px}.layers button.sel{border-color:var(--acc)}.layers button.off{opacity:.45}
+.addgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}.addgrid button{text-align:left;border:2px solid var(--line);background:var(--card);color:var(--fg);border-radius:14px;padding:10px}.addgrid b{display:block;font-size:15px}.addgrid span{font-size:12px;color:var(--mut)}
+.scv canvas{width:min(100%,calc(34vh * 1.3334));height:auto;aspect-ratio:4/3;display:block}
+.sp{scroll-margin-top:calc(60px + 34vh + 14px)}
+.hintbox{background:color-mix(in srgb,var(--acc) 18%,transparent);border:1px solid var(--acc);border-radius:12px;padding:10px 12px;font-size:14px;line-height:1.45;margin-top:8px}
+.pk{width:100%;text-align:left;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--fg);font-size:15px;min-height:42px}.pk i{color:var(--mut);font-style:normal}
+.nv{flex:1;min-width:0;border:1px solid var(--line);border-radius:10px;background:var(--card2);color:var(--fg);font-size:15px}
+.sheet{position:fixed;inset:0;z-index:30;background:rgba(0,0,0,.55);display:flex;align-items:flex-end}
+.sheetbox{width:100%;max-height:75vh;overflow-y:auto;background:var(--card);border-radius:20px 20px 0 0;padding:12px 12px calc(16px + env(safe-area-inset-bottom,0px))}
+.sheeth{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.sheetbox>button{display:block;width:100%;text-align:left;border:2px solid var(--line);background:transparent;color:var(--fg);border-radius:12px;padding:13px 14px;font-size:16px;margin:6px 0}.sheetbox>button.sel{border-color:var(--acc)}
+.sheetin{width:100%;padding:14px;border-radius:12px;border:2px solid var(--acc);background:var(--card2);color:var(--fg);font-size:20px}
+</style>
+</head>
+<body>
+<header><div class="logo">NOVA <b>RIDE</b></div><div id="pill">Ikke forbundet</div></header>
+<main id="view"></main>
+<nav id="tabs"></nav>
+<script>
+// NOVA RIDE widgets 2.0: JSON <-> compact binary (max ~2 KB) understood by the board, plus a canvas renderer
+// that draws the same layout in the app (editor preview). The firmware parser (src/WidgetLayout.h) enforces the
+// same rules. Keep both in sync. Old (v1) JSON files still compile: they are upgraded on the way.
+(function (root) {
+  'use strict';
+  var TYPES = { text: 1, num: 2, bar: 3, arc: 4, rect: 6, circle: 7, line: 8, button: 9, segbar: 10, spark: 11, dot: 12, icon: 13 };
+  var TYPE_ALIAS = { ring: 'arc', modebar: 'modebar' };
+  var SRC = { none: 0, speed: 1, power: 2, battery: 3, volt: 4, current: 5, temp: 6, motortemp: 7, trip: 8, total: 9, mode: 10, fault: 11,
+              maxspeed: 12, maxpower: 13, minvolt: 14, energy: 15, ridetime: 16,
+              ble: 17, phone: 18, limit: 19, demo: 20, alert: 21, regen: 22, moving: 23 };
+  var NUMERIC = function (s) { return (s >= 1 && s <= 9) || (s >= 12 && s <= 16); };
+  var STATUS = function (s) { return s >= 17 && s <= 23; };
+  var PAL = { text: 0, neon: 1, ok: 2, warn: 3, bad: 4, dim: 5, panel: 6, bg: 7, glow: 8, white: 9, black: 10 };
+  var FONTS = { '1': 0, '2': 1, '4': 2, '6': 3, '7': 4, '8': 5 };
+  var ALIGN = { left: 0, center: 1, right: 2 };
+  var ACTIONS = { none: 0, nextpage: 1, prevpage: 2, walk: 3, eco: 4, drive: 5, sport: 6, prevtrack: 7, playpause: 8, nexttrack: 9, settings: 10, messages: 11, music: 12, safety: 13 };
+  var ICONS = { bolt: 0, battery: 1, thermo: 2, gauge: 3, warning: 4, lock: 5, phone: 6, light: 7 };
+  var OPS = { none: 0, '>': 1, '<': 2, '==': 3, '!=': 4, '>=': 5, '<=': 6 };
+  var F = { fill: 1, round: 2, border: 4, knob: 8, ticks: 16, caps: 32, bidir: 64, rev: 128 };
+  var LIM = { items: 48, str: 24, strLen: 16, colors: 16, header: 12, itemLen: 32 };
+  var V1FONT = { '2': 'two', '4': 'four' };
+
+  function inv(o) { var r = {}; Object.keys(o).forEach(function (k) { r[o[k]] = k; }); return r; }
+  function clampi(v, a, b) { v = Math.round(+v); return v < a ? a : v > b ? b : v; }
+  function rgb565(hex) { var r = parseInt(hex.slice(1, 3), 16), g = parseInt(hex.slice(3, 5), 16), b = parseInt(hex.slice(5, 7), 16); return ((r & 0xF8) << 8) | ((g & 0xFC) << 3) | (b >> 3); }
+
+  // v1 file (ring/bar/modebar, fixed top margin) -> v2 object
+  function upgrade(w) {
+    if (!w || w.v === 2) return w;
+    var o = { v: 2, name: w.name, author: w.author, desc: w.desc, pages: 1, items: [] };
+    (w.items || []).forEach(function (it) {
+      var n = JSON.parse(JSON.stringify(it));
+      if (n.t === 'ring') { n.t = 'arc'; n.a0 = 135; n.sweep = 270; n.color2 = 'panel'; }
+      if (n.t === 'bar') { n.border = true; n.color2 = 'panel'; }
+      if (n.t === 'rect') { n.border = true; n.rad = 4; }
+      o.items.push(n);
+    });
+    return o;
+  }
+
+  function compile(w0) {
+    var err = [];
+    function bad(i, m) { err.push((i < 0 ? '' : 'Element ' + (i + 1) + ': ') + m); }
+    if (!w0 || typeof w0 !== 'object') return { ok: false, errors: ['Ingen widget'] };
+    var w = upgrade(w0);
+    var items = w.items;
+    if (!Array.isArray(items) || items.length < 1) return { ok: false, errors: ['Widget skal have mindst ét element'] };
+    var pages = clampi(w.pages == null ? 1 : w.pages, 1, 4);
+    var strs = [], cols = [], out = [];
+    function strIdx(s, i, what) {
+      s = String(s == null ? '' : s);
+      if (!/^[\x20-\x7E]*$/.test(s)) { bad(i, what + ' må kun have almindelige tegn (ASCII)'); return 255; }
+      if (s.length === 0) return 255;
+      if (s.length > LIM.strLen - 1) { bad(i, what + ' maks ' + (LIM.strLen - 1) + ' tegn'); return 255; }
+      var k = strs.indexOf(s);
+      if (k < 0) { if (strs.length >= LIM.str) { bad(i, 'For mange forskellige tekster (maks ' + LIM.str + ')'); return 255; } strs.push(s); k = strs.length - 1; }
+      return k;
+    }
+    function colIdx(c, def, i, what) {
+      if (c == null) c = def;
+      if (typeof c === 'string' && c.charAt(0) === '#') {
+        if (!/^#[0-9a-fA-F]{6}$/.test(c)) { bad(i, what + ': farve skal være #rrggbb'); return 0; }
+        var v = rgb565(c), k = cols.indexOf(v);
+        if (k < 0) { if (cols.length >= LIM.colors) { bad(i, 'For mange egne farver (maks ' + LIM.colors + ')'); return 0; } cols.push(v); k = cols.length - 1; }
+        return 16 + k;
+      }
+      var p = PAL[c];
+      if (p === undefined) { bad(i, what + ': ukendt farve'); return 0; }
+      return p;
+    }
+    var bg = colIdx(w.bg, 'bg', -1, 'Baggrund');
+    var expanded = [];
+    items.forEach(function (it) {
+      if (it && it.t === 'modebar') {                       // old mode buttons: four real buttons along the bottom
+        ['walk', 'eco', 'drive', 'sport'].forEach(function (m, k) {
+          expanded.push({ t: 'button', x: 4 + k * 79, y: 206, w: 75, h: 30, action: m, text: m.toUpperCase(), font: '2', rad: 9, color: 'text', color2: 'panel' });
+        });
+      } else expanded.push(it);
+    });
+    if (expanded.length > LIM.items) return { ok: false, errors: ['Højst ' + LIM.items + ' elementer'] };
+    expanded.forEach(function (it, i) {
+      var tn = TYPE_ALIAS[it.t] || it.t, t = TYPES[tn];
+      if (!t) { bad(i, 'Ukendt type'); return; }
+      var s = SRC[it.src == null ? 'none' : it.src];
+      var action = 0;
+      if (t === 9) { action = ACTIONS[it.action == null ? 'none' : it.action]; if (action === undefined) { bad(i, 'Ukendt handling'); return; } s = action; }
+      else if (s === undefined) { bad(i, 'Ukendt kilde'); return; }
+      var color = colIdx(it.color, 'text', i, 'Farve'), color2 = colIdx(it.color2, 'panel', i, 'Farve 2');
+      var font = FONTS[String(it.font == null ? '2' : it.font)];
+      if (font === undefined) { bad(i, 'Ukendt skrifttype (1, 2, 4, 6, 7, 8)'); return; }
+      var al = ALIGN[it.align == null ? 'left' : it.align];
+      if (al === undefined) { bad(i, 'Ukendt justering'); return; }
+      var dp = it.dp == null ? 0 : it.dp | 0;
+      if (dp < 0 || dp > 2) { bad(i, 'Decimaler 0-2'); return; }
+      var pg = it.page == null ? 15 : (it.page === 'all' ? 15 : it.page | 0);
+      if (pg !== 15 && (pg < 0 || pg >= pages)) { bad(i, 'Side findes ikke (siderne er 0-' + (pages - 1) + ')'); return; }
+      var x = Math.round(+it.x || 0), y = Math.round(+it.y || 0), wd = Math.round(+it.w || 0), ht = Math.round(+it.h || 0);
+      var mn = it.min == null ? 0 : Math.round(+it.min), mx = it.max == null ? 0 : Math.round(+it.max);
+      var th = Math.round(+it.rad || 0), a0 = Math.round((((+it.a0 == null || isNaN(+it.a0)) ? 135 : +it.a0) % 360 + 360) % 360 / 2), sw = Math.round((it.sweep == null ? 270 : +it.sweep) / 2);
+      var flags = 0;
+      Object.keys(F).forEach(function (k) { if (it[k]) flags |= F[k]; });
+      var str = strIdx(it.t === 'text' || t === 9 ? it.text : it.unit, i, 'Tekst'), str2 = strIdx(it.pre, i, 'Præfiks');
+      if (t === 1) {
+        if (s !== 0) bad(i, 'Tekst har ingen kilde');
+        if (font > 2) bad(i, 'Tekst kan kun bruge skrift 1, 2 eller 4');
+        if (str === 255) bad(i, 'Tekst mangler');
+      } else if (t === 2) {
+        if (s === 0) bad(i, 'Tal skal have en kilde');
+        if (s === SRC.mode && font > 2) bad(i, 'Tilstandsnavn kan kun bruge skrift 1, 2 eller 4');
+        if (font > 2 && (str !== 255 || str2 !== 255)) bad(i, 'Skrift 6, 7 og 8 kan kun vise tal - brug en tekst ved siden af i stedet for enhed/præfiks');
+      } else if (t === 3) {
+        if (!NUMERIC(s)) bad(i, 'Bjælke skal have en talkilde');
+        if (mx <= mn) bad(i, 'max skal være større end min');
+        if (wd < 4 || wd > 320 || ht < 2 || ht > 200) bad(i, 'Bjælke: bredde 4-320, højde 2-200');
+        if (th > Math.min(wd, ht) / 2) bad(i, 'Afrunding er for stor');
+      } else if (t === 4) {
+        var r = Math.round(+it.r || 0), tk = Math.round(+it.th || 0); wd = r; ht = tk;
+        if (!NUMERIC(s)) bad(i, 'Bue skal have en talkilde');
+        if (mx <= mn) bad(i, 'max skal være større end min');
+        if (r < 8 || r > 160 || tk < 1 || tk >= r) bad(i, 'Bue: radius 8-160, tykkelse 1 til under radius');
+        if (sw < 1 || sw > 180) bad(i, 'Bue: åbning 2-360 grader');
+      } else if (t === 6) {
+        if (wd < 2 || wd > 640 || ht < 2 || ht > 640) bad(i, 'Firkant: bredde og højde 2-640');
+        if (th > Math.min(wd, ht) / 2) bad(i, 'Afrunding er for stor');
+      } else if (t === 7) {
+        var cr = Math.round(+it.r || 0); wd = cr; ht = 0;
+        if (cr < 2 || cr > 160) bad(i, 'Cirkel: radius 2-160');
+        th = Math.round(+it.th || 0);
+        if (th > cr) bad(i, 'Kant er tykkere end cirklen');
+      } else if (t === 8) {
+        th = Math.round(it.th == null ? 2 : +it.th);
+        if (th < 1 || th > 12) bad(i, 'Linje: tykkelse 1-12');
+        if (wd < 0 || ht < 0 || wd > 640 || ht > 640 || (wd === 0 && ht === 0)) bad(i, 'Linje: længde skal være 1-640');
+      } else if (t === 9) {
+        if (wd < 16 || wd > 320 || ht < 12 || ht > 200) bad(i, 'Knap: bredde 16-320, højde 12-200');
+        if (str === 255) bad(i, 'Knap skal have tekst');
+        if (th > Math.min(wd, ht) / 2) bad(i, 'Afrunding er for stor');
+        if (font > 2) bad(i, 'Knap kan kun bruge skrift 1, 2 eller 4');
+      } else if (t === 10) {
+        th = Math.round(+it.n || 0);
+        if (!NUMERIC(s)) bad(i, 'Segmenter skal have en talkilde');
+        if (mx <= mn) bad(i, 'max skal være større end min');
+        if (th < 2 || th > 40) bad(i, 'Segmenter: 2-40');
+        if (ht < 2 || ht > 100 || wd < th * 2 || wd > 320) bad(i, 'Segmenter: bredde (mindst 2 pr. segment) og højde 2-100');
+      } else if (t === 11) {
+        th = Math.round(it.th == null ? 2 : +it.th);
+        if (!NUMERIC(s)) bad(i, 'Graf skal have en talkilde');
+        if (mx <= mn) bad(i, 'max skal være større end min');
+        if (wd < 16 || wd > 320 || ht < 8 || ht > 200) bad(i, 'Graf: bredde 16-320, højde 8-200');
+        if (th < 1 || th > 6) bad(i, 'Graf: stregtykkelse 1-6');
+      } else if (t === 12) {
+        var dr = Math.round(+it.r || 0); wd = dr; ht = 0;
+        if (s < 1 || s > 23 || s === SRC.mode) bad(i, 'Prik skal have en kilde');
+        if (dr < 2 || dr > 40) bad(i, 'Prik: radius 2-40');
+      } else if (t === 13) {
+        var ic = ICONS[it.icon == null ? 'bolt' : it.icon]; th = ic;
+        wd = Math.round(+it.size || 0); ht = 0;
+        if (ic === undefined) bad(i, 'Ukendt ikon');
+        if (wd < 8 || wd > 96) bad(i, 'Ikon: størrelse 8-96');
+      }
+      if (x < -200 || x > 520 || y < -200 || y > 520) bad(i, 'Ligger for langt uden for skærmen');
+      // show-only-when rule and colour thresholds
+      var showSrc = 0, showOp = 0, showVal = 0, warn = 0, badv = 0;
+      if (it.show) {
+        showSrc = SRC[it.show.src];
+        if (!showSrc || showSrc === SRC.mode) bad(i, 'Vis kun når: ukendt kilde');
+        var op = OPS[it.show.op == null ? '>' : it.show.op];
+        if (!op) bad(i, 'Vis kun når: ukendt sammenligning'); else showOp = op;
+        showVal = clampi(it.show.val || 0, -32768, 32767);
+      }
+      if (it.warn != null || it.bad != null) {
+        showOp |= 8; if (it.below) showOp |= 16;
+        warn = clampi(it.warn == null ? (it.below ? -32768 : 32767) : it.warn, -32768, 32767);
+        badv = clampi(it.bad == null ? (it.below ? -32768 : 32767) : it.bad, -32768, 32767);
+      }
+      out.push({ t: t, s: s, color: color, color2: color2, font: font, al: al, dp: dp, pg: pg, str: str, str2: str2, max: mx, min: mn, x: x, y: y, w: wd, h: ht,
+                 flags: flags, a0: a0, sw: sw, th: th, showSrc: showSrc, showOp: showOp, showVal: showVal, warn: warn, bad: badv });
+    });
+    if (err.length) return { ok: false, errors: err };
+    var n = out.length, total = LIM.header + strs.length * LIM.strLen + cols.length * 2 + n * LIM.itemLen, b = new Uint8Array(total);
+    b[0] = 0x4E; b[1] = 0x57; b[2] = 2; b[3] = n; b[4] = strs.length; b[5] = cols.length; b[6] = total & 255; b[7] = total >> 8; b[8] = pages; b[9] = bg; b[10] = w.dots === false ? 0 : 1; b[11] = 0;
+    strs.forEach(function (s, i) { for (var k = 0; k < s.length; k++) b[LIM.header + i * LIM.strLen + k] = s.charCodeAt(k); });
+    var co = LIM.header + strs.length * LIM.strLen;
+    cols.forEach(function (c, i) { b[co + i * 2] = c & 255; b[co + i * 2 + 1] = c >> 8; });
+    var o = co + cols.length * 2;
+    function p16(p, v) { b[p] = v & 255; b[p + 1] = (v >> 8) & 255; }
+    out.forEach(function (it, i) {
+      var p = o + i * LIM.itemLen;
+      b[p] = it.t; b[p + 1] = it.s; b[p + 2] = it.color; b[p + 3] = it.color2; b[p + 4] = it.font; b[p + 5] = it.al | (it.dp << 2) | (it.pg << 4); b[p + 6] = it.str; b[p + 7] = it.str2;
+      p16(p + 8, it.max); p16(p + 10, it.min); p16(p + 12, it.x); p16(p + 14, it.y); p16(p + 16, it.w); p16(p + 18, it.h);
+      b[p + 20] = it.flags; b[p + 21] = it.a0; b[p + 22] = it.sw; b[p + 23] = it.th; b[p + 24] = it.showSrc; b[p + 25] = it.showOp; p16(p + 26, it.showVal); p16(p + 28, it.warn); p16(p + 30, it.bad);
+    });
+    return { ok: true, bytes: b, errors: [], pages: pages };
+  }
+
+  function validateFile(w) {
+    var e = [];
+    if (!w || typeof w !== 'object') return ['Ikke et JSON-objekt'];
+    if (w.v !== 1 && w.v !== 2) e.push('v skal være 1 eller 2');
+    if (typeof w.name !== 'string' || !/^[\x20-\x7E]{2,24}$/.test(w.name)) e.push('name: 2-24 almindelige tegn');
+    if (typeof w.author !== 'string' || !/^[\x20-\x7E]{1,24}$/.test(w.author)) e.push('author: 1-24 almindelige tegn');
+    if (w.desc != null && (typeof w.desc !== 'string' || w.desc.length > 120)) e.push('desc: højst 120 tegn');
+    var c = compile(w);
+    if (!c.ok) e = e.concat(c.errors);
+    return e;
+  }
+
+  // ------------------------------------------------------------------ renderer (canvas) -- mirrors src/WidgetDraw.cpp
+  var THEME = { text: '#ececec', neon: '#6fa3a8', ok: '#8fd9a8', warn: '#ffb000', bad: '#ff5a6e', dim: '#9a9fa2', panel: '#3b3b3b', bg: '#303030', glow: '#4c6e73', white: '#ffffff', black: '#000000' };
+  var FH = { 0: 8, 1: 16, 2: 26, 3: 48, 4: 48, 5: 75 };       // glyph box height of the board's fonts 1, 2, 4, 6, 7, 8
+  function mixc(a, b, t) {
+    function p(h) { return [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)]; }
+    var x = p(a), y = p(b), r = [0, 1, 2].map(function (i) { return Math.round(x[i] + (y[i] - x[i]) * t); });
+    return '#' + r.map(function (v) { return ('0' + v.toString(16)).slice(-2); }).join('');
+  }
+  function colorOf(c, theme) {
+    if (typeof c === 'string' && c.charAt(0) === '#') return c;
+    return theme[c == null ? 'text' : c] || theme.text;
+  }
+  function valueOf(src, L) {                                    // L: {speed:{v,ok}...} or flat values; returns null when not available
+    var m = { speed: 'speed', power: 'power', battery: 'battery', volt: 'volt', current: 'current', temp: 'temp', motortemp: 'motortemp', trip: 'trip', total: 'total', fault: 'fault',
+              maxspeed: 'maxspeed', maxpower: 'maxpower', minvolt: 'minvolt', energy: 'energy', ridetime: 'ridetime' };
+    if (src === 'mode') return L.mode == null ? null : L.mode;
+    if (m[src]) { var v = L[m[src]]; return v == null ? null : v; }
+    if (src === 'ble') return L.ble ? 1 : 0;
+    if (src === 'phone') return L.phone ? 1 : 0;
+    if (src === 'limit') return L.limit ? 1 : 0;
+    if (src === 'demo') return L.demo ? 1 : 0;
+    if (src === 'alert') return L.fault ? 1 : 0;
+    if (src === 'regen') return L.power != null && L.power < 0 ? 1 : 0;
+    if (src === 'moving') return L.speed != null && L.speed > 1 ? 1 : 0;
+    return null;
+  }
+  function fmt(v, dp) { return v == null ? '--' : (dp ? v.toFixed(dp) : String(Math.round(v))); }
+  function isVisible(it, L, page) {
+    var pg = it.page == null || it.page === 'all' ? 15 : it.page;
+    if (pg !== 15 && pg !== page) return false;
+    if (!it.show) return true;
+    var v = valueOf(it.show.src, L); if (v == null) return false;
+    var c = it.show.val || 0;
+    switch (it.show.op == null ? '>' : it.show.op) { case '>': return v > c; case '<': return v < c; case '==': return v === c; case '!=': return v !== c; case '>=': return v >= c; case '<=': return v <= c; }
+    return true;
+  }
+  function ruleColor(it, v, theme, base) {
+    if (v == null || (it.warn == null && it.bad == null)) return base;
+    var below = !!it.below;
+    if (it.bad != null && (below ? v <= it.bad : v >= it.bad)) return theme.bad;
+    if (it.warn != null && (below ? v <= it.warn : v >= it.warn)) return theme.warn;
+    return base;
+  }
+  function frac(it, v) { if (v == null) return 0; var mn = it.min || 0, mx = it.max || 1; var f = (v - mn) / (mx - mn); return f < 0 ? 0 : f > 1 ? 1 : f; }
+  function rr(ctx, x, y, w, h, r) { r = Math.max(0, Math.min(r, w / 2, h / 2)); ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
+  function text(ctx, s, x, y, font, align, color) {
+    var h = FH[font] || 16, fam = font === 4 ? 'ui-monospace,Menlo,monospace' : '"Roboto Condensed","Arial Narrow",system-ui,sans-serif';
+    ctx.font = (font === 0 ? '' : 'bold ') + Math.round(h * (font === 0 ? 1.0 : 0.82)) + 'px ' + fam;
+    ctx.textBaseline = 'top'; ctx.textAlign = align === 'center' ? 'center' : align === 'right' ? 'right' : 'left'; ctx.fillStyle = color;
+    ctx.fillText(s, x, y + h * 0.08);
+  }
+  function arcPath(ctx, cx, cy, ro, ri, a0, a1, caps) {
+    var rm = (ro + ri) / 2, tk = ro - ri, A = a0 * Math.PI / 180, B = a1 * Math.PI / 180;
+    ctx.beginPath(); ctx.arc(cx, cy, rm, A, B, false); ctx.lineWidth = tk; ctx.lineCap = caps ? 'round' : 'butt'; ctx.stroke();
+  }
+  function drawIcon(ctx, id, x, y, s, col, frc, theme) {
+    ctx.save(); ctx.translate(x, y); ctx.strokeStyle = col; ctx.fillStyle = col; ctx.lineWidth = Math.max(1.5, s / 12); ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+    var u = s / 24;
+    if (id === 0) { ctx.beginPath(); ctx.moveTo(14 * u, 1 * u); ctx.lineTo(5 * u, 14 * u); ctx.lineTo(11 * u, 14 * u); ctx.lineTo(9 * u, 23 * u); ctx.lineTo(19 * u, 9 * u); ctx.lineTo(13 * u, 9 * u); ctx.closePath(); ctx.fill(); }
+    else if (id === 1) { rr(ctx, 1 * u, 6 * u, 19 * u, 12 * u, 3 * u); ctx.stroke(); ctx.fillRect(21 * u, 10 * u, 2.5 * u, 4 * u); ctx.fillRect(3.5 * u, 8.5 * u, 14 * u * (frc == null ? 1 : frc), 7 * u); }
+    else if (id === 2) { rr(ctx, 9 * u, 1 * u, 6 * u, 15 * u, 3 * u); ctx.stroke(); ctx.beginPath(); ctx.arc(12 * u, 19 * u, 4.5 * u, 0, 7); ctx.fill(); ctx.fillRect(11 * u, 8 * u, 2 * u, 11 * u); }
+    else if (id === 3) { ctx.beginPath(); ctx.arc(12 * u, 14 * u, 10 * u, Math.PI * 0.85, Math.PI * 2.15); ctx.stroke(); ctx.beginPath(); ctx.moveTo(12 * u, 14 * u); ctx.lineTo(18 * u, 7 * u); ctx.stroke(); }
+    else if (id === 4) { ctx.beginPath(); ctx.moveTo(12 * u, 2 * u); ctx.lineTo(23 * u, 21 * u); ctx.lineTo(1 * u, 21 * u); ctx.closePath(); ctx.stroke(); ctx.fillRect(11 * u, 8 * u, 2 * u, 7 * u); ctx.fillRect(11 * u, 17 * u, 2 * u, 2 * u); }
+    else if (id === 5) { rr(ctx, 4 * u, 11 * u, 16 * u, 11 * u, 2 * u); ctx.fill(); ctx.beginPath(); ctx.arc(12 * u, 10 * u, 5 * u, Math.PI, 0); ctx.stroke(); }
+    else if (id === 6) { rr(ctx, 6 * u, 1 * u, 12 * u, 22 * u, 3 * u); ctx.stroke(); ctx.fillRect(10 * u, 19 * u, 4 * u, 1.5 * u); }
+    else { ctx.beginPath(); ctx.arc(12 * u, 12 * u, 5 * u, 0, 7); ctx.fill(); for (var k = 0; k < 8; k++) { var a = k * Math.PI / 4; ctx.beginPath(); ctx.moveTo(12 * u + Math.cos(a) * 8 * u, 12 * u + Math.sin(a) * 8 * u); ctx.lineTo(12 * u + Math.cos(a) * 11 * u, 12 * u + Math.sin(a) * 11 * u); ctx.stroke(); } }
+    ctx.restore();
+  }
+
+  // Draws one item. L = live values; opts: {theme, page, hist:{src:[...]}, mode:0..3, selected}
+  function drawItem(ctx, it, L, opts) {
+    var th = opts.theme, t = it.t, src = it.src, v = (t === 'button' || t === 'icon' && !src) ? null : valueOf(src, L), col = colorOf(it.color, th), col2 = colorOf(it.color2 == null ? 'panel' : it.color2, th);
+    if (v != null && !STATUS(SRC[src] || 0)) col = ruleColor(it, v, th, col);
+    var x = it.x || 0, y = it.y || 0, w = it.w || 0, h = it.h || 0, rad = it.rad || 0;
+    ctx.save();
+    if (t === 'text') text(ctx, it.text || '', x, y, FONTS[String(it.font || '2')], it.align, col);
+    else if (t === 'num') {
+      var s;
+      if (src === 'mode') s = L.mode == null ? '--' : ['WALK', 'ECO', 'DRIVE', 'SPORT'][L.mode] || '--';
+      else if (STATUS(SRC[src])) s = v ? 'ON' : 'OFF';
+      else s = fmt(v, it.dp || 0);
+      var ft = FONTS[String(it.font || '2')]; if (v == null && src !== 'mode') { col = th.dim; if (ft > 2) ft = 2; }
+      text(ctx, (it.pre || '') + s + (v != null || src === 'mode' ? (it.unit || '') : ''), x, y, ft, it.align, col);
+    } else if (t === 'bar') {
+      var f = frac(it, v), vert = h > w, r = it.round ? Math.max(rad, 0) : rad;
+      rr(ctx, x, y, w, h, r); ctx.fillStyle = col2; ctx.fill();
+      if (it.border) { ctx.strokeStyle = mixc(th.bg, th.text, 0.5); ctx.lineWidth = 1; rr(ctx, x + .5, y + .5, w - 1, h - 1, r); ctx.stroke(); }
+      var ix = it.border ? 2 : 0, fw = (vert ? h : w) - ix * 2, a = 0, b = f;
+      if (it.bidir) { var z = (-(it.min || 0)) / ((it.max || 1) - (it.min || 0)); var vv = v == null ? 0 : (v - (it.min || 0)) / ((it.max || 1) - (it.min || 0)); a = Math.min(z, vv); b = Math.max(z, vv); }
+      else if (it.rev) { a = 1 - f; b = 1; } else { a = 0; b = f; }
+      ctx.fillStyle = col;
+      if (b - a > 0.002) {
+        if (vert) rr(ctx, x + ix, y + ix + fw * (1 - b), w - ix * 2, Math.max(1, fw * (b - a)), Math.max(0, r - ix));
+        else rr(ctx, x + ix + fw * a, y + ix, Math.max(1, fw * (b - a)), h - ix * 2, Math.max(0, r - ix));
+        ctx.fill();
+      }
+    } else if (t === 'arc') {
+      var r2 = it.r, tk = it.th, a0 = it.a0 == null ? 135 : it.a0, sw = it.sweep == null ? 270 : it.sweep, fr = frac(it, v);
+      ctx.strokeStyle = col2; arcPath(ctx, x, y, r2, r2 - tk, a0, a0 + sw, !!it.caps);
+      if (fr > 0.003) { ctx.strokeStyle = col; var e = it.rev ? a0 + sw - sw * fr : a0 + sw * fr; if (it.rev) arcPath(ctx, x, y, r2, r2 - tk, e, a0 + sw, !!it.caps); else arcPath(ctx, x, y, r2, r2 - tk, a0, e, !!it.caps); }
+      if (it.ticks) { ctx.strokeStyle = mixc(th.bg, th.text, 0.55); ctx.lineWidth = 1.5; for (var k = 0; k <= 10; k++) { var q = (a0 + sw * k / 10) * Math.PI / 180; ctx.beginPath(); ctx.moveTo(x + Math.cos(q) * (r2 + 3), y + Math.sin(q) * (r2 + 3)); ctx.lineTo(x + Math.cos(q) * (r2 + 8), y + Math.sin(q) * (r2 + 8)); ctx.stroke(); } }
+      if (it.knob) { var qa = (it.rev ? a0 + sw - sw * fr : a0 + sw * fr) * Math.PI / 180, rm = r2 - tk / 2; ctx.fillStyle = th.text; ctx.beginPath(); ctx.arc(x + Math.cos(qa) * rm, y + Math.sin(qa) * rm, Math.max(4, tk * 0.8), 0, 7); ctx.fill(); }
+    } else if (t === 'rect') {
+      rr(ctx, x, y, w, h, rad);
+      if (it.fill || !it.border) { ctx.fillStyle = it.fill ? col : col2; ctx.fill(); }
+      if (it.border) { ctx.strokeStyle = col; ctx.lineWidth = 2; rr(ctx, x + 1, y + 1, w - 2, h - 2, Math.max(0, rad - 1)); ctx.stroke(); }
+    } else if (t === 'circle') {
+      var cr = it.r || 0; ctx.beginPath(); ctx.arc(x, y, cr, 0, 7);
+      if (it.fill || !it.border) { ctx.fillStyle = col; ctx.fill(); }
+      if (it.border) { ctx.strokeStyle = col; ctx.lineWidth = Math.max(1, it.th || 2); ctx.beginPath(); ctx.arc(x, y, Math.max(1, cr - (it.th || 2) / 2), 0, 7); ctx.stroke(); }
+    } else if (t === 'line') {
+      ctx.strokeStyle = col; ctx.lineWidth = it.th == null ? 2 : it.th; ctx.lineCap = 'round'; ctx.beginPath();
+      if (it.rev) { ctx.moveTo(x, y + h); ctx.lineTo(x + w, y); } else { ctx.moveTo(x, y); ctx.lineTo(x + w, y + h); } ctx.stroke();
+    } else if (t === 'button') {
+      var act = it.action || 'none', M = { walk: 0, eco: 1, drive: 2, sport: 3 }, sel = M[act] != null && opts.mode === M[act];
+      rr(ctx, x, y, w, h, rad || 9); ctx.fillStyle = sel ? colorOf(it.color2 == null ? 'neon' : it.color2, th) : 'rgba(0,0,0,0)'; if (sel || it.fill) ctx.fill();
+      ctx.strokeStyle = col; ctx.lineWidth = 2; rr(ctx, x + 1, y + 1, w - 2, h - 2, Math.max(0, (rad || 9) - 1)); ctx.stroke();
+      var bf = FONTS[String(it.font || '2')]; text(ctx, it.text || '', x + w / 2, y + h / 2 - (FH[bf] || 16) / 2, bf, 'center', sel ? th.bg : col);
+    } else if (t === 'segbar') {
+      var n = it.n || 10, gap = Math.max(1, Math.round(w / n * 0.18)), sw2 = (w - gap * (n - 1)) / n, lit = Math.round(frac(it, v) * n);
+      for (var j = 0; j < n; j++) { ctx.fillStyle = j < lit ? col : col2; rr(ctx, x + j * (sw2 + gap), y, sw2, h, it.round ? Math.min(3, sw2 / 2) : 0); ctx.fill(); }
+    } else if (t === 'spark') {
+      var hs = (opts.hist && opts.hist[src]) || [], tkn = it.th == null ? 2 : it.th; ctx.strokeStyle = col2; ctx.lineWidth = 1; ctx.strokeRect(x + .5, y + .5, w - 1, h - 1);
+      if (hs.length > 1) {
+        ctx.beginPath(); hs.forEach(function (q, k) { var px = x + (w - 1) * k / (hs.length - 1), py = y + h - 1 - (h - 2) * frac(it, q); if (k) ctx.lineTo(px, py); else ctx.moveTo(px, py); });
+        if (it.fill) { ctx.lineTo(x + w - 1, y + h - 1); ctx.lineTo(x, y + h - 1); ctx.closePath(); ctx.fillStyle = mixc(th.bg, col, 0.35); ctx.fill(); ctx.beginPath(); hs.forEach(function (q, k) { var px = x + (w - 1) * k / (hs.length - 1), py = y + h - 1 - (h - 2) * frac(it, q); if (k) ctx.lineTo(px, py); else ctx.moveTo(px, py); }); }
+        ctx.strokeStyle = col; ctx.lineWidth = tkn; ctx.lineJoin = 'round'; ctx.stroke();
+      }
+    } else if (t === 'dot') {
+      var on = v != null && v > 0; ctx.fillStyle = on ? col : col2; ctx.beginPath(); ctx.arc(x, y, it.r || 4, 0, 7); ctx.fill();
+    } else if (t === 'icon') {
+      drawIcon(ctx, ICONS[it.icon == null ? 'bolt' : it.icon] || 0, x, y, it.size || 24, col, it.icon === 'battery' && src ? frac(it, v) : 1, th);
+    }
+    ctx.restore();
+  }
+
+  function render(ctx, w0, L, opts) {
+    opts = opts || {}; var w = upgrade(w0), th = opts.theme || THEME, page = opts.page || 0;
+    var bgc = colorOf(w.bg == null ? 'bg' : w.bg, th);
+    ctx.save(); ctx.fillStyle = bgc; ctx.fillRect(0, 0, 320, 240);
+    var list = [];
+    (w.items || []).forEach(function (it) {
+      if (it.t === 'modebar') ['walk', 'eco', 'drive', 'sport'].forEach(function (m, k) { list.push({ t: 'button', x: 4 + k * 79, y: 206, w: 75, h: 30, action: m, text: m.toUpperCase(), font: '2', rad: 9, color: 'text', color2: 'neon' }); });
+      else list.push(it);
+    });
+    list.forEach(function (it, i) { var pgv = it.page == null || it.page === 'all' ? 15 : it.page; if (opts.ignoreShow ? (pgv === 15 || pgv === page) : isVisible(it, L, page)) drawItem(ctx, it, L, { theme: th, hist: opts.hist, mode: opts.mode == null ? L.modeIdx : opts.mode }); });
+    ctx.restore();
+    return list;
+  }
+
+  // box that surrounds an item in the 320x240 picture (editor selection / hit test)
+  function bounds(it, ctx) {
+    var t = it.t, x = it.x || 0, y = it.y || 0, w = it.w || 0, h = it.h || 0;
+    if (t === 'arc') return { x: x - it.r, y: y - it.r, w: it.r * 2, h: it.r * 2 };
+    if (t === 'circle' || t === 'dot') { var r = it.r || 4; return { x: x - r, y: y - r, w: r * 2, h: r * 2 }; }
+    if (t === 'icon') { var s = it.size || 24; return { x: x, y: y, w: s, h: s }; }
+    if (t === 'line') return { x: x, y: y, w: Math.max(w, 6), h: Math.max(h, 6) };
+    if (t === 'text' || t === 'num') {
+      var fh = FH[FONTS[String(it.font || '2')]] || 16, tw = 0;
+      if (ctx) { text(ctx, '', 0, 0, FONTS[String(it.font || '2')], 'left', '#000'); var sample = t === 'text' ? (it.text || '') : ((it.pre || '') + '0000' + (it.unit || '')); var mt = ctx.measureText ? ctx.measureText(sample) : null; tw = mt && mt.width ? mt.width : fh * 0.55 * Math.max(3, sample.length); }
+      else tw = fh * 0.55 * Math.max(3, (t === 'text' ? (it.text || '').length : 6));
+      var bx = it.align === 'center' ? x - tw / 2 : it.align === 'right' ? x - tw : x;
+      return { x: bx, y: y, w: Math.max(tw, 10), h: fh };
+    }
+    return { x: x, y: y, w: Math.max(w, 6), h: Math.max(h, 6) };
+  }
+
+  // animated sample data so layouts can be previewed without a scooter
+  function sample(t, opts) {
+    opts = opts || {};
+    var sp = opts.still ? 1 : 17 + 14 * Math.sin(t * 0.5), pw = opts.still ? 1890 : Math.round(sp * 62 + 140 * Math.sin(t * 1.3)), pct = opts.still ? 60 : Math.max(8, Math.round(86 - t * 0.2) % 100), V = opts.still ? 78.7 : 67.5 + pct * 0.19;
+    return { speed: sp, power: pw, battery: pct, volt: V, current: opts.still ? 22 : pw / V, temp: 40 + sp * 0.5, motortemp: 52 + sp * 0.6, trip: 12.4 + t * 0.01, total: 20660, fault: 0,
+             maxspeed: Math.max(sp, 31.4), maxpower: Math.max(pw, 2650), minvolt: 71.2, energy: 148 + t * 0.4, ridetime: 18 + Math.floor(t / 60), mode: 2, modeIdx: 2, ble: true, phone: Math.sin(t * 0.2) > -0.3, limit: !!opts.limit, demo: true };
+  }
+  function history(L, n) { var h = {}; ['speed', 'power', 'battery', 'volt', 'current', 'temp', 'motortemp'].forEach(function (k) { h[k] = []; for (var i = 0; i < n; i++) { var s = sample(i * 0.7 + L._t0 || 0); h[k].push(s[k]); } }); return h; }
+
+  var api = { compile: compile, validateFile: validateFile, upgrade: upgrade, render: render, drawItem: drawItem, bounds: bounds, sample: sample, history: history, isVisible: isVisible, mixc: mixc,
+              TYPES: TYPES, SRC: SRC, PAL: PAL, FONTS: FONTS, ALIGN: ALIGN, ACTIONS: ACTIONS, ICONS: ICONS, OPS: OPS, FLAGS: F, LIM: LIM, THEME: THEME,
+              SRC_NAMES: inv(SRC), TYPE_NAMES: inv(TYPES), COLOR_NAMES: inv(PAL), NUMERIC: NUMERIC, STATUS: STATUS, MAX_ITEMS: LIM.items };
+  root.NovaWidget = api;
+  if (typeof module !== 'undefined' && module.exports) module.exports = api;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+window.STARTERS = [{"v": 2, "name": "Standard", "author": "NOVA", "desc": "Standard-skaermen. Du kan aendre alt: tekster, knapper og handlinger", "pages": 2, "bg": "bg", "items": [{"t": "arc", "x": 90, "y": 104, "r": 82, "th": 9, "a0": 135, "sweep": 270, "src": "speed", "max": 35, "color": "#bfe6ea", "color2": "neon", "caps": true, "knob": true, "page": 0}, {"t": "text", "x": 90, "y": 60, "text": "_NOVA RIDE_", "font": "2", "align": "center", "page": 0}, {"t": "num", "x": 90, "y": 68, "src": "speed", "font": "8", "align": "center", "page": 0}, {"t": "text", "x": 90, "y": 150, "text": "km/h", "font": "2", "align": "center", "color": "dim", "page": 0}, {"t": "num", "x": 290, "y": 18, "src": "total", "font": "2", "align": "right", "color": "dim", "page": 0}, {"t": "num", "x": 290, "y": 33, "src": "power", "font": "6", "align": "right", "page": 0}, {"t": "text", "x": 296, "y": 52, "text": "W", "font": "2", "color": "dim", "page": 0}, {"t": "bar", "x": 176, "y": 87, "w": 138, "h": 6, "src": "power", "min": -800, "max": 6000, "color": "#d6d6d6", "color2": "#4a4a4a", "border": true, "round": true, "rad": 3, "bidir": true, "page": 0}, {"t": "num", "x": 178, "y": 100, "src": "battery", "font": "4", "unit": "%", "warn": 20, "bad": 10, "below": true, "page": 0}, {"t": "num", "x": 314, "y": 106, "src": "volt", "font": "2", "align": "right", "dp": 1, "unit": " V", "page": 0}, {"t": "bar", "x": 176, "y": 133, "w": 138, "h": 14, "src": "battery", "max": 100, "color": "#d6d6d6", "color2": "#4a4a4a", "border": true, "round": true, "rad": 7, "warn": 20, "bad": 10, "below": true, "page": 0}, {"t": "num", "x": 178, "y": 158, "src": "temp", "font": "1", "pre": "CTRL ", "unit": "C", "page": 0}, {"t": "num", "x": 314, "y": 156, "src": "current", "font": "1", "align": "right", "pre": "BATT ", "unit": " A", "page": 0}, {"t": "button", "x": 178, "y": 175, "w": 97, "h": 47, "action": "sport", "text": "SPORT", "font": "4", "rad": 13, "page": 0}, {"t": "button", "x": 281, "y": 175, "w": 33, "h": 47, "action": "none", "text": "RACE", "font": "1", "rad": 11, "color": "#9b5a64", "color2": "#9b5a64", "show": {"src": "limit", "op": "==", "val": 1}, "page": 0}, {"t": "button", "x": 281, "y": 175, "w": 33, "h": 47, "action": "nextpage", "text": "RACE", "font": "1", "rad": 11, "color": "bad", "color2": "bad", "show": {"src": "limit", "op": "==", "val": 0}, "page": 0}, {"t": "dot", "x": 14, "y": 14, "r": 4, "src": "ble", "color": "ok", "color2": "dim", "page": 0}, {"t": "text", "x": 24, "y": 8, "text": "DEMO", "font": "2", "color": "dim", "show": {"src": "demo", "op": "==", "val": 1}, "page": 0}, {"t": "dot", "x": 84, "y": 15, "r": 4, "src": "limit", "color": "warn", "color2": "bg", "page": 0}, {"t": "text", "x": 92, "y": 8, "text": "LIMIT 20", "font": "2", "color": "warn", "show": {"src": "limit", "op": "==", "val": 1}, "page": 0}, {"t": "dot", "x": 296, "y": 8, "r": 2, "src": "demo", "color": "dim", "color2": "dim", "page": 0}, {"t": "dot", "x": 304, "y": 8, "r": 2, "src": "demo", "color": "dim", "color2": "dim", "page": 0}, {"t": "dot", "x": 312, "y": 8, "r": 2, "src": "demo", "color": "dim", "color2": "dim", "page": 0}, {"t": "text", "x": 8, "y": 8, "text": "MODES", "font": "4", "color": "neon", "page": 1}, {"t": "button", "x": 8, "y": 40, "w": 148, "h": 44, "action": "walk", "text": "WALK", "font": "4", "rad": 12, "page": 1}, {"t": "button", "x": 164, "y": 40, "w": 148, "h": 44, "action": "eco", "text": "ECO", "font": "4", "rad": 12, "page": 1}, {"t": "button", "x": 8, "y": 92, "w": 148, "h": 44, "action": "drive", "text": "DRIVE", "font": "4", "rad": 12, "page": 1}, {"t": "button", "x": 164, "y": 92, "w": 148, "h": 44, "action": "sport", "text": "SPORT", "font": "4", "rad": 12, "page": 1}, {"t": "button", "x": 8, "y": 146, "w": 92, "h": 40, "action": "prevtrack", "text": "<<", "font": "4", "rad": 12, "page": 1}, {"t": "button", "x": 114, "y": 146, "w": 92, "h": 40, "action": "playpause", "text": "PLAY", "font": "2", "rad": 12, "page": 1}, {"t": "button", "x": 220, "y": 146, "w": 92, "h": 40, "action": "nexttrack", "text": ">>", "font": "4", "rad": 12, "page": 1}, {"t": "button", "x": 8, "y": 196, "w": 92, "h": 36, "action": "prevpage", "text": "BACK", "font": "2", "rad": 10, "page": 1}, {"t": "button", "x": 114, "y": 196, "w": 92, "h": 36, "action": "messages", "text": "MESSAGES", "font": "2", "rad": 10, "page": 1}, {"t": "button", "x": 220, "y": 196, "w": 92, "h": 36, "action": "settings", "text": "SETTINGS", "font": "2", "rad": 10, "page": 1}]}, {"v": 2, "name": "Steel dashboard", "author": "NOVA", "desc": "Som standard-dashboardet, men du kan flytte og aendre alt", "pages": 1, "bg": "bg", "items": [{"t": "arc", "x": 90, "y": 104, "r": 82, "th": 9, "a0": 135, "sweep": 270, "src": "speed", "max": 35, "color": "#bfe6ea", "color2": "neon", "caps": true, "knob": true}, {"t": "text", "x": 90, "y": 60, "text": "_STEEL_", "font": "2", "align": "center", "color": "text"}, {"t": "num", "x": 90, "y": 68, "src": "speed", "font": "8", "align": "center"}, {"t": "text", "x": 90, "y": 150, "text": "km/h", "font": "2", "align": "center", "color": "dim"}, {"t": "num", "x": 290, "y": 18, "src": "total", "font": "2", "align": "right", "color": "dim"}, {"t": "num", "x": 290, "y": 33, "src": "power", "font": "6", "align": "right"}, {"t": "text", "x": 296, "y": 52, "text": "W", "font": "2", "color": "dim"}, {"t": "bar", "x": 176, "y": 87, "w": 138, "h": 6, "src": "power", "min": -800, "max": 6000, "color": "#d6d6d6", "color2": "#4a4a4a", "border": true, "round": true, "rad": 3, "bidir": true}, {"t": "num", "x": 178, "y": 100, "src": "battery", "font": "4", "unit": "%", "warn": 20, "bad": 10, "below": true}, {"t": "num", "x": 314, "y": 106, "src": "volt", "font": "2", "align": "right", "dp": 1, "unit": " V"}, {"t": "bar", "x": 176, "y": 133, "w": 138, "h": 14, "src": "battery", "max": 100, "color": "#d6d6d6", "color2": "#4a4a4a", "border": true, "round": true, "rad": 7, "warn": 20, "bad": 10, "below": true}, {"t": "num", "x": 178, "y": 158, "src": "temp", "font": "1", "pre": "CTRL ", "unit": "C"}, {"t": "num", "x": 314, "y": 156, "src": "current", "font": "1", "align": "right", "pre": "BATT ", "unit": " A"}, {"t": "button", "x": 178, "y": 175, "w": 97, "h": 47, "action": "sport", "text": "SPORT", "font": "4", "rad": 13}, {"t": "button", "x": 281, "y": 175, "w": 33, "h": 47, "action": "nextpage", "text": "RACE", "font": "1", "rad": 11, "color": "bad", "color2": "bad", "show": {"src": "limit", "op": "==", "val": 0}}, {"t": "dot", "x": 14, "y": 14, "r": 4, "src": "ble", "color": "ok", "color2": "dim"}, {"t": "text", "x": 24, "y": 8, "text": "DEMO", "font": "2", "color": "dim", "show": {"src": "demo", "op": "==", "val": 1}}, {"t": "dot", "x": 70, "y": 15, "r": 4, "src": "limit", "color": "warn", "color2": "bg"}]}, {"v": 2, "name": "Cockpit", "author": "NOVA", "desc": "To sider: hovedside med buer og en side med grafer", "pages": 2, "bg": "bg", "items": [{"t": "arc", "x": 88, "y": 118, "r": 84, "th": 16, "a0": 135, "sweep": 270, "src": "speed", "max": 35, "color": "neon", "color2": "panel", "caps": true, "ticks": true, "warn": 25, "bad": 32}, {"t": "num", "x": 88, "y": 86, "src": "speed", "font": "8", "align": "center"}, {"t": "text", "x": 88, "y": 150, "text": "KM/H", "font": "2", "align": "center", "color": "dim"}, {"t": "num", "x": 88, "y": 172, "src": "mode", "font": "2", "align": "center", "color": "ok"}, {"t": "arc", "x": 250, "y": 56, "r": 40, "th": 8, "a0": 135, "sweep": 270, "src": "power", "min": 0, "max": 3000, "color": "warn", "color2": "panel", "caps": true, "warn": 2200, "bad": 2800, "page": 0}, {"t": "num", "x": 250, "y": 44, "src": "power", "font": "2", "align": "center"}, {"t": "text", "x": 250, "y": 62, "text": "WATT", "font": "1", "align": "center", "color": "dim"}, {"t": "icon", "x": 190, "y": 112, "size": 22, "icon": "battery", "src": "battery", "max": 100, "color": "ok", "warn": 20, "bad": 10, "below": true}, {"t": "num", "x": 220, "y": 114, "src": "battery", "font": "4", "unit": "%", "warn": 20, "bad": 10, "below": true}, {"t": "segbar", "x": 190, "y": 146, "w": 122, "h": 12, "n": 16, "src": "battery", "max": 100, "color": "ok", "color2": "panel", "round": true, "warn": 20, "bad": 10, "below": true}, {"t": "num", "x": 190, "y": 168, "src": "volt", "font": "2", "dp": 1, "unit": " V"}, {"t": "num", "x": 312, "y": 168, "src": "current", "font": "2", "align": "right", "dp": 1, "unit": " A"}, {"t": "icon", "x": 190, "y": 190, "size": 18, "icon": "thermo", "color": "dim"}, {"t": "num", "x": 212, "y": 190, "src": "temp", "font": "2", "unit": "C", "warn": 60, "bad": 75}, {"t": "icon", "x": 262, "y": 11, "size": 20, "icon": "warning", "color": "bad", "show": {"src": "alert", "op": "==", "val": 1}}, {"t": "button", "x": 8, "y": 206, "w": 60, "h": 28, "action": "eco", "text": "ECO", "font": "2", "rad": 9, "page": 0}, {"t": "button", "x": 74, "y": 206, "w": 60, "h": 28, "action": "drive", "text": "DRIVE", "font": "2", "rad": 9, "page": 0}, {"t": "button", "x": 140, "y": 206, "w": 60, "h": 28, "action": "sport", "text": "SPORT", "font": "2", "rad": 9, "page": 0}, {"t": "button", "x": 262, "y": 206, "w": 50, "h": 28, "action": "nextpage", "text": ">", "font": "4", "rad": 9, "page": 0}, {"t": "text", "x": 8, "y": 8, "text": "SPEED", "font": "1", "color": "dim", "page": 1}, {"t": "spark", "x": 8, "y": 20, "w": 304, "h": 62, "src": "speed", "max": 35, "color": "neon", "color2": "panel", "fill": true, "th": 2, "page": 1}, {"t": "text", "x": 8, "y": 90, "text": "POWER", "font": "1", "color": "dim", "page": 1}, {"t": "spark", "x": 8, "y": 102, "w": 304, "h": 50, "src": "power", "min": -500, "max": 3000, "color": "warn", "color2": "panel", "fill": true, "page": 1}, {"t": "text", "x": 8, "y": 160, "text": "VOLT", "font": "1", "color": "dim", "page": 1}, {"t": "spark", "x": 8, "y": 172, "w": 200, "h": 28, "src": "volt", "min": 60, "max": 88, "color": "ok", "color2": "panel", "page": 1}, {"t": "num", "x": 220, "y": 176, "src": "maxspeed", "font": "4", "dp": 0, "pre": "MAX ", "color": "text", "page": 1}, {"t": "button", "x": 262, "y": 206, "w": 50, "h": 28, "action": "nextpage", "text": ">", "font": "4", "rad": 9, "page": 1}]}, {"v": 2, "name": "Retro amber", "author": "NOVA", "desc": "Sort skaerm med rav-farvede 7-segment tal", "pages": 1, "bg": "black", "items": [{"t": "segbar", "x": 10, "y": 10, "w": 300, "h": 16, "n": 30, "src": "speed", "max": 35, "color": "#ffb000", "color2": "#2a1c00", "warn": 28, "bad": 33}, {"t": "num", "x": 160, "y": 40, "src": "speed", "font": "7", "align": "center", "color": "#ffb000"}, {"t": "text", "x": 160, "y": 92, "text": "KM/H", "font": "2", "align": "center", "color": "#6b4a00"}, {"t": "num", "x": 10, "y": 120, "src": "power", "font": "6", "color": "#ffb000"}, {"t": "text", "x": 150, "y": 150, "text": "W", "font": "2", "color": "#6b4a00"}, {"t": "num", "x": 10, "y": 176, "src": "battery", "font": "4", "unit": "%", "color": "#ffb000", "warn": 20, "bad": 10, "below": true}, {"t": "segbar", "x": 10, "y": 206, "w": 190, "h": 18, "n": 20, "src": "battery", "max": 100, "color": "#ffb000", "color2": "#2a1c00", "warn": 20, "bad": 10, "below": true}, {"t": "num", "x": 310, "y": 120, "src": "volt", "font": "4", "align": "right", "dp": 1, "color": "#ffb000", "unit": "V"}, {"t": "num", "x": 310, "y": 150, "src": "current", "font": "2", "align": "right", "dp": 1, "color": "#6b4a00", "unit": "A"}, {"t": "num", "x": 310, "y": 176, "src": "temp", "font": "4", "align": "right", "unit": "C", "color": "#ffb000", "warn": 60, "bad": 75}, {"t": "text", "x": 214, "y": 206, "text": "HOT", "font": "4", "color": "bad", "show": {"src": "temp", "op": ">=", "val": 70}}, {"t": "dot", "x": 300, "y": 214, "r": 7, "src": "limit", "color": "warn", "color2": "#2a1c00"}, {"t": "line", "x": 10, "y": 112, "w": 300, "h": 0, "th": 1, "color": "#6b4a00"}]}, {"v": 2, "name": "Racer", "author": "NOVA", "desc": "Kaempe hastighed, farveskift naar du naermer dig graenser", "pages": 1, "bg": "bg", "items": [{"t": "num", "x": 160, "y": 6, "src": "speed", "font": "8", "align": "center", "warn": 25, "bad": 32}, {"t": "text", "x": 160, "y": 84, "text": "KM/H", "font": "2", "align": "center", "color": "dim"}, {"t": "segbar", "x": 8, "y": 108, "w": 304, "h": 22, "n": 36, "src": "speed", "max": 36, "color": "neon", "color2": "panel", "round": true, "warn": 25, "bad": 32}, {"t": "num", "x": 8, "y": 146, "src": "power", "font": "4", "pre": "", "unit": " W"}, {"t": "num", "x": 312, "y": 146, "src": "battery", "font": "4", "align": "right", "unit": "%", "warn": 20, "bad": 10, "below": true}, {"t": "bar", "x": 8, "y": 182, "w": 304, "h": 8, "src": "battery", "max": 100, "color": "ok", "color2": "panel", "round": true, "rad": 4, "warn": 20, "bad": 10, "below": true}, {"t": "num", "x": 8, "y": 200, "src": "volt", "font": "2", "dp": 1, "unit": " V", "color": "dim"}, {"t": "num", "x": 160, "y": 200, "src": "maxspeed", "font": "2", "align": "center", "pre": "TOP ", "color": "dim"}, {"t": "num", "x": 312, "y": 200, "src": "ridetime", "font": "2", "align": "right", "unit": " min", "color": "dim"}, {"t": "icon", "x": 10, "y": 224, "size": 14, "icon": "bolt", "color": "warn", "show": {"src": "power", "op": ">", "val": 2500}}, {"t": "icon", "x": 30, "y": 224, "size": 14, "icon": "thermo", "color": "bad", "show": {"src": "temp", "op": ">", "val": 65}}, {"t": "icon", "x": 50, "y": 224, "size": 14, "icon": "lock", "color": "warn", "show": {"src": "limit", "op": "==", "val": 1}}]}, {"v": 2, "name": "Rings", "author": "NOVA", "desc": "Tre ringe: fart, effekt og batteri", "pages": 1, "bg": "bg", "items": [{"t": "arc", "x": 100, "y": 120, "r": 100, "th": 14, "a0": 120, "sweep": 300, "src": "speed", "max": 35, "color": "neon", "color2": "panel", "caps": true}, {"t": "arc", "x": 100, "y": 120, "r": 80, "th": 12, "a0": 120, "sweep": 300, "src": "power", "max": 3000, "color": "warn", "color2": "panel", "caps": true}, {"t": "arc", "x": 100, "y": 120, "r": 62, "th": 10, "a0": 120, "sweep": 300, "src": "battery", "max": 100, "color": "ok", "color2": "panel", "caps": true, "warn": 20, "bad": 10, "below": true}, {"t": "num", "x": 100, "y": 88, "src": "speed", "font": "6", "align": "center"}, {"t": "text", "x": 100, "y": 138, "text": "km/h", "font": "2", "align": "center", "color": "dim"}, {"t": "num", "x": 220, "y": 40, "src": "speed", "font": "4", "unit": " km/h"}, {"t": "num", "x": 220, "y": 90, "src": "power", "font": "4", "unit": " W", "color": "warn"}, {"t": "num", "x": 220, "y": 140, "src": "battery", "font": "4", "unit": "%", "color": "ok", "warn": 20, "bad": 10, "below": true}, {"t": "num", "x": 220, "y": 176, "src": "volt", "font": "2", "dp": 1, "unit": " V", "color": "dim"}, {"t": "num", "x": 220, "y": 196, "src": "temp", "font": "2", "unit": " C", "color": "dim"}]}, {"v": 2, "name": "Trip stats", "author": "NOVA", "desc": "Ture, tophastighed, energi og en graf", "pages": 2, "bg": "bg", "items": [{"t": "text", "x": 8, "y": 6, "text": "THIS RIDE", "font": "4", "color": "neon"}, {"t": "line", "x": 8, "y": 34, "w": 304, "h": 0, "th": 1, "color": "dim"}, {"t": "text", "x": 8, "y": 44, "text": "Top speed", "font": "2", "color": "dim"}, {"t": "num", "x": 312, "y": 44, "src": "maxspeed", "font": "2", "align": "right", "dp": 1, "unit": " km/h"}, {"t": "text", "x": 8, "y": 68, "text": "Peak power", "font": "2", "color": "dim"}, {"t": "num", "x": 312, "y": 68, "src": "maxpower", "font": "2", "align": "right", "unit": " W"}, {"t": "text", "x": 8, "y": 92, "text": "Lowest volt", "font": "2", "color": "dim"}, {"t": "num", "x": 312, "y": 92, "src": "minvolt", "font": "2", "align": "right", "dp": 1, "unit": " V"}, {"t": "text", "x": 8, "y": 116, "text": "Energy used", "font": "2", "color": "dim"}, {"t": "num", "x": 312, "y": 116, "src": "energy", "font": "2", "align": "right", "dp": 1, "unit": " Wh"}, {"t": "text", "x": 8, "y": 140, "text": "Ride time", "font": "2", "color": "dim"}, {"t": "num", "x": 312, "y": 140, "src": "ridetime", "font": "2", "align": "right", "unit": " min"}, {"t": "text", "x": 8, "y": 164, "text": "Trip", "font": "2", "color": "dim"}, {"t": "num", "x": 312, "y": 164, "src": "trip", "font": "2", "align": "right", "dp": 1, "unit": " km"}, {"t": "text", "x": 8, "y": 188, "text": "Total", "font": "2", "color": "dim"}, {"t": "num", "x": 312, "y": 188, "src": "total", "font": "2", "align": "right", "unit": " km"}, {"t": "button", "x": 8, "y": 210, "w": 100, "h": 26, "action": "nextpage", "text": "GRAPH", "font": "2", "rad": 8, "page": 0}, {"t": "spark", "x": 8, "y": 40, "w": 304, "h": 130, "src": "speed", "max": 35, "color": "neon", "color2": "panel", "fill": true, "th": 2, "page": 1}, {"t": "num", "x": 8, "y": 178, "src": "speed", "font": "4", "unit": " km/h", "page": 1}, {"t": "button", "x": 8, "y": 210, "w": 100, "h": 26, "action": "nextpage", "text": "STATS", "font": "2", "rad": 8, "page": 1}]}, {"v": 1, "name": "Classic ring", "author": "NOVA", "desc": "Ringmaaler med hastighed, effekt, batteri og temperaturer", "items": [{"t": "ring", "x": 88, "y": 126, "r": 80, "th": 14, "src": "speed", "max": 35, "color": "neon"}, {"t": "num", "x": 88, "y": 88, "src": "speed", "font": "8", "align": "center", "dp": 0, "color": "text"}, {"t": "text", "x": 88, "y": 158, "text": "km/h", "font": "4", "align": "center", "color": "dim"}, {"t": "num", "x": 88, "y": 66, "src": "mode", "font": "2", "align": "center", "color": "ok"}, {"t": "num", "x": 292, "y": 30, "src": "power", "font": "6", "align": "right", "color": "text"}, {"t": "bar", "x": 184, "y": 80, "w": 122, "h": 8, "src": "power", "max": 1000, "color": "neon"}, {"t": "num", "x": 184, "y": 94, "src": "current", "font": "2", "align": "left", "dp": 1, "unit": " A", "color": "text"}, {"t": "num", "x": 184, "y": 112, "src": "battery", "font": "4", "align": "left", "unit": "%", "color": "ok"}, {"t": "num", "x": 306, "y": 112, "src": "volt", "font": "4", "align": "right", "dp": 1, "unit": "V", "color": "text"}, {"t": "bar", "x": 184, "y": 140, "w": 122, "h": 10, "src": "battery", "max": 100, "color": "ok"}, {"t": "num", "x": 184, "y": 156, "src": "trip", "font": "2", "align": "left", "dp": 1, "unit": " km", "color": "dim"}, {"t": "num", "x": 184, "y": 171, "src": "total", "font": "2", "align": "left", "unit": " km", "color": "dim"}, {"t": "num", "x": 56, "y": 186, "src": "temp", "font": "2", "align": "center", "unit": "C", "color": "dim"}, {"t": "num", "x": 120, "y": 186, "src": "motortemp", "font": "2", "align": "center", "unit": "C", "color": "dim"}, {"t": "modebar"}]}, {"v": 1, "name": "Big speed", "author": "NOVA", "desc": "K\u00e6mpe hastighed og en bred bj\u00e6lke. Let at afl\u00e6se under k\u00f8rsel", "items": [{"t": "num", "x": 160, "y": 50, "src": "speed", "font": "8", "align": "center", "dp": 0, "color": "text"}, {"t": "text", "x": 160, "y": 130, "text": "km/h", "font": "4", "align": "center", "color": "dim"}, {"t": "bar", "x": 20, "y": 160, "w": 280, "h": 14, "src": "speed", "max": 35, "color": "neon"}, {"t": "num", "x": 20, "y": 176, "src": "battery", "font": "4", "align": "left", "unit": "%", "color": "ok"}, {"t": "num", "x": 300, "y": 176, "src": "power", "font": "4", "align": "right", "unit": " W", "color": "text"}, {"t": "modebar"}]}, {"v": 1, "name": "Power focus", "author": "NOVA", "desc": "Effekt og str\u00f8m i centrum", "items": [{"t": "num", "x": 160, "y": 40, "src": "power", "font": "6", "align": "center", "color": "text"}, {"t": "text", "x": 160, "y": 92, "text": "WATT", "font": "2", "align": "center", "color": "dim"}, {"t": "bar", "x": 20, "y": 112, "w": 280, "h": 12, "src": "power", "max": 1000, "color": "neon"}, {"t": "num", "x": 20, "y": 136, "src": "current", "font": "4", "align": "left", "dp": 1, "unit": " A", "color": "text"}, {"t": "num", "x": 300, "y": 136, "src": "volt", "font": "4", "align": "right", "dp": 1, "unit": " V", "color": "text"}, {"t": "num", "x": 20, "y": 172, "src": "speed", "font": "4", "align": "left", "unit": " km/h", "color": "ok"}, {"t": "num", "x": 300, "y": 172, "src": "battery", "font": "4", "align": "right", "unit": "%", "color": "ok"}, {"t": "modebar"}]}, {"v": 1, "name": "Minimal", "author": "NOVA", "desc": "Kun hastighed og batteri", "items": [{"t": "num", "x": 160, "y": 62, "src": "speed", "font": "8", "align": "center", "dp": 0, "color": "text"}, {"t": "num", "x": 20, "y": 180, "src": "battery", "font": "4", "align": "left", "unit": "%", "color": "ok"}, {"t": "num", "x": 300, "y": 180, "src": "volt", "font": "4", "align": "right", "dp": 1, "unit": "V", "color": "dim"}]}];
+
+(function(){
+'use strict';
+var $=function(s){return document.querySelector(s)};
+var UU={svc:'4e4f5641-5249-4445-0000-000000000001',ctrl:'4e4f5641-5249-4445-0000-000000000002',data:'4e4f5641-5249-4445-0000-000000000003',stat:'4e4f5641-5249-4445-0000-000000000004'};
+var OP={INFO:1,BEGIN:0x10,END:0x11,ABORT:0x12,THEME:0x20,STYLE:0x21,TEXT:0x22,IMG_BEGIN:0x23,IMG_CHUNK:0x24,IMG_END:0x25,PREVIEW:0x26,MUSIC:0x30,LB:0x40,LC:0x41,LE:0x42,LU:0x43,START:0x50,BL:0x51,AM:0x52,AC:0x53};
+var ERR=['','Opdateringsvinduet er lukket på boardet','Løbehjulet kører','Filstørrelsen accepteres ikke','Ikke en ESP32-firmware (.bin)','CRC-fejl','Skrivefejl i flash','Kunne ikke starte opdatering','Dataoverløb – prøv igen','Boardet er optaget','Timeout'];
+var THEMES=[
+ {n:'NOVA BLUE',bg:'#040814',panel:'#0a1630',neon:'#00aaff',warn:'#ffb000',ok:'#00dc8c',text:'#e1f0ff'},
+ {n:'EMBER',bg:'#120604',panel:'#2c120a',neon:'#ff6e14',warn:'#ffc800',ok:'#78dc50',text:'#fff0e1'},
+ {n:'MATRIX',bg:'#020c06',panel:'#082412',neon:'#00ff6e',warn:'#ffc800',ok:'#78ffa0',text:'#dcffe6'},
+ {n:'VIOLET',bg:'#0a0414',panel:'#1c0e34',neon:'#aa5aff',warn:'#ffbe3c',ok:'#00dca0',text:'#f0e6ff'},
+ {n:'ROSE',bg:'#14040a',panel:'#300c1c',neon:'#ff3c8c',warn:'#ffbe28',ok:'#00dc96',text:'#ffe6f0'},
+ {n:'MONO',bg:'#000000',panel:'#1a1a1a',neon:'#ebebeb',warn:'#ffbe00',ok:'#00dc78',text:'#ffffff'},
+ {n:'STEEL',bg:'#303030',panel:'#3b3b3b',neon:'#6fa3a8',warn:'#ffb000',ok:'#8fd9a8',text:'#ececec'},
+ {n:'EGEN',bg:'#303030',panel:'#3b3b3b',neon:'#6fa3a8',warn:'#ffb000',ok:'#8fd9a8',text:'#ececec'}];
+var STYLES=['Klassisk','Navn','Billede','Minimal'];
+var MAXAPP=0x140000,MINAPP=65536;
+var NW=window.NovaWidget;
+
+var S={tab:'home',sub:{tune:'themes',system:'device'},live:null,pref:null,t:null,demo:false,conn:false,info:null,ota:{state:0,err:0,recv:0,total:0},file:null,fileInfo:null,
+  wid:{v:2,name:'Mit dashboard',author:'',desc:'',pages:1,bg:'bg',items:[]},gal:[],comm:[],commMsg:'',repo:'',
+  img:null,thr:128,inv:false,imgName:'',busy:false,msg:'',text:'',acks:{},otaWait:null};
+
+// ---------- CRC-32 (same as zlib) ----------
+var CRC=(function(){var t=new Uint32Array(256);for(var n=0;n<256;n++){var c=n;for(var k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();
+function crc32(u8){var c=0xFFFFFFFF;for(var i=0;i<u8.length;i++)c=CRC[(c^u8[i])&255]^(c>>>8);return (c^0xFFFFFFFF)>>>0}
+function le32(v){return [v&255,(v>>>8)&255,(v>>>16)&255,(v>>>24)&255]}
+function sleep(ms){return new Promise(function(r){setTimeout(r,ms)})}
+function hex(v){return ('00000000'+v.toString(16)).slice(-8).toUpperCase()}
+
+// ---------- transports ----------
+function BleT(){this.onStat=null;this.onClose=null}
+BleT.prototype.connect=async function(){
+  var self=this,stage='scan';
+  function fail(msg,e){var d=e&&e.name?(' ('+e.name+')'):'';throw new Error(msg+d)}
+  try{
+    stage='scan';
+    this.dev=await navigator.bluetooth.requestDevice({filters:[{namePrefix:'NOVA RIDE'}],optionalServices:[UU.svc]});
+    this.dev.addEventListener('gattserverdisconnected',function(){if(self.onClose)self.onClose()});
+    stage='gatt';
+    var srv=await this.dev.gatt.connect();
+    stage='service';
+    var svc=await srv.getPrimaryService(UU.svc);
+    stage='chars';
+    this.c=await svc.getCharacteristic(UU.ctrl);
+    this.d=await svc.getCharacteristic(UU.data);
+    this.s=await svc.getCharacteristic(UU.stat);
+    stage='notify';
+    await this.s.startNotifications();
+    this.s.addEventListener('characteristicvaluechanged',function(e){if(self.onStat)self.onStat(new Uint8Array(e.target.value.buffer,e.target.value.byteOffset,e.target.value.byteLength))});
+  }catch(e){
+    var m={
+      scan:'Fandt ingen enhed. Sæt PHONE ON på boardet, og hold telefonen tæt på.',
+      gatt:'Kunne ikke oprette forbindelse. Prøv igen, og sluk/tænd boardet hvis det bliver ved.',
+      service:'Boardet har ikke app-tjenesten. Enten er firmwaren ældre end 0.8 (flash den nyeste .factory.bin med USB), eller også husker iPhonen en gammel tjenesteliste: Indstillinger > Bluetooth > NOVA RIDE (i) > Glem denne enhed, og par igen.',
+      chars:'Appens kanaler mangler på boardet. Opdater firmwaren, og glem enheden i iPhone-indstillingerne.',
+      notify:'Kunne ikke abonnere på svar fra boardet. Glem enheden i iPhone-indstillingerne og par igen.'}[stage];
+    if(e&&e.name==='NotFoundError'&&stage==='scan')m='Ingen enhed valgt. Prøv igen.';
+    fail(m,e);
+  }
+};
+BleT.prototype.disconnect=function(){try{this.dev.gatt.disconnect()}catch(e){}};
+BleT.prototype.ctrl=function(b){var u=new Uint8Array(b);return this.c.writeValueWithResponse?this.c.writeValueWithResponse(u):this.c.writeValue(u)};
+BleT.prototype.data=function(b){var u=new Uint8Array(b);return this.d.writeValueWithoutResponse?this.d.writeValueWithoutResponse(u):this.d.writeValue(u)};
+
+// A simulated board, so the app can be tried without hardware.
+function DemoT(){this.onStat=null;this.onClose=null;this.st={bl:80,arc:0,acc:[111,163,168],theme:0,style:0,text:'',img:false,recv:0,total:0,exp:0,state:0}}
+DemoT.prototype.connect=async function(){await sleep(300);var self=this,t0=Date.now();
+  this.tm=setInterval(function(){var s=self.st,t=(Date.now()-t0)/1000,sp=14+12*Math.sin(t*.5);if(s.startcap&&sp>20)sp=20;
+   var pct=Math.max(5,Math.round(86-t*.05)),pw=Math.round(sp*58+120*Math.sin(t)),V=67.5+pct*.19,amp=pw/V,u16=function(x){x=Math.round(x)&0xFFFF;return [x&255,x>>8]};
+   self.emit([0x40,0xFF].concat(u16(sp*10),[pct],u16(V*10),u16(pw),u16(amp*10),[Math.round(34+sp*.5)&255,Math.round(45+sp*.5)&255,2,s.startcap?1:0],le32(Math.round(20660*10))))},500);
+  if(this.tm&&this.tm.unref)this.tm.unref()};
+DemoT.prototype.disconnect=function(){clearInterval(this.tm);if(this.onClose)this.onClose()};
+DemoT.prototype.emit=function(a){if(this.onStat)this.onStat(new Uint8Array(a))};
+DemoT.prototype.info=function(){var s=this.st,e=new TextEncoder(),a=[1,1,s.theme,s.style,1|(s.img?2:0)|4|8|(s.lay?48:0)|(s.startcap?64:0),0].slice(0,5);
+  var tail=Array.from(e.encode('0.8.0 (demo)')).concat([0],Array.from(e.encode('cyd_st7789')),[0],Array.from(e.encode(s.text)),[0],Array.from(e.encode([s.bl,s.arc].concat(s.acc).join(','))),[0]);this.emit(a.concat(tail))};
+DemoT.prototype.ota=function(){var s=this.st;this.emit([0x10,s.state,0].concat(le32(s.recv),le32(s.total)))};
+DemoT.prototype.ack=function(op,r){this.emit([0x30,op,r||0])};
+DemoT.prototype.ctrl=async function(b){var s=this.st,self=this;await sleep(30);
+  switch(b[0]){
+   case OP.INFO:this.info();break;
+   case OP.THEME:s.theme=b[1];this.ack(b[0]);break;
+   case OP.STYLE:s.style=b[1];this.ack(b[0]);break;
+   case OP.TEXT:s.text=new TextDecoder().decode(b.slice?b.slice(1):new Uint8Array(b).slice(1));this.ack(b[0]);break;
+   case OP.IMG_BEGIN:case OP.IMG_CHUNK:this.ack(b[0]);break;
+   case OP.IMG_END:s.img=true;this.ack(b[0]);break;
+   case OP.LB:case OP.LC:this.ack(b[0]);break;
+   case OP.LE:s.lay=true;this.ack(b[0]);break;
+   case OP.LU:s.lay=b[1]===1;this.ack(b[0]);break;
+   case OP.START:s.startcap=b[1]===1;this.ack(b[0]);break;
+   case OP.BL:s.bl=b[1];this.ack(b[0]);break;
+   case OP.AM:s.arc=b[1];this.ack(b[0]);break;
+   case OP.AC:s.acc=[b[1],b[2],b[3]];this.ack(b[0]);break;
+   case OP.PREVIEW:case OP.MUSIC:case OP.END:case OP.ABORT:this.ack(b[0]);if(b[0]===OP.ABORT){s.state=0;this.ota()}break;
+   case OP.BEGIN:s.total=b[1]|(b[2]<<8)|(b[3]<<16)|(b[4]<<24);s.total>>>=0;s.recv=0;s.state=2;this.ota();break;
+  }};
+DemoT.prototype.data=async function(b){var s=this.st;if(s.state!==2)return;await sleep(2);var prev=s.recv;s.recv=Math.min(s.total,s.recv+b.length);
+  if(s.recv===s.total){s.state=3;this.ota();var me=this;setTimeout(function(){s.state=4;me.ota();setTimeout(function(){me.disconnect()},1500)},700)}
+  else if(Math.floor(s.recv/4096)>Math.floor(prev/4096))this.ota()};
+
+// ---------- protocol ----------
+function onStat(u){
+  if(!u.length)return;
+  if(u[0]===1&&u.length>5){
+    var parts=new TextDecoder().decode(u.slice(5)).split('\0');
+    S.info={theme:u[2],style:u[3],flags:u[4],ver:parts[0],profile:parts[1],text:parts[2]||'',bl:80,arc:0,acc:[111,163,168]};
+    if(parts[3]){var ex=parts[3].split(',').map(Number);if(ex.length>=5&&!ex.some(isNaN)){S.info.bl=ex[0];S.info.arc=ex[1];S.info.acc=[ex[2],ex[3],ex[4]]}}
+    THEMES[7].neon='#'+S.info.acc.map(function(x){return ('0'+x.toString(16)).slice(-2)}).join('');
+    if(!S.textTouched)S.text=S.info.text;
+  }else if(u[0]===0x40&&u.length>=19){
+    var i16=function(a,b){var v=u[a]|(u[b]<<8);return v>32767?v-65536:v},i8=function(a){return u[a]>127?u[a]-256:u[a]};
+    S.live={v:u[1],speed:(u[2]|(u[3]<<8))/10,pct:u[4],volt:(u[5]|(u[6]<<8))/10,pw:i16(7,8),amp:i16(9,10)/10,t:i8(11),mt:i8(12),mode:u[13],cap:u[14],odo:((u[15]|(u[16]<<8)|(u[17]<<16)|(u[18]<<24))>>>0)/10};
+    paintLive();return;
+  }else if(u[0]===0x10&&u.length>=11){
+    S.ota={state:u[1],err:u[2],recv:(u[3]|(u[4]<<8)|(u[5]<<16)|(u[6]<<24))>>>0,total:(u[7]|(u[8]<<8)|(u[9]<<16)|(u[10]<<24))>>>0};
+    if(S.otaWait){var w=S.otaWait;S.otaWait=null;w()}
+    paintOta();
+  }else if(u[0]===0x30&&u.length>=3){
+    var f=S.acks[u[1]];if(f){delete S.acks[u[1]];f(u[2])}
+  }
+  if(u[0]===1)render();
+}
+function sendAck(bytes){return new Promise(function(res,rej){
+  var op=bytes[0],to=setTimeout(function(){delete S.acks[op];rej(new Error('Intet svar fra boardet'))},4000);
+  S.acks[op]=function(r){clearTimeout(to);r===0?res():rej(new Error('Boardet afviste kommandoen'))};
+  S.t.ctrl(bytes).catch(function(e){clearTimeout(to);delete S.acks[op];rej(e)});
+})}
+function waitOta(ms){return new Promise(function(res){var to=setTimeout(function(){S.otaWait=null;res()},ms);S.otaWait=function(){clearTimeout(to);res()}})}
+
+async function connect(demo){
+  S.msg='';
+  try{
+    S.demo=!!demo;S.t=demo?new DemoT():new BleT();
+    S.t.onStat=onStat;
+    var me=S.t;
+    S.t.onClose=function(){if(S.t!==me)return;S.conn=false;S.info=null;S.live=null;S.busy=false;if(S.ota.state===4)S.msg='Opdatering færdig – boardet genstarter.';render()};
+    await S.t.connect();
+    S.conn=true;render();
+    try{await S.t.ctrl([OP.INFO])}catch(e){throw new Error('Boardet afviste første kommando. Parring mangler: par NOVA RIDE i iPhone-indstillinger > Bluetooth, og prøv igen. ('+((e&&e.name)||'fejl')+')')}
+  }catch(e){S.conn=false;S.msg=(e&&e.message)||String(e);render()}
+}
+function disconnect(){if(S.t)S.t.disconnect()}
+
+async function act(fn){
+  if(!S.conn){S.msg='Forbind først.';render();return}
+  try{await fn();S.msg=''}catch(e){S.msg=(e&&e.message)||String(e)}
+  render();
+}
+function setTheme(i){return act(async function(){await sendAck([OP.THEME,i]);await S.t.ctrl([OP.INFO])})}
+function setStyle(i){return act(async function(){await sendAck([OP.STYLE,i]);await S.t.ctrl([OP.INFO])})}
+function sendText(){return act(async function(){var u=Array.from(new TextEncoder().encode(S.text.replace(/[^\x20-\x7E]/g,'').slice(0,15)));await sendAck([OP.TEXT].concat(u));S.textTouched=false;await S.t.ctrl([OP.INFO])})}
+function preview(){return act(function(){return sendAck([OP.PREVIEW])})}
+function music(k){return act(function(){return sendAck([OP.MUSIC,k])})}
+function sendImage(){return act(async function(){
+  if(!S.img)throw new Error('Vælg et billede først.');
+  S.busy=true;render();
+  await sendAck([OP.IMG_BEGIN]);
+  for(var off=0;off<1024;off+=128)await sendAck([OP.IMG_CHUNK,off&255,off>>8].concat(Array.from(S.img.slice(off,off+128))));
+  await sendAck([OP.IMG_END]);
+  await sendAck([OP.STYLE,2]);
+  S.busy=false;await S.t.ctrl([OP.INFO]);
+})}
+
+// ---------- firmware update ----------
+function checkFile(u8,name){
+  if(!/\.bin$/i.test(name))return 'Filen skal være en .bin';
+  if(u8.length<MINAPP||u8.length>MAXAPP)return 'Størrelsen skal være mellem 64 KB og '+(MAXAPP/1024)+' KB (er '+Math.round(u8.length/1024)+' KB)';
+  if(u8[0]!==0xE9||u8[12]!==0||u8[13]!==0)return 'Det ligner ikke en ESP32-app (.bin). Brug NOVA_RIDE_<profil>.bin – ikke .factory.bin';
+  return '';
+}
+async function pickFile(f){
+  S.file=null;S.fileInfo=null;S.msg='';
+  if(!f){render();return}
+  var u8=new Uint8Array(await f.arrayBuffer());
+  var bad=checkFile(u8,f.name);
+  S.fileInfo={name:f.name,size:u8.length,crc:crc32(u8),bad:bad};
+  S.file=bad?null:u8;
+  render();
+}
+async function startUpdate(){
+  if(!S.file||!S.conn)return;
+  S.busy=true;S.msg='';S.ota={state:0,err:0,recv:0,total:S.file.length};S.t0=Date.now();render();
+  try{
+    await S.t.ctrl([OP.BEGIN].concat(le32(S.file.length),le32(S.fileInfo.crc)));
+    await waitOta(5000);
+    if(S.ota.state!==2)throw new Error(ERR[S.ota.err]||'Boardet startede ikke opdateringen');
+    var CH=160,sent=0,u=S.file;
+    while(sent<u.length){
+      if(S.ota.state===5)throw new Error(ERR[S.ota.err]||'Fejl på boardet');
+      if(sent-S.ota.recv>=6144){await waitOta(3000);if(sent-S.ota.recv>=6144&&S.ota.state===2){await sleep(50);continue}}
+      var end=Math.min(u.length,sent+CH);
+      await S.t.data(u.slice(sent,end));
+      sent=end;
+    }
+    var t0=Date.now();
+    while(S.ota.state!==4&&S.ota.state!==5&&Date.now()-t0<20000)await waitOta(1000);
+    if(S.ota.state===5)throw new Error(ERR[S.ota.err]||'Fejl på boardet');
+    S.msg='Opdatering sendt. Boardet genstarter nu.';
+  }catch(e){
+    S.msg=(e&&e.message)||String(e);
+    try{if(S.conn)await S.t.ctrl([OP.ABORT])}catch(x){}
+  }
+  S.busy=false;render();
+}
+function paintOta(){
+  var b=$('#obar'),t=$('#otxt');if(!b)return;
+  var o=S.ota,pct=o.total?Math.floor(o.recv*100/o.total):0;
+  b.style.width=pct+'%';
+  var el=(Date.now()-(S.t0||Date.now()))/1000,sp=el>0?o.recv/el/1024:0;
+  var names=['Klar','Klar','Sender…','Kontrollerer…','Færdig – genstarter','Fejl'];
+  t.textContent=names[o.state]+'  '+pct+'%  ('+Math.round(o.recv/1024)+' / '+Math.round(o.total/1024)+' KB'+(sp>0?', '+sp.toFixed(1)+' KB/s':'')+')';
+}
+
+// ---------- images ----------
+async function loadImage(f){
+  if(!f)return;S.imgName=f.name;S.imgFile=f;await rebuildImg();render();
+}
+async function rebuildImg(){
+  if(!S.imgFile)return;
+  var bmp=await createImageBitmap(S.imgFile),c=document.createElement('canvas');c.width=128;c.height=64;
+  var g=c.getContext('2d');g.fillStyle='#000';g.fillRect(0,0,128,64);
+  var sc=Math.min(128/bmp.width,64/bmp.height),w=bmp.width*sc,h=bmp.height*sc;g.drawImage(bmp,(128-w)/2,(64-h)/2,w,h);
+  var d=g.getImageData(0,0,128,64).data,bits=new Uint8Array(1024);
+  for(var y=0;y<64;y++)for(var x=0;x<128;x++){var i=(y*128+x)*4,lum=0.299*d[i]+0.587*d[i+1]+0.114*d[i+2],on=lum>S.thr;if(S.inv)on=!on;if(on){var b=y*128+x;bits[b>>3]|=0x80>>(b&7)}}
+  S.img=bits;paintImg();
+}
+function paintImg(){
+  var cv=$('#imgprev');if(!cv||!S.img)return;var g=cv.getContext('2d'),th=THEMES[S.info?S.info.theme:0];
+  g.fillStyle='#000';g.fillRect(0,0,128,64);g.fillStyle=th.neon;
+  for(var y=0;y<64;y++)for(var x=0;x<128;x++){var b=y*128+x;if(S.img[b>>3]&(0x80>>(b&7)))g.fillRect(x,y,1,1)}
+}
+
+// ---------- drawing helpers ----------
+function miniDash(t){
+  return '<svg viewBox="0 0 160 100"><rect width="160" height="100" fill="'+t.bg+'"/>'+
+  '<circle cx="48" cy="52" r="34" fill="none" stroke="'+t.panel+'" stroke-width="9"/>'+
+  '<circle cx="48" cy="52" r="34" fill="none" stroke="'+t.neon+'" stroke-width="9" stroke-dasharray="120 214" transform="rotate(135 48 52)"/>'+
+  '<text x="48" y="60" text-anchor="middle" font-size="26" font-weight="700" fill="'+t.text+'" font-family="monospace">23</text>'+
+  '<text x="110" y="30" font-size="18" font-weight="700" fill="'+t.text+'" font-family="monospace">340</text>'+
+  '<rect x="92" y="38" width="56" height="5" rx="2" fill="'+t.panel+'"/><rect x="92" y="38" width="30" height="5" rx="2" fill="'+t.neon+'"/>'+
+  '<rect x="92" y="58" width="56" height="5" rx="2" fill="'+t.panel+'"/><rect x="92" y="58" width="38" height="5" rx="2" fill="'+t.ok+'"/>'+
+  '<rect x="8" y="86" width="30" height="9" rx="3" fill="'+t.panel+'"/><rect x="42" y="86" width="30" height="9" rx="3" fill="'+t.panel+'" stroke="'+t.ok+'"/>'+
+  '<rect x="76" y="86" width="30" height="9" rx="3" fill="'+t.panel+'"/><rect x="110" y="86" width="30" height="9" rx="3" fill="'+t.panel+'"/></svg>';
+}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function kv(a,b){return '<div class="kv"><span>'+a+'</span><span>'+b+'</span></div>'}
+function chip(t,ok){return '<span class="chip'+(ok?' ok':'')+'">'+t+'</span>'}
+// ---------- app preferences (this phone only) ----------
+var LOOKS=[['steel','Stål'],['dark','Mørk'],['light','Lys']];
+var ACCS=['#6fa3a8','#ff8200','#3aa0ff','#33d17a','#b36bff','#ff4f8b','#ffd23f','#e8e8e8'];
+var TILES=[['power','Effekt'],['batt','Batteri'],['volt','Spænding'],['amp','Strøm'],['temp','Temperaturer'],['odo','Km-tæller']];
+S.pref={look:'steel',acc:'#6fa3a8',unit:'kmh',tiles:{power:1,batt:1,volt:1,amp:1,temp:1,odo:1}};
+(function(){try{if(typeof localStorage==='undefined')return;var j=localStorage.getItem('novaPrefs');if(!j)return;var q=JSON.parse(j);
+ ['look','acc','unit'].forEach(function(k){if(q[k])S.pref[k]=q[k]});if(q.tiles)for(var t in q.tiles)S.pref.tiles[t]=q.tiles[t]}catch(e){}})();
+function savePrefs(){try{localStorage.setItem('novaPrefs',JSON.stringify(S.pref))}catch(e){}}
+function applyLook(){try{if(document.documentElement)document.documentElement.onclick=null}catch(e){}
+var r=typeof document!=='undefined'&&document.documentElement;if(!r||!r.setAttribute)return;r.setAttribute('data-look',S.pref.look);r.style.setProperty('--acc',S.pref.acc)}
+function curTheme(){return THEMES[S.info?S.info.theme:6]}
+
+// ---------- views ----------
+var TABS=[['home','🏠','Hjem'],['tune','🎨','Tilpas'],['safe','🛡️','Sikkerhed'],['system','⚙️','System']];
+function subnav(list,cur){return '<div class="subnav">'+list.map(function(x){return '<button data-sub="'+x[0]+'" class="'+(x[0]===cur?'sel':'')+'">'+x[1]+'</button>'}).join('')+'</div>'}
+function render(){
+  applyLook();
+  var pill=$('#pill');pill.textContent=S.conn?(S.demo?'Demo':'Forbundet'):'Ikke forbundet';pill.className=S.conn?'on':'';
+  $('#tabs').innerHTML=TABS.map(function(t){return '<button data-t="'+t[0]+'" class="'+(S.tab===t[0]?'sel':'')+'"><span>'+t[1]+'</span>'+t[2]+'</button>'}).join('');
+  var v=$('#view'),h='',t=S.tab;
+  if(S.msg)h+='<div class="card warn">'+esc(S.msg)+'</div>';
+  if(S.studio)h+=vStudio();else if(t==='home')h+=vHome();else if(t==='tune')h+=vTune();else if(t==='safe')h+=vSafe();else h+=vSystem();
+  v.innerHTML=h;wire();if(S.studio){saveWid();wireStudio();studioLoop()}else wire2();
+  var nv=$('#tabs');if(nv)nv.style.display=S.studio?'none':'';
+  if(t==='system'&&S.sub.system==='update')paintOta();
+  if(t==='tune'&&S.sub.tune==='boot')paintImg();
+  if(!S.studio&&t==='tune'&&S.sub.tune==='widgets')paintWidgets();
+  if(t==='home')paintLive();
+}
+// ----- Hjem: live view of the board's dashboard
+var LA={cx:90,cy:96,r:72};
+function lvPt(f,r){var a=(135+270*f)*Math.PI/180;return [LA.cx+r*Math.cos(a),LA.cy+r*Math.sin(a)]}
+function lvArc(f){var p0=lvPt(0,LA.r),p1=lvPt(f,LA.r);return 'M'+p0[0].toFixed(1)+' '+p0[1].toFixed(1)+'A'+LA.r+' '+LA.r+' 0 '+(270*f>180?1:0)+' 1 '+p1[0].toFixed(1)+' '+p1[1].toFixed(1)}
+function lvBar(id,x,y,w,h){return '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="'+h/2+'" fill="var(--tr)" stroke="var(--edge)"/><rect id="'+id+'" x="'+(x+2)+'" y="'+(y+2)+'" width="0" height="'+(h-4)+'" rx="'+(h-4)/2+'" fill="var(--btn)"/>'}
+function vLive(){
+  return '<div class="card live"><svg viewBox="0 0 320 196">'+
+  '<path d="'+lvArc(1)+'" fill="none" stroke="var(--acc)" stroke-width="9" stroke-linecap="round" opacity=".55"/>'+
+  '<path id="lv-fill" d="" fill="none" stroke="var(--acc)" stroke-width="9" stroke-linecap="round"/>'+
+  '<line id="lv-cap" x1="0" y1="0" x2="0" y2="0" stroke="#ffb000" stroke-width="3" stroke-linecap="round" opacity="0"/>'+
+  '<circle id="lv-knob" r="7" cx="0" cy="0" fill="#f4f4f4"/>'+
+  '<text id="lv-name" x="90" y="44" text-anchor="middle" font-size="10.5" font-weight="700" letter-spacing="1.6"></text>'+
+  '<text id="lv-sp" x="90" y="112" text-anchor="middle" font-size="72" font-weight="700">--</text>'+
+  '<text id="lv-unit" x="90" y="136" text-anchor="middle" font-size="13" font-weight="700" class="m">km/h</text>'+
+  '<g id="g-temp"><text id="lv-t1" x="46" y="178" font-size="10" font-weight="700"></text><text id="lv-t2" x="46" y="191" font-size="10" font-weight="700" class="m"></text></g>'+
+  '<g id="g-odo"><text id="lv-odo" x="290" y="20" text-anchor="end" font-size="16"></text></g>'+
+  '<g id="g-power"><text id="lv-pw" x="290" y="56" text-anchor="end" font-size="42" font-weight="700">--</text><text x="296" y="56" font-size="13" font-weight="700" class="m">W</text>'+lvBar('lv-pb',176,64,138,7)+'</g>'+
+  '<g id="g-batt"><text id="lv-pct" x="178" y="102" font-size="30" font-weight="700">--</text>'+lvBar('lv-bb',176,110,138,15)+'</g>'+
+  '<g id="g-volt"><text id="lv-v" x="314" y="98" text-anchor="end" font-size="15" font-weight="700">--</text></g>'+
+  '<g id="g-amp"><rect x="254" y="136" width="60" height="14" rx="4" fill="var(--acc)" opacity=".3"/><text id="lv-a" x="284" y="147" text-anchor="middle" font-size="10" font-weight="700">BATT -- A</text></g>'+
+  '</svg></div>';
+}
+function paintLive(){
+  try{
+  var L=S.live,e=function(id){return $('#'+id)};if(!L||!e('lv-sp'))return;
+  var mph=S.pref.unit==='mph',k=mph?0.621371:1,P=S.pref.tiles,ok=function(b){return (L.v&b)!==0};
+  var fixed=S.info&&S.info.arc?S.info.arc*5:0,mx=fixed||Math.max(35,Math.ceil((ok(1)?L.speed:0)/5)*5);
+  if(ok(1)&&L.speed>mx)mx=Math.ceil(L.speed/5)*5;
+  e('lv-sp').textContent=ok(1)?Math.round(L.speed*k):'--';e('lv-unit').textContent=mph?'mph':'km/h';
+  var own=S.info&&S.info.text,md=['WALK','ECO','DRIVE','SPORT'][L.mode];e('lv-name').textContent='_'+(own?own.toUpperCase():(md||'--'))+'_';
+  e('lv-pw').textContent=ok(8)?L.pw:'--';e('lv-pct').textContent=ok(2)?L.pct+'%':'--';e('lv-v').textContent=ok(4)?L.volt.toFixed(1)+' V':'-- V';
+  e('lv-a').textContent='BATT '+(ok(16)?Math.round(L.amp):'--')+' A';e('lv-odo').textContent=ok(128)?Math.round(L.odo*k):'--';
+  e('lv-t1').textContent='R FET '+(ok(32)?L.t+'\u00b0':'--')+'  MOT '+(ok(64)?L.mt+'\u00b0':'--');e('lv-t2').textContent='F FET --  MOT --';
+  ['power','batt','volt','amp','temp','odo'].forEach(function(n){var g=e('g-'+n);if(g)g.style.display=P[n]?'':'none'});
+  var f=ok(1)?Math.min(L.speed/mx,1):0,kp=lvPt(f,LA.r);
+  e('lv-fill').setAttribute('d',f>.004?lvArc(f):'');e('lv-knob').setAttribute('cx',kp[0]);e('lv-knob').setAttribute('cy',kp[1]);
+  var c=e('lv-cap'),a=lvPt(20/mx,LA.r-8),b=lvPt(20/mx,LA.r+8);
+  c.setAttribute('x1',a[0]);c.setAttribute('y1',a[1]);c.setAttribute('x2',b[0]);c.setAttribute('y2',b[1]);c.setAttribute('opacity',L.cap===1?1:0);
+  var zx=134*.2,w=ok(8)&&L.pw>0?Math.min(L.pw/6000,1)*134*.8:0,n=ok(8)&&L.pw<0?Math.min(-L.pw/800,1)*zx:0;
+  e('lv-pb').setAttribute('x',178+zx-n);e('lv-pb').setAttribute('width',Math.max(0,w+n));
+  e('lv-bb').setAttribute('width',ok(2)?Math.round(L.pct*1.34):0);
+  e('lv-bb').setAttribute('fill',!ok(2)||L.pct>20?'var(--btn)':L.pct>10?'#ffb000':'var(--bad)');
+  }catch(x){}
+}
+function vHome(){
+  if(!S.conn)return vDevice();
+  var f=S.info?S.info.flags:0;
+  return vLive()+(S.info?'<div class="chips" style="margin:0 4px 6px">'+chip('Telefon '+(f&4?'forbundet':'ikke forbundet'),f&4)+chip('Løbehjul '+(f&8?'forbundet':'ikke forbundet'),f&8)+chip('Start 20 km/t '+(f&64?'til':'fra'),f&64)+'</div>':'')+
+  '<div class="card"><h3>Musik</h3><div class="mrow"><button data-m="0">⏮</button><button data-m="1">⏯</button><button data-m="2">⏭</button></div></div>';
+}
+// ----- Tilpas
+function hexOf(a){return '#'+a.map(function(x){return ('0'+x.toString(16)).slice(-2)}).join('')}
+function vTune(){
+  var sub=S.sub.tune,h=subnav([['themes','Temaer'],['screen','Skærm'],['boot','Boot'],['widgets','Widgets'],['app','App']],sub);
+  if(sub==='themes')h+=vThemes()+vAccent();else if(sub==='screen')h+=vScreen();else if(sub==='boot')h+=vBoot();else if(sub==='widgets')h+=vWidgets();else h+=vAppLook();
+  return h;
+}
+function vAccent(){
+  var a=S.info?S.info.acc:[111,163,168];
+  return '<div class="card"><h2>Egen farve</h2><p>Vælg en farve til temaet <b>EGEN</b>. Knappen sender farven og skifter boardet til temaet.</p>'+
+  '<input type="color" id="accpick" value="'+hexOf(a)+'"><button class="btn" data-a="accsend"'+(S.conn?'':' disabled')+'>Brug farven på boardet</button></div>';
+}
+function vScreen(){
+  var bl=S.info?S.info.bl:80,am=S.info?S.info.arc:0,ST=[0,6,7,8,10,12,16],bs=[20,40,60,80,100];
+  return '<div class="card"><h2>Lysstyrke</h2><div class="seg c5">'+bs.map(function(n){return '<button data-bl="'+n+'" class="'+(Math.abs(bl-n)<10?'sel':'')+'">'+n+'%</button>'}).join('')+'</div>'+
+  '<input type="range" id="blr" min="10" max="100" value="'+bl+'" style="margin-top:12px"></div>'+
+  '<div class="card"><h2>Hastighedsbue</h2><p>Hvor mange km/t hele buen dækker. Auto vokser med grænser og fart, så buen også virker over 35 km/t.</p><div class="seg c4" style="grid-template-columns:repeat(4,1fr)">'+
+  ST.map(function(n){return '<button data-am="'+n+'" class="'+(am===n?'sel':'')+'">'+(n?n*5:'Auto')+'</button>'}).join('')+'</div></div>'+
+  (S.conn?'':'<p class="small">Forbind til boardet for at ændre skærmen.</p>');
+}
+function vAppLook(){
+  var P=S.pref;
+  return '<div class="card"><h2>Udseende</h2><div class="seg c3">'+LOOKS.map(function(l){return '<button data-lk="'+l[0]+'" class="'+(P.look===l[0]?'sel':'')+'">'+l[1]+'</button>'}).join('')+'</div>'+
+  '<h3 style="margin-top:14px">Accentfarve</h3><div class="sw">'+ACCS.map(function(c){return '<button data-acc="'+c.slice(1)+'" style="background:'+c+'" class="'+(P.acc===c?'sel':'')+'"></button>'}).join('')+'</div>'+
+  '<input type="color" id="appacc" value="'+P.acc+'"></div>'+
+  '<div class="card"><h2>Enheder</h2><div class="seg c3" style="grid-template-columns:1fr 1fr">'+[['kmh','km/h'],['mph','mph']].map(function(u){return '<button data-unit="'+u[0]+'" class="'+(P.unit===u[0]?'sel':'')+'">'+u[1]+'</button>'}).join('')+'</div>'+
+  '<p>Gælder kun live-visningen i appen.</p></div>'+
+  '<div class="card"><h2>Live-visning</h2><p>Vælg hvad der vises på Hjem.</p><div class="tg">'+TILES.map(function(t){return '<button data-tile="'+t[0]+'" class="'+(P.tiles[t[0]]?'sel':'')+'">'+t[1]+'</button>'}).join('')+'</div></div>'+
+  '<button class="btn sec" data-a="resetprefs">Nulstil appens udseende</button>';
+}
+// ----- System
+function vSystem(){
+  var sub=S.sub.system;
+  return subnav([['device','Enhed'],['update','Opdater']],sub)+(sub==='update'?vUpdate():vDevice());
+}
+function vDevice(){
+  var i=S.info,th=curTheme(),h='<div class="card"><div class="hero">'+
+  '<svg width="92" height="92" viewBox="0 0 92 92"><circle cx="46" cy="46" r="36" fill="none" stroke="var(--card2)" stroke-width="10"/><circle cx="46" cy="46" r="36" fill="none" stroke="var(--acc)" stroke-width="10" stroke-dasharray="130 226" transform="rotate(135 46 46)"/><text x="46" y="53" text-anchor="middle" font-size="20" font-weight="800" fill="var(--fg)">N</text></svg>'+
+  '<div><h2>NOVA RIDE OS</h2><p>'+(S.conn&&i?'Firmware '+esc(i.ver):'CYD-dashboard til dit løbehjul')+'</p></div></div>';
+  if(S.conn&&i){var f=i.flags;h+='<div class="chips">'+chip('Telefon '+(f&4?'forbundet':'ikke forbundet'),f&4)+chip('Løbehjul '+(f&8?'forbundet':'ikke forbundet'),f&8)+chip('Opdateringsvindue '+(f&1?'åbent':'lukket'),f&1)+chip('Dashboard: '+(f&16?'eget':'standard'),f&16)+chip('Start 20 km/t '+(f&64?'til':'fra'),f&64)+'</div>'}
+  h+='</div>';
+  if(S.conn){
+    h+='<div class="card"><h3>Enhed</h3>'+(i?kv('Firmware',esc(i.ver))+kv('Profil',esc(i.profile))+kv('Tema',THEMES[i.theme]?THEMES[i.theme].n:'?')+kv('Bootskærm',STYLES[i.style]||'?')+kv('Tekst',esc(i.text||'–')):'<p>Henter oplysninger…</p>')+'</div>'+
+    '<button class="btn sec" data-a="disc">Afbryd</button>';
+  }else{
+    h+='<div class="card"><h2>Forbind</h2><p>Sæt <b>PHONE ON</b> i boardets Settings, og vælg derefter <b>NOVA RIDE</b>. Første gang beder iPhonen om at parre.</p>'+
+    (navigator.bluetooth?'':'<p class="warn">Denne browser har ikke Web Bluetooth. På iPhone: åbn siden i appen <b>Bluefy</b>. På Android/Windows: brug Chrome eller Edge.</p>')+
+    '<button class="btn" data-a="conn"'+(navigator.bluetooth?'':' disabled')+'>Find NOVA RIDE</button><button class="btn sec" data-a="demo">Prøv demo uden board</button></div>';
+  }
+  return h;
+}
+function vSafe(){
+  var on=!!(S.info&&(S.info.flags&64));
+  return '<div class="card"><h2>Start-begrænsning</h2>'+
+  '<p>Når den er slået til, kan løbehjulet <b>kun køre 20 km/t</b>, hver gang det tændes. Indstillingen findes kun her i appen – den kan ikke ændres fra boardets egne menuer.</p>'+
+  '<div class="chips">'+chip(S.conn&&S.info?(on?'Slået til':'Slået fra'):'Ikke forbundet',on)+'</div>'+
+  '<button class="btn'+(on?' sec':'')+'" data-a="startcap"'+(S.conn&&S.info?'':' disabled')+'>'+(on?'Slå start-begrænsning fra':'Slå start-begrænsning til')+'</button></div>'+
+  '<p class="small">Begrænsningen sættes på igen, hver gang boardet får forbindelse til løbehjulet. Den virker kun, når boardet har en bekræftet forbindelse til hjulet, og den kan ikke bekræftes i demo-tilstand. Husk, at den lovlige grænse for el-løbehjul på offentlig vej er 20 km/t i Danmark.</p>';
+}
+function vUpdate(){
+  var fi=S.fileInfo,h='<div class="card"><h2>Opdater firmware</h2>'+
+  '<div class="step"><em>1</em><div>På boardet: <b>Settings → UPDATE</b>, og hold knappen nede, så <b>WINDOW OPEN</b> vises (2 minutter).</div></div>'+
+  '<div class="step"><em>2</em><div>Vælg din egen fil <b>NOVA_RIDE_&lt;profil&gt;.bin</b> (fra GitHub Actions, ikke <i>.factory.bin</i>).</div></div>'+
+  '<div class="step"><em>3</em><div>Tryk <b>Start opdatering</b>. Lad telefonen ligge tæt på, og stå stille med hjulet.</div></div></div>'+
+  '<div class="card"><input type="file" id="bin" accept=".bin,application/octet-stream" style="width:100%">';
+  if(fi)h+=kv('Fil',esc(fi.name))+kv('Størrelse',Math.round(fi.size/1024)+' KB')+kv('CRC-32',hex(fi.crc))+(fi.bad?'<p style="color:var(--bad)">'+esc(fi.bad)+'</p>':'<p style="color:var(--ok)">Filen ser ud som en gyldig ESP32-app.</p>');
+  h+='<div class="bar"><i id="obar"></i></div><div class="small" id="otxt">Klar</div>'+
+  '<button class="btn" data-a="go"'+((S.file&&S.conn&&!S.busy)?'':' disabled')+'>Start opdatering</button></div>'+
+  '<p class="small">Boardet kontrollerer filens størrelse, ESP32-header og CRC, og opdateringen kræver, at du selv har åbnet vinduet på boardet. Der er ingen signatur: installér kun filer, du selv har bygget. Går noget galt, kan du altid flashe igen med USB.</p>';
+  return h;
+}
+function vThemes(){
+  var cur=S.info?S.info.theme:-1;
+  return '<div class="card"><h2>Temaer</h2><p>Vælg farverne. Det gælder hele skærmen med det samme.</p><div class="grid">'+
+  THEMES.map(function(t,i){return '<div class="tcard'+(i===cur?' sel':'')+'" data-th="'+i+'">'+miniDash(t)+t.n+'</div>'}).join('')+'</div></div>';
+}
+function vBoot(){
+  var st=S.info?S.info.style:-1,th=curTheme();
+  var h='<div class="card"><h2>Bootskærm</h2><p>Vælg stil. Boardet viser den med det samme.</p><div class="seg">'+
+  STYLES.map(function(n,i){return '<button data-st="'+i+'" class="'+(i===st?'sel':'')+'">'+n+'</button>'}).join('')+'</div></div>'+
+  '<div class="card"><h3>Tekst (maks 15 tegn)</h3><input type="text" id="btext" maxlength="15" value="'+esc(S.text)+'" placeholder="Dit navn"><button class="btn sec" data-a="text">Send tekst</button></div>'+
+  '<div class="card"><h3>Billede (128 × 64, sort/hvid)</h3><input type="file" id="img" accept="image/*" style="width:100%">'+
+  '<canvas id="imgprev" width="128" height="64" style="margin-top:10px"></canvas>'+
+  '<p>Lysstyrke-grænse: <span id="thrv">'+S.thr+'</span></p><input type="range" id="thr" min="20" max="235" value="'+S.thr+'">'+
+  '<label class="small"><input type="checkbox" id="inv"'+(S.inv?' checked':'')+'> Byt lyst/mørkt</label>'+
+  '<button class="btn" data-a="img"'+((S.img&&S.conn&&!S.busy)?'':' disabled')+'>'+(S.busy?'Sender…':'Send billede til boardet')+'</button></div>'+
+  '<button class="btn sec" data-a="prev">Vis bootskærm på boardet</button>';
+  return h;
+}
+function vMusic(){
+  return '<div class="card"><h2>Musik</h2><p>Knapperne sender medietaster via boardet til din iPhone, så de styrer den app, der spiller. Boardet skal være parret som Bluetooth-enhed (PHONE ON). Titel og kunstner er ikke med endnu.</p>'+
+  '<div class="play"><button data-m="0">⏮</button><button class="big" data-m="1">⏯</button><button data-m="2">⏭</button></div></div>';
+}
+function wire(){
+  var v=$('#view');
+  [].forEach.call(document.querySelectorAll('[data-a]'),function(b){b.onclick=function(){
+    var a=b.dataset.a;
+    if(a==='conn')connect(false);else if(a==='demo')connect(true);else if(a==='disc')disconnect();
+    else if(a==='startcap')act(function(){return sendAck([OP.START,(S.info&&(S.info.flags&64))?0:1]).then(function(){return S.t.ctrl([OP.INFO])})});else if(a==='accsend')act(function(){var h=$('#accpick').value||'#6fa3a8',r=parseInt(h.slice(1,3),16),g=parseInt(h.slice(3,5),16),bl=parseInt(h.slice(5,7),16);
+      return sendAck([OP.AC,r,g,bl]).then(function(){return sendAck([OP.THEME,7])}).then(function(){return S.t.ctrl([OP.INFO])})});
+    else if(a==='resetprefs'){S.pref.look='steel';S.pref.acc='#6fa3a8';S.pref.unit='kmh';for(var tk in S.pref.tiles)S.pref.tiles[tk]=1;savePrefs();render()}
+    else if(a==='go')startUpdate();else if(a==='winstall')act(function(){return installWidget(S.wid)});else if(a==='wexport')exportWidget();else if(a==='wshare')shareWidget();else if(a==='wstd')act(function(){return sendAck([OP.LU,0]).then(function(){return S.t.ctrl([OP.INFO])})});else if(a==='text')sendText();else if(a==='img')sendImage();else if(a==='prev')preview();
+  }});
+  [].forEach.call(document.querySelectorAll('[data-th]'),function(b){b.onclick=function(){setTheme(+b.dataset.th)}});
+  [].forEach.call(document.querySelectorAll('[data-st]'),function(b){b.onclick=function(){setStyle(+b.dataset.st)}});
+  [].forEach.call(document.querySelectorAll('[data-m]'),function(b){b.onclick=function(){music(+b.dataset.m)}});
+  var bin=$('#bin');if(bin)bin.onchange=function(){pickFile(bin.files[0])};
+  var img=$('#img');if(img)img.onchange=function(){loadImage(img.files[0])};
+  var thr=$('#thr');if(thr)thr.oninput=function(){S.thr=+thr.value;$('#thrv').textContent=S.thr;rebuildImg()};
+  var inv=$('#inv');if(inv)inv.onchange=function(){S.inv=inv.checked;rebuildImg()};
+  var bt=$('#btext');if(bt)bt.oninput=function(){S.text=bt.value;S.textTouched=true};
+  if(S.tab==='tune'&&S.sub.tune==='widgets')wireWidgets();
+  [].forEach.call(document.querySelectorAll('#tabs button'),function(b){b.onclick=function(){S.tab=b.dataset.t;render()}});
+}
+
+// ---------- widgets (custom dashboard) ----------
+function wire2(){
+  var q=function(sel,fn){[].forEach.call(document.querySelectorAll(sel),function(b){if(b===document.documentElement||b===document.body)return;b.onclick=function(){fn(b)}})};
+  q('[data-sub]',function(b){S.sub[S.tab]=b.dataset.sub;render()});
+  q('[data-lk]',function(b){S.pref.look=b.dataset.lk;savePrefs();render()});
+  q('[data-acc]',function(b){S.pref.acc='#'+b.dataset.acc;savePrefs();render()});
+  q('[data-unit]',function(b){S.pref.unit=b.dataset.unit;savePrefs();render()});
+  q('[data-tile]',function(b){S.pref.tiles[b.dataset.tile]=S.pref.tiles[b.dataset.tile]?0:1;savePrefs();render()});
+  var send=function(bytes){if(!S.conn){S.msg='Forbind først til boardet.';render();return}act(function(){return sendAck(bytes).then(function(){return S.t.ctrl([OP.INFO])})})};
+  q('[data-bl]',function(b){send([OP.BL,+b.dataset.bl])});
+  q('[data-am]',function(b){send([OP.AM,+b.dataset.am])});
+  var r=$('#blr');if(r)r.onchange=function(){send([OP.BL,+r.value])};
+  var c=$('#appacc');if(c)c.onchange=function(){S.pref.acc=c.value;savePrefs();render()};
+}
+// ---------- widgets: previews, gallery and the studio (visual editor) ----------
+var SRC_LABEL={speed:'Hastighed',power:'Effekt (W)',battery:'Batteri %',volt:'Spænding (V)',current:'Strøm (A)',temp:'Temperatur styring',motortemp:'Temperatur motor',trip:'Tur (km)',total:'Total (km)',mode:'Køretilstand',fault:'Fejlkode',
+ maxspeed:'Tophastighed',maxpower:'Spidseffekt',minvolt:'Laveste spænding',energy:'Energi brugt (Wh)',ridetime:'Køretid (min)',ble:'Forbundet til løbehjul',phone:'Forbundet til telefon',limit:'20-grænse aktiv',demo:'Demo-tilstand',alert:'Fejl aktiv',regen:'Regenererer',moving:'Kører'};
+var NUMSRC=['speed','power','battery','volt','current','temp','motortemp','trip','total','maxspeed','maxpower','minvolt','energy','ridetime'],STATSRC=['ble','phone','limit','demo','alert','regen','moving'];
+var TYPE_LABEL={text:'Tekst',num:'Tal',bar:'Bjælke',arc:'Bue / måler',segbar:'Segmenter',spark:'Graf',rect:'Firkant',circle:'Cirkel',line:'Linje',button:'Knap',dot:'Lampe',icon:'Ikon',modebar:'Tilstandsknapper'};
+var TYPE_HINT={text:'En fast tekst',num:'Et tal fra løbehjulet',bar:'Fyldes efter en værdi',arc:'Rund måler, vælg start og åbning',segbar:'Lysdiode-række',spark:'Graf over de sidste 2 min.',rect:'Panel eller ramme',circle:'Rund flade eller ring',line:'Streg',button:'Knap med handling',dot:'Lampe der lyser',icon:'Lille symbol',modebar:'4 knapper til køretilstand'};
+var PAL_NAMES=[['text','Tekst'],['neon','Accent'],['ok','Grøn'],['warn','Gul'],['bad','Rød'],['dim','Dæmpet'],['panel','Panel'],['bg','Baggrund'],['white','Hvid'],['black','Sort']];
+var FONT_LABEL=[['1','Meget lille'],['2','Lille'],['4','Mellem'],['6','Stort tal'],['7','Segment-tal'],['8','Kæmpe tal']];
+var ACTION_LABEL=[['none','Ingen'],['nextpage','Næste side'],['prevpage','Forrige side'],['walk','Tilstand: Walk'],['eco','Tilstand: Eco'],['drive','Tilstand: Drive'],['sport','Tilstand: Sport'],['prevtrack','Forrige sang'],['playpause','Afspil / pause'],['nexttrack','Næste sang'],['settings','Åbn indstillinger'],['messages','Åbn beskeder'],['music','Åbn musik'],['safety','Åbn 20-skærm']];
+var ACTION_HELP={none:'Knappen gør ikke noget (bruges fx som lampe eller mærkat).',nextpage:'Skifter til næste side i designet.',prevpage:'Skifter til forrige side.',walk:'Skifter køretilstand til Walk. Hold knappen nede i 0,8 sekund.',eco:'Skifter køretilstand til Eco. Hold nede i 0,8 sekund.',drive:'Skifter køretilstand til Drive. Hold nede i 0,8 sekund.',sport:'Skifter til Sport. Hold nede i 0,8 sekund.',prevtrack:'Forrige sang på telefonen.',playpause:'Afspil eller pause musik på telefonen.',nexttrack:'Næste sang på telefonen.',settings:'Åbner indstillinger på boardet.',messages:'Åbner beskeder.',music:'Åbner musikskærmen.',safety:'Åbner 20-skærmen.'};
+var ICON_LABEL=[['bolt','Lyn'],['battery','Batteri'],['thermo','Termometer'],['gauge','Måler'],['warning','Advarsel'],['lock','Lås'],['phone','Telefon'],['light','Lys']];
+var DEF2={text:{t:'text',x:20,y:100,text:'Tekst',font:'4',align:'left',color:'text'},num:{t:'num',x:20,y:100,src:'speed',font:'4',align:'left',dp:0,color:'text'},
+ bar:{t:'bar',x:20,y:110,w:160,h:12,src:'battery',max:100,color:'neon',color2:'panel',border:true,round:true,rad:6},arc:{t:'arc',x:100,y:120,r:70,th:12,a0:135,sweep:270,src:'speed',max:35,color:'neon',color2:'panel',caps:true},
+ segbar:{t:'segbar',x:20,y:110,w:200,h:16,n:12,src:'speed',max:35,color:'neon',color2:'panel',round:true},spark:{t:'spark',x:20,y:90,w:200,h:60,src:'speed',max:35,color:'neon',color2:'panel',fill:true,th:2},
+ rect:{t:'rect',x:20,y:80,w:120,h:70,color:'dim',color2:'panel',border:true,rad:8},circle:{t:'circle',x:100,y:120,r:30,color:'neon',fill:true},line:{t:'line',x:20,y:120,w:200,h:0,th:2,color:'dim'},
+ button:{t:'button',x:20,y:180,w:90,h:34,action:'nextpage',text:'KNAP',font:'2',rad:10,color:'text',color2:'neon'},dot:{t:'dot',x:30,y:30,r:6,src:'ble',color:'ok',color2:'dim'},
+ icon:{t:'icon',x:20,y:20,size:28,icon:'bolt',color:'warn'},modebar:{t:'modebar'}};
+var STUDIO_TYPES=['num','text','arc','bar','segbar','spark','button','icon','dot','rect','circle','line','modebar'];
+
+function cloneW(w){return JSON.parse(JSON.stringify(w))}
+function expandModes(w){var o=[];(w.items||[]).forEach(function(it){if(it&&it.t==='modebar')['walk','eco','drive','sport'].forEach(function(m,k){o.push({t:'button',x:4+k*79,y:206,w:75,h:30,action:m,text:m.toUpperCase(),font:'2',rad:9,color:'text',color2:'neon'})});else o.push(it)});w.items=o;return w}
+function toV2(w){var o=NW.upgrade(cloneW(w));o.v=2;o.pages=o.pages||1;o.bg=o.bg||'bg';o.items=o.items||[];return expandModes(o)}
+function wtheme(th){th=th||curTheme();var m=NW.mixc;return {text:th.text,neon:th.neon,ok:th.ok,warn:th.warn,bad:'#ff5a6e',dim:m(th.bg,th.text,.5),panel:th.panel,bg:th.bg,glow:m(th.bg,th.neon,.5),white:'#ffffff',black:'#000000'}}
+function paintLayout(cv,w,th){
+  cv.width=320;cv.height=240;var g=cv.getContext('2d');if(!g)return;
+  try{NW.render(g,w,NW.sample(0,{still:true}),{theme:wtheme(th),page:0,hist:NW.history({_t0:0},60),mode:2})}catch(e){}
+}
+function loadGallery(){
+  var base=location.protocol==='file:'?null:'widgets/';
+  S.gal=(window.STARTERS||[]).map(function(w){return w});
+  if(!base){S.commMsg='Fællesskabets widgets kræver, at siden ligger på nettet (GitHub Pages).';return}
+  fetch(base+'community/index.json',{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(ix){
+    return Promise.all((ix.widgets||[]).slice(0,60).map(function(n){return fetch(base+'community/'+encodeURIComponent(n)+'.json').then(function(r){return r.json()}).catch(function(){return null})}));
+  }).then(function(list){S.comm=list.filter(function(w){return w&&NW.validateFile(w).length===0});S.commMsg=S.comm.length?'':'Der er ingen delte widgets endnu.';if(S.tab==='tune'&&S.sub.tune==='widgets')render()}).catch(function(){S.commMsg='Kunne ikke hente fællesskabets widgets.';if(S.tab==='tune'&&S.sub.tune==='widgets')render()});
+}
+function repoGuess(){var h=location.hostname,p=location.pathname.split('/').filter(Boolean);if(/\.github\.io$/.test(h)&&p[0])return h.split('.')[0]+'/'+p[0];return ''}
+function cardW(w,idx,src){
+  var c=NW.compile(w),pg=c.ok?c.pages:1;
+  return '<div class="wcard"><canvas class="wprev" data-src="'+src+'" data-i="'+idx+'" width="320" height="240"></canvas><b>'+esc(w.name)+'</b> <span class="small">af '+esc(w.author||'?')+(pg>1?' · '+pg+' sider':'')+'</span><p>'+esc(w.desc||'')+'</p>'+
+  '<div class="row3"><button class="btn mini" data-wi="'+src+':'+idx+'">Installér</button><button class="btn sec mini" data-we="'+src+':'+idx+'">Rediger</button></div></div>';
+}
+function vWidgets(){
+  var h='<div class="card"><h2>Rediger din skærm</h2><p>Hele skærmen på boardet er et design, du selv kan ændre: tekster, knapper og hvad de gør, farver, målere og flere sider. Editoren starter med det design, boardet viser fra fabrikken.</p>'+
+  '<button class="btn" data-s="open">Åbn editoren</button><button class="btn sec" data-s="reset"'+(S.conn?'':' disabled')+'>Gendan standard-design på boardet</button><button class="btn sec" data-a="wstd">Brug den faste skærm (uden design)</button></div>';
+  h+='<div class="card"><h3>Start-designs</h3>'+S.gal.map(function(x,i){return cardW(x,i,'s')}).join('')+'</div>';
+  h+='<div class="card"><h3>Fra fællesskabet</h3>'+(S.comm.length?S.comm.map(function(x,i){return cardW(x,i,'c')}).join(''):'<p>'+esc(S.commMsg||'Henter…')+'</p>')+'</div>';
+  return h;
+}
+function paintWidgets(){
+  var th=curTheme();
+  [].forEach.call(document.querySelectorAll('.wprev'),function(cv){var w=(cv.dataset.src==='s'?S.gal:S.comm)[+cv.dataset.i];paintLayout(cv,w,th)});
+}
+async function installWidget(w){
+  var c=NW.compile(w);if(!c.ok)throw new Error(c.errors[0]);
+  var b=Array.from(c.bytes);
+  await sendAck([OP.LB]);
+  for(var off=0;off<b.length;off+=120)await sendAck([OP.LC,off&255,off>>8].concat(b.slice(off,off+120)));
+  await sendAck([OP.LE]);
+  await S.t.ctrl([OP.INFO]);
+}
+function toFile(w){var o={v:2,name:w.name,author:w.author,desc:w.desc||'',pages:w.pages||1,bg:w.bg||'bg',items:w.items};return JSON.stringify(o,null,1)}
+function exportWidget(){var t=toFile(S.wid),bl=new Blob([t],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(bl);a.download=(S.wid.name||'widget').toLowerCase().replace(/[^a-z0-9]+/g,'-')+'.json';a.click()}
+function shareWidget(){
+  var errs=NW.validateFile(S.wid);if(errs.length){S.msg='Ret først: '+errs[0];render();return}
+  var repo=S.repo||repoGuess();if(!repo){repo=prompt('GitHub-repository (ejer/navn), som siden hører til:','')||''}
+  if(!/^[\w.-]+\/[\w.-]+$/.test(repo)){S.msg='Ugyldigt repository';render();return}
+  S.repo=repo;
+  var body='Widget til NOVA RIDE. Ejeren tjekker den og tilføjer mærket "approved", så vises den for alle.\n\n```json\n'+toFile(S.wid)+'\n```\n';
+  window.open('https://github.com/'+repo+'/issues/new?title='+encodeURIComponent('[widget] '+S.wid.name)+'&body='+encodeURIComponent(body),'_blank');
+}
+
+// ----- studio state and history
+S.ed={sel:-1,page:0,anim:true,still:false,snap:2,undo:[],redo:[],add:false,th:-1,limit:false,drag:null,raf:0,t0:Date.now()};
+function pushUndo(){var E=S.ed;E.undo.push(JSON.stringify(S.wid));if(E.undo.length>60)E.undo.shift();E.redo=[]}
+function undo(){var E=S.ed;if(!E.undo.length)return;E.redo.push(JSON.stringify(S.wid));S.wid=JSON.parse(E.undo.pop());if(E.sel>=S.wid.items.length)E.sel=-1;if(E.page>=(S.wid.pages||1))E.page=0;render()}
+function redo(){var E=S.ed;if(!E.redo.length)return;E.undo.push(JSON.stringify(S.wid));S.wid=JSON.parse(E.redo.pop());if(E.sel>=S.wid.items.length)E.sel=-1;render()}
+function saveWid(){try{localStorage.setItem('novaWid',JSON.stringify(S.wid))}catch(e){}}
+function openStudio(w){if(w)S.wid=toV2(w);else S.wid=toV2(S.wid);S.studio=true;S.ed.sel=-1;S.ed.page=0;S.ed.undo=[];S.ed.redo=[];S.ed.add=false;render();try{window.scrollTo(0,0)}catch(e){}}
+function closeStudio(){S.studio=false;stopStudioLoop();render();try{window.scrollTo(0,0)}catch(e){}}
+function selItem(){var E=S.ed;return E.sel>=0?S.wid.items[E.sel]:null}
+function snapv(v){var g=S.ed.snap;return g>1?Math.round(v/g)*g:Math.round(v)}
+
+// ----- studio views
+var PKO={};          // option lists of the pick buttons on screen (rebuilt with every render)
+var MORE_COLORS=['#ff8200','#ffd23f','#33d17a','#00d4d4','#3aa0ff','#7c5cff','#b36bff','#ff4f8b','#ff3b30','#e8e8e8','#8d8d8d','#4a4a4a'];
+function lbl(opts,v){for(var i=0;i<opts.length;i++){var o=opts[i];if(Array.isArray(o)){if(String(o[0])===String(v))return o[1]}else if(String(o)===String(v))return o}return String(v)}
+// number: tap − or + for small steps, tap the number to type it
+function nf(label,key,it,min,max,step){
+  var v=it[key];if(v==null)v=(key==='dp'||key==='rad'||(key==='th'&&it.t==='circle'))?0:'';step=step||1;
+  return '<div class="nf"><label>'+label+'</label><div class="nfr"><button data-nm="'+key+':'+(-step)+'">−</button><button class="nv" data-nv="'+key+':'+min+':'+max+':'+esc(label)+'">'+esc(v===''?'–':v)+'</button><button data-nm="'+key+':'+step+'">+</button></div></div>';
+}
+// choice: a button that opens a list with big buttons
+function sel(label,key,it,opts,def){
+  var v=it[key];if(v==null)v=def==null?'':def;PKO[key]=opts;
+  return '<div class="nf"><label>'+label+'</label><button class="pk" data-pk="'+key+'|'+esc(label)+'">'+esc(lbl(opts,v))+' <i>▾</i></button></div>';
+}
+// text: tap to type
+function tf(label,key,it,max){
+  return '<div class="nf"><label>'+label+'</label><button class="pk tx" data-tx="'+key+'|'+max+'|'+esc(label)+'">'+(it[key]?esc(it[key]):'<i>tryk for at skrive</i>')+'</button></div>';
+}
+function colf(label,key,it,def){
+  var cur=it[key]==null?def:it[key],th=wtheme(S.ed.th>=0?THEMES[S.ed.th]:null),custom=typeof cur==='string'&&cur.charAt(0)==='#';
+  return '<div class="nf wide"><label>'+label+'</label><div class="swr">'+PAL_NAMES.map(function(p){return '<button class="sc'+(cur===p[0]?' sel':'')+'" title="'+p[1]+'" data-c="'+key+':'+p[0]+'" style="background:'+th[p[0]]+'"></button>'}).join('')+
+  MORE_COLORS.map(function(c){return '<button class="sc'+(cur===c?' sel':'')+'" data-c="'+key+':'+c+'" style="background:'+c+'"></button>'}).join('')+
+  '<button class="mini" data-cc="'+key+'">Egen…</button></div>'+(custom?'<div class="small">Egen farve: '+esc(cur)+'</div>':'')+'</div>';
+}
+function chips(it,list){
+  return '<div class="nf wide"><label>Udseende</label><div class="tg">'+list.map(function(f){return '<button data-f="'+f[0]+'" class="'+(it[f[0]]?'sel':'')+'">'+f[1]+'</button>'}).join('')+'</div></div>';
+}
+function itemPanel(it){
+  var t=it.t,h='<div class="sp"><div class="sph"><b>'+TYPE_LABEL[t]+'</b><span><button class="mini" data-s="dup">Kopiér</button><button class="mini" data-s="front">Frem</button><button class="mini" data-s="back">Tilbage</button><button class="mini bad" data-s="del">Slet</button></span></div>';
+  var srcOpts=function(stat,mode){var a=NUMSRC.concat(mode?['mode']:[]).concat(stat?STATSRC:[]);return a.map(function(k){return [k,SRC_LABEL[k]]})};
+  var ALIGNS=[['left','Venstre'],['center','Midt'],['right','Højre']];
+  h+='<div class="nfg">';
+  if(t==='text'){h+=tf('Tekst','text',it,15)+sel('Størrelse','font',it,FONT_LABEL.slice(0,3),'2')+sel('Placering','align',it,ALIGNS,'left')+colf('Farve','color',it,'text')}
+  if(t==='num'){h+=sel('Viser','src',it,srcOpts(true,true),'speed')+sel('Størrelse','font',it,FONT_LABEL,'2')+sel('Placering','align',it,ALIGNS,'left')+nf('Decimaler','dp',it,0,2)+tf('Foran tallet','pre',it,15)+tf('Efter tallet (enhed)','unit',it,15)+colf('Farve','color',it,'text')}
+  if(t==='bar'){h+=sel('Viser','src',it,srcOpts(false),'speed')+nf('Bredde','w',it,4,320)+nf('Højde','h',it,2,200)+nf('Afrunding','rad',it,0,100)+nf('Tom ved','min',it,-32768,32767)+nf('Fuld ved','max',it,-32767,65535)+colf('Fyld','color',it,'neon')+colf('Bund','color2',it,'panel')+chips(it,[['border','Kant'],['bidir','Fra nul'],['rev','Omvendt']])}
+  if(t==='arc'){h+=sel('Viser','src',it,srcOpts(false),'speed')+nf('Radius','r',it,8,160)+nf('Tykkelse','th',it,1,80)+nf('Start (grader)','a0',it,0,359,5)+nf('Åbning (grader)','sweep',it,10,360,10)+nf('Tom ved','min',it,-32768,32767)+nf('Fuld ved','max',it,-32767,65535)+colf('Fyld','color',it,'neon')+colf('Bund','color2',it,'panel')+chips(it,[['caps','Runde ender'],['knob','Knop'],['ticks','Streger'],['rev','Omvendt']])}
+  if(t==='rect'){h+=nf('Bredde','w',it,2,640)+nf('Højde','h',it,2,640)+nf('Afrunding','rad',it,0,100)+colf('Farve','color',it,'dim')+colf('Fyld','color2',it,'panel')+chips(it,[['fill','Fyldt'],['border','Kant']])}
+  if(t==='circle'){h+=nf('Radius','r',it,2,160)+nf('Kant-tykkelse','th',it,0,40)+colf('Farve','color',it,'neon')+colf('Inde i','color2',it,'panel')+chips(it,[['fill','Fyldt'],['border','Kant']])}
+  if(t==='line'){h+=nf('Længde vandret','w',it,0,640)+nf('Længde lodret','h',it,0,640)+nf('Tykkelse','th',it,1,12)+colf('Farve','color',it,'dim')+chips(it,[['rev','Skråt opad']])}
+  if(t==='button'){h+=tf('Tekst','text',it,15)+sel('Når du trykker','action',it,ACTION_LABEL,'none')+'<div class="nf wide small">'+esc(ACTION_HELP[it.action||'none'])+'</div>'+nf('Bredde','w',it,16,320)+nf('Højde','h',it,12,200)+nf('Afrunding','rad',it,0,100)+sel('Størrelse','font',it,FONT_LABEL.slice(0,3),'2')+colf('Kant og tekst','color',it,'text')+colf('Valgt farve','color2',it,'neon')+chips(it,[['fill','Fyldt']])}
+  if(t==='segbar'){h+=sel('Viser','src',it,srcOpts(false),'speed')+nf('Antal segmenter','n',it,2,40)+nf('Bredde','w',it,4,320)+nf('Højde','h',it,2,100)+nf('Tom ved','min',it,-32768,32767)+nf('Fuld ved','max',it,-32767,65535)+colf('Tændt','color',it,'neon')+colf('Slukket','color2',it,'panel')+chips(it,[['round','Runde']])}
+  if(t==='spark'){h+=sel('Viser','src',it,srcOpts(false),'speed')+nf('Bredde','w',it,16,320)+nf('Højde','h',it,8,200)+nf('Streg','th',it,1,6)+nf('Bund ved','min',it,-32768,32767)+nf('Top ved','max',it,-32767,65535)+colf('Linje','color',it,'neon')+colf('Ramme','color2',it,'panel')+chips(it,[['fill','Fyld under']])}
+  if(t==='dot'){h+=sel('Lyser når','src',it,srcOpts(true),'ble')+nf('Radius','r',it,2,40)+colf('Tændt','color',it,'ok')+colf('Slukket','color2',it,'dim')}
+  if(t==='icon'){h+=sel('Ikon','icon',it,ICON_LABEL,'bolt')+nf('Størrelse','size',it,8,96,2)+sel('Niveau fra (valgfri)','src',it,[['none','Ingen']].concat(srcOpts(false)),'none')+nf('Tom ved','min',it,-32768,32767)+nf('Fuld ved','max',it,-32767,65535)+colf('Farve','color',it,'text')}
+  h+='</div>';
+  h+='<div class="nfg">'+nf((t==='arc'||t==='circle'||t==='dot')?'Midte x':'x','x',it,-200,520)+nf((t==='arc'||t==='circle'||t==='dot')?'Midte y':'y','y',it,-200,520)+'</div>'+
+     '<div class="nudge"><button data-ng="-1:0">←</button><button data-ng="0:-1">↑</button><button data-ng="0:1">↓</button><button data-ng="1:0">→</button><button data-ng="-10:0">⇇</button><button data-ng="10:0">⇉</button></div>';
+  if(['num','bar','arc','segbar','icon','spark'].indexOf(t)>=0&&(t==='num'?NUMSRC.indexOf(it.src)>=0:true)&&it.src!=='none'){
+    h+='<details class="adv"'+((it.warn!=null||it.bad!=null)?' open':'')+'><summary>Skift farve ved grænser</summary><div class="nfg">'+nf('Gul ved','warn',it,-32768,32767)+nf('Rød ved','bad',it,-32768,32767)+
+      '</div><div class="tg"><button data-f="below" class="'+(it.below?'sel':'')+'">Gælder under (fx batteri)</button><button data-s="clrwarn">Fjern grænser</button></div></details>';
+  }
+  var sh=it.show||{},OPL=[['>','større end'],['<','mindre end'],['==','lig med'],['!=','forskellig fra'],['>=','mindst'],['<=','højst']];
+  var SHS=[['','Altid vist']].concat(NUMSRC.concat(STATSRC).map(function(k){return [k,SRC_LABEL[k]]}));
+  var PG=[['all','Alle sider']].concat([0,1,2,3].slice(0,S.wid.pages||1).map(function(p){return [String(p),'Side '+(p+1)]}));
+  PKO['show.src']=SHS;PKO['show.op']=OPL;PKO.page=PG;
+  h+='<details class="adv"'+(it.show||it.page!=null?' open':'')+'><summary>Vis kun når / side</summary><div class="nfg">'+
+    '<div class="nf"><label>Kilde</label><button class="pk" data-pk="show.src|Vis kun når">'+esc(lbl(SHS,sh.src||''))+' <i>▾</i></button></div>'+
+    '<div class="nf"><label>Er</label><button class="pk" data-pk="show.op|Er">'+esc(lbl(OPL,sh.op||'>'))+' <i>▾</i></button></div>'+
+    '<div class="nf"><label>Værdi</label><button class="pk" data-nv="show.val:-32768:32767:Værdi">'+esc(sh.val==null?0:sh.val)+'</button></div>'+
+    '<div class="nf"><label>Side</label><button class="pk" data-pk="page|Side">'+esc(lbl(PG,it.page==null||it.page==='all'?'all':String(it.page)))+' <i>▾</i></button></div></div></details>';
+  return h+'</div>';
+}
+function docPanel(){
+  var w=S.wid,PGN=[['1','1 side'],['2','2 sider'],['3','3 sider'],['4','4 sider']];PKO['doc.pages']=PGN;
+  var bgc=w.bg||'bg',th=wtheme();
+  return '<div class="sp"><div class="sph"><b>Hele skærmen</b></div><div class="nfg">'+
+   '<div class="nf"><label>Navn</label><button class="pk tx" data-tx="doc.name|24|Navn">'+esc(w.name||'')+'</button></div><div class="nf"><label>Dit navn</label><button class="pk tx" data-tx="doc.author|24|Dit navn">'+(w.author?esc(w.author):'<i>tryk for at skrive</i>')+'</button></div>'+
+   '<div class="nf wide"><label>Beskrivelse</label><button class="pk tx" data-tx="doc.desc|120|Beskrivelse">'+(w.desc?esc(w.desc):'<i>tryk for at skrive</i>')+'</button></div>'+
+   '<div class="nf"><label>Antal sider</label><button class="pk" data-pk="doc.pages|Antal sider">'+esc(lbl(PGN,String(w.pages||1)))+' <i>▾</i></button></div>'+
+   '<div class="nf wide"><label>Baggrund</label><div class="swr">'+['bg','panel','black','white','neon'].map(function(n){return '<button class="sc'+(bgc===n?' sel':'')+'" data-bgc="'+n+'" style="background:'+th[n]+'"></button>'}).join('')+
+   MORE_COLORS.map(function(c){return '<button class="sc'+(bgc===c?' sel':'')+'" data-bgc="'+c+'" style="background:'+c+'"></button>'}).join('')+'<button class="mini" data-cc="doc.bg">Egen…</button></div></div></div>'+
+   '<div class="hintbox"><b>Sådan ændrer du ting</b><br>Tryk på en knap, tekst eller måler i billedet (eller på et lag i listen nedenfor). Så kan du ændre <b>teksten</b>, <b>hvad en knap gør</b>, hvad et tal viser, farver og størrelse. Træk for at flytte, træk i det runde håndtag for at ændre størrelse. Tryk <b>Installér</b> når du er klar. Et tryk i øverste højre hjørne på boardet åbner altid indstillinger.</div></div>';
+}
+function vStudio(){
+  PKO={};
+  var w=S.wid,E=S.ed,it=selItem(),c=NW.compile(w),pages=w.pages||1;
+  var h='<div class="sbar"><button class="mini" data-s="close">✕ Luk</button><b class="sname">'+esc(w.name)+'</b><button class="mini pri" data-s="install"'+(S.conn&&c.ok?'':' disabled')+'>Installér</button></div>';
+  h+='<div class="scv"><canvas id="stcv" width="320" height="240"></canvas></div>';
+  h+='<div class="stb"><button data-s="undo"'+(E.undo.length?'':' disabled')+'>↶</button><button data-s="redo"'+(E.redo.length?'':' disabled')+'>↷</button><button class="pri" data-s="add">+ Tilføj</button>'+
+     '<button data-s="anim" class="'+(E.anim?'sel':'')+'">'+(E.anim?'Live':'Stille')+'</button><button data-s="lim" class="'+(E.limit?'sel':'')+'">20-grænse</button>'+
+     (function(){var SN=[[1,'Frit'],[2,'Net 2'],[4,'Net 4'],[8,'Net 8']];PKO['ed.snap']=SN;return '<button data-pk="ed.snap|Net">'+lbl(SN,E.snap)+' ▾</button>'})()+'</div>';
+  if(pages>1)h+='<div class="subnav">'+[0,1,2,3].slice(0,pages).map(function(p){return '<button data-pg="'+p+'" class="'+(E.page===p?'sel':'')+'">Side '+(p+1)+'</button>'}).join('')+'</div>';
+  if(!c.ok)h+='<div class="err">'+c.errors.slice(0,3).map(esc).join('<br>')+'</div>';
+  else h+='<div class="small" style="margin:2px 4px">'+c.bytes.length+' / '+NW.LIM.itemLen*NW.LIM.items+' bytes · '+w.items.length+' / '+NW.LIM.items+' elementer</div>';
+  if(E.add)h+='<div class="addgrid">'+STUDIO_TYPES.map(function(t){return '<button data-ad="'+t+'"><b>'+TYPE_LABEL[t]+'</b><span>'+TYPE_HINT[t]+'</span></button>'}).join('')+'</div>';
+  h+=it?itemPanel(it):docPanel();
+  if(E.sheet&&E.sheet.kind){var K=E.sheet,typ=K.kind==='num'?'number':'text',hint=K.kind==='num'?('Fra '+K.min+' til '+K.max):K.kind==='color'?'Skriv fx #33ccff':('Højst '+K.max+' tegn');
+    h+='<div class="sheet"><div class="sheetbox"><div class="sheeth"><b>'+esc(K.title)+'</b><button class="mini" data-pc="1">Annullér</button></div>'+
+      '<input id="sheetin" class="sheetin" type="'+typ+'"'+(K.kind==='num'?' inputmode="decimal"':' autocapitalize="characters" autocomplete="off" spellcheck="false"')+(K.max&&K.kind==='text'?' maxlength="'+K.max+'"':'')+' value="'+esc(K.cur==null?'':K.cur)+'">'+
+      '<div class="small" style="margin:6px 2px 10px">'+esc(hint)+'</div><button class="btn" data-sv="1">Gem</button></div></div>'}
+  else if(E.sheet){var so=PKO[E.sheet.key]||[];h+='<div class="sheet" data-sx="1"><div class="sheetbox"><div class="sheeth"><b>'+esc(E.sheet.title)+'</b><button class="mini" data-pc="1">Annullér</button></div>'+so.map(function(o,i){var ov=Array.isArray(o)?o[0]:o,ol=Array.isArray(o)?o[1]:o;return '<button data-pv="'+i+'" class="'+(String(ov)===String(E.sheet.cur)?'sel':'')+'">'+esc(ol)+'</button>'}).join('')+'</div></div>'}
+  h+='<div class="sp"><div class="sph"><b>Lag</b><span class="small">øverst tegnes sidst</span></div><div class="layers">'+
+     w.items.map(function(x,i){return {x:x,i:i}}).reverse().map(function(o){var pg=o.x.page==null||o.x.page==='all'?15:o.x.page;return '<button data-sel="'+o.i+'" class="'+(o.i===E.sel?'sel':'')+(pg!==15&&pg!==E.page?' off':'')+'">'+(o.i+1)+'. '+TYPE_LABEL[o.x.t]+(o.x.text?' · '+esc(o.x.text):o.x.src&&o.x.src!=='none'?' · '+esc(SRC_LABEL[o.x.src]||o.x.src):'')+'</button>'}).join('')+'</div></div>';
+  h+='<div class="sp"><div class="row3"><button class="btn sec mini" data-s="export">Gem som fil</button><button class="btn sec mini" data-s="share">Del</button><button class="btn sec mini" data-s="new">Ny tom</button><button class="btn sec mini" data-s="std">Standard</button></div>'+
+     '<input type="file" id="wimport" accept=".json,application/json" style="width:100%;margin-top:8px"></div>';
+  return h;
+}
+
+// ----- studio painting and pointer handling
+function studioTheme(){return wtheme(S.ed.th>=0?THEMES[S.ed.th]:null)}
+function studioPaint(){
+  var cv=$('#stcv');if(!cv||!cv.getContext)return;var g=cv.getContext('2d');if(!g)return;
+  var E=S.ed,t=(Date.now()-E.t0)/1000,live=NW.sample(t,{still:!E.anim,limit:E.limit}),th=studioTheme();
+  try{NW.render(g,S.wid,live,{theme:th,page:E.page,hist:NW.history({_t0:0},60),mode:2,ignoreShow:true})}catch(x){}
+  var list=S.wid.items;
+  if(E.drag&&E.snap>1){g.fillStyle='rgba(255,255,255,.18)';for(var gx=0;gx<=320;gx+=E.snap*4)for(var gy=0;gy<=240;gy+=E.snap*4)g.fillRect(gx,gy,1,1)}
+  g.fillStyle='rgba(255,255,255,.28)';[0,1,2].forEach(function(i){g.fillRect(298+i*6,8,2,2)});
+  var it=selItem();
+  if(it&&it.t!=='modebar'){var b=NW.bounds(it,g);g.save();g.strokeStyle='#00c8ff';g.lineWidth=1;g.setLineDash([4,3]);g.strokeRect(b.x-1.5,b.y-1.5,b.w+3,b.h+3);g.setLineDash([]);g.fillStyle='#00c8ff';g.beginPath();g.arc(b.x+b.w+1.5,b.y+b.h+1.5,6,0,7);g.fill();g.restore()}
+}
+function stopStudioLoop(){if(S.ed.raf){clearTimeout(S.ed.raf);S.ed.raf=0}}
+function studioLoop(){stopStudioLoop();if(!S.studio||typeof document==='undefined')return;(function f(){if(!S.studio)return;studioPaint();S.ed.raf=setTimeout(f,S.ed.anim?66:400)})()}
+function hitTest(px,py,g){
+  var E=S.ed,items=S.wid.items,page=E.page;
+  for(var i=items.length-1;i>=0;i--){var it=items[i],pg=it.page==null||it.page==='all'?15:it.page;if(pg!==15&&pg!==page)continue;if(it.t==='modebar')continue;var b=NW.bounds(it,g);if(px>=b.x-4&&px<=b.x+b.w+4&&py>=b.y-4&&py<=b.y+b.h+4)return i}
+  return -1;
+}
+function wireStudioCanvas(){
+  var cv=$('#stcv');if(!cv||!cv.addEventListener)return;
+  var g=cv.getContext('2d');
+  function pt(e){var r=cv.getBoundingClientRect(),k=320/r.width;return {x:(e.clientX-r.left)*k,y:(e.clientY-r.top)*k,k:k}}
+  cv.addEventListener('pointerdown',function(e){
+    e.preventDefault();var p=pt(e),E=S.ed,it=selItem();
+    if(it&&it.t!=='modebar'){var b=NW.bounds(it,g);if(Math.hypot(p.x-(b.x+b.w+1.5),p.y-(b.y+b.h+1.5))<14){pushUndo();E.drag={mode:'size',sx:p.x,sy:p.y,o:cloneW(it)};try{cv.setPointerCapture(e.pointerId)}catch(x){}return}}
+    var i=hitTest(p.x,p.y,g);
+    if(i!==E.sel){E.sel=i;render();studioLoop();scrollPanel()}
+    if(i>=0){pushUndo();E.drag={mode:'move',sx:p.x,sy:p.y,o:cloneW(S.wid.items[i]),moved:false};try{cv.setPointerCapture(e.pointerId)}catch(x){}}
+  });
+  cv.addEventListener('pointermove',function(e){
+    var E=S.ed,d=E.drag;if(!d)return;var p=pt(e),it=selItem();if(!it)return;var dx=p.x-d.sx,dy=p.y-d.sy;
+    if(d.mode==='move'){it.x=Math.max(-200,Math.min(520,snapv(d.o.x+dx)));it.y=Math.max(-200,Math.min(520,snapv(d.o.y+dy)));d.moved=true}
+    else{
+      var t=it.t,m=Math.max(dx,dy);
+      if(t==='arc'){it.r=Math.max(8,Math.min(160,snapv(d.o.r+m)));if(it.th>=it.r)it.th=it.r-1}
+      else if(t==='circle'||t==='dot'){it.r=Math.max(2,Math.min(t==='dot'?40:160,snapv((d.o.r||4)+m)))}
+      else if(t==='icon')it.size=Math.max(8,Math.min(96,snapv((d.o.size||24)+m)));
+      else if(t==='text'||t==='num'){}
+      else{it.w=Math.max(4,Math.min(640,snapv((d.o.w||0)+dx)));if(t!=='line'||d.o.h)it.h=Math.max(t==='line'?0:2,Math.min(640,snapv((d.o.h||0)+dy)))}
+    }
+    studioPaint();
+  });
+  function end(){var E=S.ed;if(E.drag){var moved=E.drag.moved||E.drag.mode==='size';E.drag=null;if(moved){render();studioLoop()}else E.undo.pop()}}
+  cv.addEventListener('pointerup',end);cv.addEventListener('pointercancel',end);
+}
+function addItem(t){
+  var w=S.wid;if(w.items.length+(t==='modebar'?3:0)>=NW.LIM.items){S.msg='Højst '+NW.LIM.items+' elementer';render();return}
+  pushUndo();var n=cloneW(DEF2[t]);if(n.t!=='modebar'&&(S.ed.page>0||w.pages>1))n.page=w.pages>1?S.ed.page:undefined;if(n.page===undefined)delete n.page;
+  if(t==='modebar'){var e=expandModes({items:[n]});e.items.forEach(function(x){if(w.pages>1)x.page=S.ed.page;w.items.push(x)});S.ed.sel=w.items.length-1}
+  else{w.items.push(n);S.ed.sel=w.items.length-1}
+  S.ed.add=false;render();studioLoop();
+}
+function scrollPanel(){try{var el=document.querySelector('.sp');if(el&&el.scrollIntoView)el.scrollIntoView({block:'start',behavior:'smooth'})}catch(e){}}
+function numChanged(it,k,v){it[k]=v;if(k==='r'&&it.t==='arc'&&it.th>=it.r)it.th=it.r-1}
+function focusSheet(){try{var el=document.getElementById('sheetin');if(el&&el.focus){el.focus();if(el.select)el.select()}}catch(e){}}
+function askText(msg,cur){try{if(typeof prompt==='function')return prompt(msg,cur)}catch(e){}return null}
+function getProp(key){
+  var w=S.wid,it=selItem();
+  if(key==='doc.name')return w.name;if(key==='doc.author')return w.author;if(key==='doc.desc')return w.desc;if(key==='doc.pages')return String(w.pages||1);if(key==='doc.bg')return w.bg||'bg';
+  if(key==='ed.snap')return S.ed.snap;if(!it)return null;
+  if(key.indexOf('show.')===0){var sh=it.show||{};var k=key.slice(5);return k==='src'?(sh.src||''):k==='op'?(sh.op||'>'):(sh.val==null?0:sh.val)}
+  if(key==='page')return it.page==null||it.page==='all'?'all':String(it.page);
+  return it[key];
+}
+function setProp(key,val){
+  var w=S.wid,it=selItem();
+  if(key==='doc.name'){w.name=val;return}if(key==='doc.author'){w.author=val;return}if(key==='doc.desc'){w.desc=val;return}
+  if(key==='doc.bg'){w.bg=val;return}
+  if(key==='doc.pages'){var n=+val;w.pages=n;w.items.forEach(function(x){if(x.page!=null&&x.page!=='all'&&x.page>=n)delete x.page});if(S.ed.page>=n)S.ed.page=0;return}
+  if(key==='ed.snap'){S.ed.snap=+val;return}
+  if(!it)return;
+  if(key.indexOf('show.')===0){var k=key.slice(5),sh=it.show||{src:'',op:'>',val:0};sh[k]=k==='val'?+val:val;if(!sh.src)delete it.show;else it.show=sh;return}
+  if(key==='page'){if(val==='all')delete it.page;else it.page=+val;return}
+  if(key==='src'&&val==='none'){delete it.src;return}
+  if(key==='font'||key==='align'||key==='action'||key==='icon'||key==='src'){it[key]=val;return}
+  numChanged(it,key,val);
+}
+function wireStudio(){
+  var q=function(sel,fn){[].forEach.call(document.querySelectorAll(sel),function(b){b.onclick=function(){fn(b)}})};
+  q('[data-s]',function(b){
+    var a=b.dataset.s,w=S.wid,E=S.ed,it=selItem();
+    if(a==='close')closeStudio();else if(a==='open')openStudio();else if(a==='undo')undo();else if(a==='redo')redo();
+    else if(a==='add'){E.add=!E.add;render();studioLoop()}
+    else if(a==='anim'){E.anim=!E.anim;render();studioLoop()}else if(a==='lim'){E.limit=!E.limit;render();studioLoop()}
+    else if(a==='dup'&&it){if(w.items.length>=NW.LIM.items)return;pushUndo();var n=cloneW(it);n.x=(n.x||0)+8;n.y=(n.y||0)+8;w.items.push(n);E.sel=w.items.length-1;render();studioLoop()}
+    else if(a==='del'&&it){pushUndo();w.items.splice(E.sel,1);E.sel=-1;render();studioLoop()}
+    else if(a==='front'&&it&&E.sel<w.items.length-1){pushUndo();var t=w.items[E.sel];w.items[E.sel]=w.items[E.sel+1];w.items[E.sel+1]=t;E.sel++;render();studioLoop()}
+    else if(a==='back'&&it&&E.sel>0){pushUndo();var t2=w.items[E.sel];w.items[E.sel]=w.items[E.sel-1];w.items[E.sel-1]=t2;E.sel--;render();studioLoop()}
+    else if(a==='clrwarn'&&it){pushUndo();delete it.warn;delete it.bad;delete it.below;render();studioLoop()}
+    else if(a==='install'){var c=NW.compile(w);if(!c.ok){S.msg=c.errors[0];render();return}act(function(){return installWidget(w).then(function(){S.msg='Installeret på boardet.'})})}
+    else if(a==='export')exportWidget();else if(a==='share')shareWidget();
+    else if(a==='std'){pushUndo();S.wid=toV2(window.STARTERS[0]);E.sel=-1;E.page=0;render();studioLoop()}
+    else if(a==='new'){pushUndo();S.wid={v:2,name:'Mit dashboard',author:w.author||'',desc:'',pages:1,bg:'bg',items:[cloneW(DEF2.arc),{t:'num',x:100,y:96,src:'speed',font:'8',align:'center',color:'text'}]};S.wid.items[1].y=82;E.sel=-1;E.page=0;render();studioLoop()}
+  });
+  q('[data-ad]',function(b){addItem(b.dataset.ad)});
+  q('[data-sel]',function(b){S.ed.sel=+b.dataset.sel;var it=selItem();if(it){var pg=it.page==null||it.page==='all'?15:it.page;if(pg!==15)S.ed.page=pg}render();studioLoop();scrollPanel()});
+  q('[data-pg]',function(b){S.ed.page=+b.dataset.pg;S.ed.sel=-1;render();studioLoop()});
+  q('[data-c]',function(b){var it=selItem();if(!it)return;var i=b.dataset.c.indexOf(':');pushUndo();it[b.dataset.c.slice(0,i)]=b.dataset.c.slice(i+1);render();studioLoop()});
+  q('[data-f]',function(b){var it=selItem();if(!it)return;pushUndo();var k=b.dataset.f;it[k]=!it[k];if(!it[k])delete it[k];render();studioLoop()});
+  q('[data-nm]',function(b){var it=selItem();if(!it)return;var p=b.dataset.nm.split(':');pushUndo();numChanged(it,p[0],(+it[p[0]]||0)+(+p[1]));render();studioLoop()});
+  q('[data-ng]',function(b){var it=selItem();if(!it)return;var p=b.dataset.ng.split(':');pushUndo();it.x=(+it.x||0)+(+p[0]);it.y=(+it.y||0)+(+p[1]);render();studioLoop()});
+  q('[data-bgc]',function(b){pushUndo();S.wid.bg=b.dataset.bgc;render();studioLoop()});
+  q('[data-pk]',function(b){var p=b.dataset.pk.split('|'),it=selItem();S.ed.sheet={key:p[0],title:p[1]||'',cur:getProp(p[0])};render();studioLoop()});
+  q('[data-pv]',function(b){var sh=S.ed.sheet;if(!sh)return;var o=(PKO[sh.key]||[])[+b.dataset.pv];if(o===undefined)return;var v=Array.isArray(o)?o[0]:o;S.ed.sheet=null;pushUndo();setProp(sh.key,v);render();studioLoop()});
+  q('[data-pc]',function(b){S.ed.sheet=null;render();studioLoop()});
+  q('[data-sx]',function(b){});
+  q('[data-nv]',function(b){var p=b.dataset.nv.split(':');var cur=getProp(p[0]);S.ed.sheet={kind:'num',key:p[0],min:+p[1],max:+p[2],title:p[3]||'Værdi',cur:cur==null?'':cur};render();studioLoop();setTimeout(focusSheet,60)});
+  q('[data-tx]',function(b){var p=b.dataset.tx.split('|');var cur=getProp(p[0]);S.ed.sheet={kind:'text',key:p[0],max:+p[1],title:p[2]||'Tekst',cur:cur==null?'':cur};render();studioLoop();setTimeout(focusSheet,60)});
+  q('[data-cc]',function(b){var key=b.dataset.cc,cur=getProp(key);S.ed.sheet={kind:'color',key:key,title:'Egen farve',cur:typeof cur==='string'&&cur.charAt(0)==='#'?cur:'#'};render();studioLoop();setTimeout(focusSheet,60)});
+  q('[data-sv]',function(b){
+    var K=S.ed.sheet,el=$('#sheetin');if(!K||!el)return;var r=String(el.value==null?'':el.value);
+    if(K.kind==='num'){var n=parseFloat(r.replace(',','.'));if(isNaN(n)){S.msg='Skriv et tal';render();studioLoop();return}n=Math.max(K.min,Math.min(K.max,Math.round(n)));S.ed.sheet=null;pushUndo();setProp(K.key,n)}
+    else if(K.kind==='color'){r=r.trim();if(r.charAt(0)!=='#')r='#'+r;if(!/^#[0-9a-fA-F]{6}$/.test(r)){S.msg='Farven skal skrives som #rrggbb, fx #33ccff';render();studioLoop();return}S.ed.sheet=null;pushUndo();setProp(K.key,r.toLowerCase())}
+    else{r=r.replace(/[^\x20-\x7E]/g,'').slice(0,K.max||15);S.ed.sheet=null;pushUndo();setProp(K.key,r)}
+    S.msg='';render();studioLoop()});
+  var im=$('#wimport');if(im)im.onchange=async function(){try{var t=await im.files[0].text(),o=JSON.parse(t);var w2=toV2(o);var e=NW.compile(w2);S.wid=w2;S.wid.author=S.wid.author||'';S.ed.sel=-1;S.ed.page=0;S.ed.undo=[];S.msg=e.ok?'':'Filen har fejl: '+e.errors[0]}catch(x){S.msg='Kunne ikke læse filen'}render();studioLoop()};
+  wireStudioCanvas();
+}
+function wireWidgets(){
+  var q=function(sel,fn){[].forEach.call(document.querySelectorAll(sel),function(b){b.onclick=function(){fn(b)}})};
+  q('[data-wi]',function(b){var p=b.dataset.wi.split(':'),w=(p[0]==='s'?S.gal:S.comm)[+p[1]];act(function(){return installWidget(w)})});
+  q('[data-we]',function(b){var p=b.dataset.we.split(':'),w=(p[0]==='s'?S.gal:S.comm)[+p[1]];var n=toV2(w);n.author=n.author||'';openStudio(n)});
+  q('[data-s]',function(b){if(b.dataset.s==='open')openStudio();else if(b.dataset.s==='reset')act(function(){return installWidget(window.STARTERS[0]).then(function(){S.msg='Standard-designet er sat på boardet igen.'})})});
+}
+
+(function(){var ok=false;try{var sv=typeof localStorage!=='undefined'&&localStorage.getItem('novaWid');if(sv){var w0=JSON.parse(sv);if(w0&&Array.isArray(w0.items)&&w0.items.length){S.wid=toV2(w0);ok=true}}}catch(e){}
+  if(!ok&&window.STARTERS&&window.STARTERS.length)S.wid=toV2(window.STARTERS[0])})();
+loadGallery();
+render();
+})();
+</script>
+</body>
+</html>
